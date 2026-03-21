@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/assets/fonts/PlusJakartaSans.woff2") format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("/assets/fonts/Fraunces.woff2") format("woff2");
+  font-weight: 300 900;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --radius: 0.75rem;
+
+    /* Dark green: #0F3B2E → oklch ~0.28 0.08 160 */
+    --brand-dark: 0.28 0.075 160;
+    /* Secondary green: #1E5A3E → oklch ~0.38 0.09 158 */
+    --brand-mid: 0.38 0.09 158;
+    /* Light green accent: oklch ~0.52 0.12 155 */
+    --brand-light: 0.52 0.12 155;
+    /* CTA orange: #F28C28 → oklch ~0.72 0.16 60 */
+    --cta-orange: 0.72 0.16 60;
+    /* WhatsApp green: #25D366 → oklch ~0.75 0.18 150 */
+    --whatsapp: 0.75 0.18 150;
+
+    --background: 1 0 0;
+    --foreground: 0.14 0.02 160;
+    --card: 1 0 0;
+    --card-foreground: 0.14 0.02 160;
+    --popover: 1 0 0;
+    --popover-foreground: 0.14 0.02 160;
+    --primary: 0.28 0.075 160;
+    --primary-foreground: 0.985 0 0;
+    --secondary: 0.96 0.01 155;
+    --secondary-foreground: 0.28 0.075 160;
+    --muted: 0.96 0.01 155;
+    --muted-foreground: 0.5 0.02 160;
+    --accent: 0.72 0.16 60;
+    --accent-foreground: 0.985 0 0;
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 0.985 0 0;
+    --border: 0.9 0.015 155;
+    --input: 0.9 0.015 155;
+    --ring: 0.38 0.09 158;
+    --chart-1: 0.646 0.222 41.116;
+    --chart-2: 0.6 0.118 184.704;
+    --chart-3: 0.398 0.07 227.392;
+    --chart-4: 0.828 0.189 84.429;
+    --chart-5: 0.769 0.188 70.08;
+    --sidebar: 0.985 0 0;
+    --sidebar-foreground: 0.145 0 0;
+    --sidebar-primary: 0.205 0 0;
+    --sidebar-primary-foreground: 0.985 0 0;
+    --sidebar-accent: 0.97 0 0;
+    --sidebar-accent-foreground: 0.205 0 0;
+    --sidebar-border: 0.922 0 0;
+    --sidebar-ring: 0.708 0 0;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
