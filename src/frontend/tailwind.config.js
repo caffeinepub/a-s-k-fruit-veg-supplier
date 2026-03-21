@@ -18,6 +18,8 @@ export default {
       fontFamily: {
         body: ['Plus Jakarta Sans', 'sans-serif'],
         display: ['Fraunces', 'serif'],
+        heading: ['Montserrat', 'Plus Jakarta Sans', 'sans-serif'],
+        hindi: ['Noto Sans Devanagari', 'Plus Jakarta Sans', 'sans-serif'],
       },
       colors: {
         border: "oklch(var(--border))",
@@ -77,6 +79,7 @@ export default {
         },
         cta: "oklch(var(--cta-orange))",
         whatsapp: "oklch(var(--whatsapp))",
+        gold: "oklch(var(--gold))",
       },
       borderRadius: {
         lg: "var(--radius)",

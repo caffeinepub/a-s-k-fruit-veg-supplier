@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -20,36 +22,38 @@
   :root {
     --radius: 0.75rem;
 
-    /* Dark green: #0F3B2E → oklch ~0.28 0.08 160 */
-    --brand-dark: 0.28 0.075 160;
-    /* Secondary green: #1E5A3E → oklch ~0.38 0.09 158 */
-    --brand-mid: 0.38 0.09 158;
-    /* Light green accent: oklch ~0.52 0.12 155 */
-    --brand-light: 0.52 0.12 155;
-    /* CTA orange: #F28C28 → oklch ~0.72 0.16 60 */
-    --cta-orange: 0.72 0.16 60;
-    /* WhatsApp green: #25D366 → oklch ~0.75 0.18 150 */
+    /* Dark forest green: mandi/bazaar feel */
+    --brand-dark: 0.26 0.085 155;
+    /* Medium green */
+    --brand-mid: 0.4 0.1 155;
+    /* Light green */
+    --brand-light: 0.55 0.13 152;
+    /* CTA warm saffron-orange: mandi vibes */
+    --cta-orange: 0.68 0.19 48;
+    /* WhatsApp green */
     --whatsapp: 0.75 0.18 150;
+    /* Gold */
+    --gold: 0.8 0.15 78;
 
-    --background: 1 0 0;
-    --foreground: 0.14 0.02 160;
+    --background: 0.98 0.005 90;
+    --foreground: 0.14 0.02 155;
     --card: 1 0 0;
-    --card-foreground: 0.14 0.02 160;
+    --card-foreground: 0.14 0.02 155;
     --popover: 1 0 0;
-    --popover-foreground: 0.14 0.02 160;
-    --primary: 0.28 0.075 160;
+    --popover-foreground: 0.14 0.02 155;
+    --primary: 0.26 0.085 155;
     --primary-foreground: 0.985 0 0;
-    --secondary: 0.96 0.01 155;
-    --secondary-foreground: 0.28 0.075 160;
-    --muted: 0.96 0.01 155;
-    --muted-foreground: 0.5 0.02 160;
-    --accent: 0.72 0.16 60;
+    --secondary: 0.95 0.015 100;
+    --secondary-foreground: 0.26 0.085 155;
+    --muted: 0.95 0.015 100;
+    --muted-foreground: 0.5 0.02 155;
+    --accent: 0.68 0.19 48;
     --accent-foreground: 0.985 0 0;
     --destructive: 0.577 0.245 27.325;
     --destructive-foreground: 0.985 0 0;
-    --border: 0.9 0.015 155;
-    --input: 0.9 0.015 155;
-    --ring: 0.38 0.09 158;
+    --border: 0.88 0.02 100;
+    --input: 0.88 0.02 100;
+    --ring: 0.4 0.1 155;
     --chart-1: 0.646 0.222 41.116;
     --chart-2: 0.6 0.118 184.704;
     --chart-3: 0.398 0.07 227.392;
@@ -74,5 +78,13 @@
 
   html {
     scroll-behavior: smooth;
+  }
+
+  .font-hindi {
+    font-family: "Noto Sans Devanagari", "Hind", sans-serif;
+  }
+
+  .bg-mandi-bg {
+    background-color: oklch(0.97 0.012 100);
   }
 }
