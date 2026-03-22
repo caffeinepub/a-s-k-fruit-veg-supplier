@@ -2,11 +2,11 @@ import { Badge } from "@/components/ui/badge";
 import { Toaster } from "@/components/ui/sonner";
 import {
   Leaf,
+  Mail,
   MapPin,
   Menu,
   Phone,
   ShoppingBag,
-  Star,
   Truck,
   X,
 } from "lucide-react";
@@ -190,6 +190,9 @@ const PRODUCTS: Product[] = [
 ];
 
 const WA_NUMBER = "918700722663";
+const RATES_MESSAGE = "Hello A.S.K Team, I want to check today's fresh rates.";
+const RATES_WA_URL = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(RATES_MESSAGE)}`;
+
 type OrderType = "retail" | "wholesale";
 
 function buildWhatsAppUrl(
@@ -239,18 +242,15 @@ function InstallPrompt() {
 
   useEffect(() => {
     if (sessionStorage.getItem("pwa-install-dismissed")) return;
-
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       deferredPrompt.current = e;
       setShowBanner(true);
     };
-
     const handleAppInstalled = () => {
       setShowBanner(false);
       deferredPrompt.current = null;
     };
-
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", handleAppInstalled);
     return () => {
@@ -292,7 +292,7 @@ function InstallPrompt() {
             <div className="h-1 bg-gradient-to-r from-green-500 to-green-700" />
             <div className="flex items-center gap-3 p-4">
               <img
-                src="/assets/generated/ask-logo-icon.dim_192x192.png"
+                src="/assets/uploads/IMG_2653-1-1.png"
                 alt="A.S.K Logo"
                 className="w-12 h-12 rounded-xl flex-shrink-0 shadow-sm object-cover"
               />
@@ -338,6 +338,27 @@ function InstallPrompt() {
   );
 }
 
+const PARTNERS = [
+  {
+    name: "Adnan A.S.K",
+    role: "Partner & Operations",
+    hindiRole: "संचालन प्रमुख",
+    initial: "A",
+  },
+  {
+    name: "Sufiyan Qureshi",
+    role: "Partner & Management",
+    hindiRole: "प्रबंधन प्रमुख",
+    initial: "S",
+  },
+  {
+    name: "Shad A.S.K",
+    role: "Partner & Finance",
+    hindiRole: "वित्त प्रमुख",
+    initial: "S",
+  },
+];
+
 export default function App() {
   const [quantities, setQuantities] = useState<Record<string, number>>(
     Object.fromEntries(PRODUCTS.map((p) => [p.id, 0])),
@@ -367,7 +388,8 @@ export default function App() {
   const navLinks = [
     { label: "Home", href: "#home" },
     { label: "Sabzi & Rates", href: "#products" },
-    { label: "Hamare Baare Mein", href: "#about" },
+    { label: "Leadership", href: "#leadership" },
+    { label: "About", href: "#about" },
     { label: "Sampark", href: "#contact" },
   ];
 
@@ -379,18 +401,25 @@ export default function App() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-brand-dark shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex flex-col leading-tight">
-              <span className="font-heading text-lg font-bold tracking-wide">
-                <span className="text-cta">A.S.K</span>
-                <span className="text-white ml-2 text-sm font-semibold hidden sm:inline">
-                  Fruit & Vegetables Supplier
+            <div className="flex items-center gap-3">
+              <img
+                src="/assets/uploads/IMG_2653-1-1.png"
+                alt="A.S.K Golden Eagle Logo"
+                className="w-9 h-9 rounded-lg object-cover"
+              />
+              <div className="flex flex-col leading-tight">
+                <span className="font-heading text-lg font-bold tracking-wide">
+                  <span className="text-cta">A.S.K</span>
+                  <span className="text-white ml-2 text-sm font-semibold hidden sm:inline">
+                    Fruit & Vegetables Supplier
+                  </span>
                 </span>
-              </span>
-              <span className="text-white/60 text-xs hidden sm:block font-hindi">
-                फल और सब्जी के थोक विक्रेता
-              </span>
+                <span className="text-white/60 text-xs hidden sm:block font-hindi">
+                  फल और सब्जी के थोक विक्रेता
+                </span>
+              </div>
             </div>
-            <nav className="hidden md:flex items-center gap-6">
+            <nav className="hidden md:flex items-center gap-5">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
@@ -682,6 +711,71 @@ export default function App() {
         </div>
       </section>
 
+      {/* ── LEADERSHIP ── */}
+      <section id="leadership" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-14"
+          >
+            <span className="text-brand-mid text-sm font-bold uppercase tracking-widest">
+              Our Leadership
+            </span>
+            <h2 className="font-heading text-4xl font-black text-brand-dark uppercase mt-2">
+              Meet the Partners
+            </h2>
+            <p className="text-muted-foreground mt-3 max-w-xl mx-auto text-sm">
+              A.S.K is led by a dedicated team of partners committed to
+              delivering the freshest produce and the best service across
+              Ghaziabad & Delhi NCR.
+            </p>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {PARTNERS.map((partner, i) => (
+              <motion.div
+                key={partner.name}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="bg-white rounded-2xl shadow-card border border-border p-8 flex flex-col items-center text-center gap-4"
+                data-ocid={`leadership.partner.${i + 1}`}
+              >
+                <div className="w-20 h-20 rounded-full bg-brand-dark flex items-center justify-center shadow-lg">
+                  <span className="text-cta font-heading text-3xl font-black">
+                    {partner.initial}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="font-heading text-xl font-bold text-brand-dark">
+                    {partner.name}
+                  </h3>
+                  <p className="text-cta font-semibold text-sm mt-1">
+                    {partner.role}
+                  </p>
+                  <p className="font-hindi text-muted-foreground text-xs mt-1">
+                    {partner.hindiRole}
+                  </p>
+                </div>
+                <a
+                  href={RATES_WA_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-ocid={`leadership.partner.${i + 1}.whatsapp`}
+                  className="flex items-center gap-2 bg-whatsapp/10 hover:bg-whatsapp/20 text-whatsapp border border-whatsapp/30 px-4 py-2 rounded-full text-xs font-semibold transition-colors"
+                >
+                  <WhatsAppIcon className="w-3.5 h-3.5" />
+                  Connect on WhatsApp
+                </a>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── ABOUT ── */}
       <section id="about" className="py-20 bg-secondary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -760,9 +854,16 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
             <div>
-              <div className="font-heading text-2xl font-bold mb-1">
-                <span className="text-cta">A.S.K</span>{" "}
-                <span className="text-white">Fruit & Veg</span>
+              <div className="flex items-center gap-3 mb-2">
+                <img
+                  src="/assets/uploads/IMG_2653-1-1.png"
+                  alt="A.S.K Golden Eagle"
+                  className="w-10 h-10 rounded-lg object-cover"
+                />
+                <div className="font-heading text-2xl font-bold">
+                  <span className="text-cta">A.S.K</span>{" "}
+                  <span className="text-white">Fruit & Veg</span>
+                </div>
               </div>
               <p className="font-hindi text-white/50 text-xs mb-3">
                 फल और सब्जी के थोक विक्रेता
@@ -781,7 +882,13 @@ export default function App() {
                 Quick Links
               </h4>
               <ul className="space-y-2">
-                {["Home", "Sabzi & Rates", "About Us", "Sampark"].map((l) => (
+                {[
+                  "Home",
+                  "Sabzi & Rates",
+                  "Leadership",
+                  "About Us",
+                  "Sampark",
+                ].map((l) => (
                   <li key={l}>
                     <a
                       href={`#${l.toLowerCase().replace(/ /g, "-")}`}
@@ -811,6 +918,31 @@ export default function App() {
                     <p className="text-xs text-white/50">WhatsApp / Call</p>
                     <p className="text-white font-semibold text-sm">
                       +91 8700722663
+                    </p>
+                  </div>
+                </a>
+                <div className="flex items-start gap-3 px-4 py-3">
+                  <MapPin className="w-5 h-5 text-white/50 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs text-white/50">
+                      Shop Address | दुकान का पता
+                    </p>
+                    <p className="text-white font-semibold text-sm">
+                      Shop No. Sahibabad SB20
+                    </p>
+                    <p className="text-white/70 text-sm">Ghaziabad</p>
+                  </div>
+                </div>
+                <a
+                  href="mailto:ask.global.exports.official@gmail.com"
+                  data-ocid="footer.email.link"
+                  className="flex items-start gap-3 px-4 py-3 hover:bg-white/5 rounded-xl transition-colors"
+                >
+                  <Mail className="w-5 h-5 text-white/50 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs text-white/50">Official Email</p>
+                    <p className="text-white font-semibold text-xs break-all">
+                      ask.global.exports.official@gmail.com
                     </p>
                   </div>
                 </a>
@@ -945,6 +1077,17 @@ function ProductCard({
           </span>
         </div>
       </div>
+      {/* Rate Enquiry Button */}
+      <a
+        href={RATES_WA_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-ocid={`products.rate_enquiry.${index}`}
+        className="flex items-center gap-1.5 bg-whatsapp/10 hover:bg-whatsapp/20 text-whatsapp border border-whatsapp/25 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors"
+      >
+        <WhatsAppIcon className="w-3 h-3" />
+        Ask Rate | रेट पूछें
+      </a>
       <div
         className="flex items-center gap-3 bg-secondary rounded-full px-2 py-1"
         data-ocid={`products.qty.${index}`}
