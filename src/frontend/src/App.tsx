@@ -11,7 +11,7 @@ import {
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 interface Product {
@@ -198,7 +198,6 @@ function buildWhatsAppUrl(
 ): string | null {
   const items = PRODUCTS.filter((p) => quantities[p.id] > 0);
   if (items.length === 0) return null;
-
   const price = (p: Product) =>
     orderType === "retail" ? p.retailPrice : p.wholesalePrice;
   const lines = items.map(
@@ -213,7 +212,6 @@ function buildWhatsAppUrl(
     `Total: ₹${total}`,
     `Order Type: ${typeLabel}`,
   ].join("\n");
-
   return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
@@ -231,6 +229,112 @@ function totalCost(
       (quantities[p.id] || 0) *
         (orderType === "retail" ? p.retailPrice : p.wholesalePrice),
     0,
+  );
+}
+
+// ── PWA Install Prompt ──
+function InstallPrompt() {
+  const deferredPrompt = useRef<any>(null);
+  const [showBanner, setShowBanner] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("pwa-install-dismissed")) return;
+
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      deferredPrompt.current = e;
+      setShowBanner(true);
+    };
+
+    const handleAppInstalled = () => {
+      setShowBanner(false);
+      deferredPrompt.current = null;
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", handleAppInstalled);
+    return () => {
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt,
+      );
+      window.removeEventListener("appinstalled", handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt.current) return;
+    deferredPrompt.current.prompt();
+    const { outcome } = await deferredPrompt.current.userChoice;
+    if (outcome === "accepted") {
+      setShowBanner(false);
+      deferredPrompt.current = null;
+    }
+  };
+
+  const handleDismiss = () => {
+    sessionStorage.setItem("pwa-install-dismissed", "1");
+    setShowBanner(false);
+  };
+
+  return (
+    <AnimatePresence>
+      {showBanner && (
+        <motion.div
+          initial={{ y: 120, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 120, opacity: 0 }}
+          transition={{ type: "spring", damping: 24, stiffness: 260 }}
+          className="fixed bottom-24 left-4 right-4 z-50 sm:left-auto sm:right-6 sm:w-80"
+          data-ocid="pwa.install.toast"
+        >
+          <div className="bg-white rounded-2xl shadow-2xl border border-green-100 overflow-hidden">
+            <div className="h-1 bg-gradient-to-r from-green-500 to-green-700" />
+            <div className="flex items-center gap-3 p-4">
+              <img
+                src="/assets/generated/ask-logo-icon.dim_192x192.png"
+                alt="A.S.K Logo"
+                className="w-12 h-12 rounded-xl flex-shrink-0 shadow-sm object-cover"
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-gray-900 leading-tight">
+                  Install Our App
+                </p>
+                <p className="font-hindi text-xs text-green-700 mt-0.5">
+                  अपने फोन पर इंस्टॉल करें
+                </p>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  Quick access to fresh sabzi rates
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleDismiss}
+                data-ocid="pwa.install.close_button"
+                className="flex-shrink-0 w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                aria-label="Dismiss install prompt"
+              >
+                <X className="w-3.5 h-3.5 text-gray-500" />
+              </button>
+            </div>
+            <div className="px-4 pb-4">
+              <button
+                type="button"
+                onClick={handleInstall}
+                data-ocid="pwa.install.primary_button"
+                className="w-full bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-2.5 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-md"
+              >
+                <span>📲</span>
+                <span>Install App</span>
+                <span className="font-hindi text-xs opacity-85">
+                  | इंस्टॉल करें
+                </span>
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -275,7 +379,6 @@ export default function App() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-brand-dark shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Brand */}
             <div className="flex flex-col leading-tight">
               <span className="font-heading text-lg font-bold tracking-wide">
                 <span className="text-cta">A.S.K</span>
@@ -287,8 +390,6 @@ export default function App() {
                 फल और सब्जी के थोक विक्रेता
               </span>
             </div>
-
-            {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-6">
               {navLinks.map((link) => (
                 <a
@@ -314,8 +415,6 @@ export default function App() {
                 </span>
               </a>
             </nav>
-
-            {/* Mobile menu toggle */}
             <button
               type="button"
               className="md:hidden text-white p-2"
@@ -331,8 +430,6 @@ export default function App() {
             </button>
           </div>
         </div>
-
-        {/* Mobile Nav */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
@@ -370,7 +467,6 @@ export default function App() {
         }}
       >
         <div className="absolute inset-0 bg-brand-dark/80" />
-
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -378,7 +474,6 @@ export default function App() {
             transition={{ duration: 0.8 }}
             className="max-w-3xl"
           >
-            {/* Location badge */}
             <div className="flex flex-wrap gap-3 mb-6">
               <span className="inline-flex items-center gap-1.5 bg-cta/20 text-cta border border-cta/30 px-4 py-1.5 rounded-full text-sm font-semibold">
                 <MapPin className="w-3.5 h-3.5" />
@@ -388,8 +483,6 @@ export default function App() {
                 गाज़ियाबाद और दिल्ली एनसीआर सप्लाई
               </span>
             </div>
-
-            {/* Main heading */}
             <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black text-white uppercase leading-tight mb-2">
               <span className="text-cta">A.S.K</span>{" "}
               <span className="text-white">Fruit &</span>
@@ -400,16 +493,12 @@ export default function App() {
             <p className="font-hindi text-xl text-cta mb-6">
               फल और सब्जी के थोक विक्रेता
             </p>
-
-            {/* Sub-headline */}
             <p className="text-white/80 text-base sm:text-lg mb-3 leading-relaxed font-medium">
               Wholesale & Retail Supply | Ghaziabad & Delhi NCR
             </p>
             <p className="font-hindi text-white/70 text-base mb-8">
               थोक और रिटेल | ताज़ी सब्ज़ी, सीधे मंडी से
             </p>
-
-            {/* Tags */}
             <div className="flex flex-wrap gap-3 mb-8">
               <span className="inline-flex items-center gap-2 bg-white text-brand-dark px-5 py-2 rounded-full text-sm font-bold shadow-sm">
                 🥬 ताज़ी सब्ज़ी रोज़ाना
@@ -421,8 +510,6 @@ export default function App() {
                 🚚 घर पर डिलीवरी
               </span>
             </div>
-
-            {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4">
               <a
                 href="#products"
@@ -445,8 +532,6 @@ export default function App() {
                 </span>
               </a>
             </div>
-
-            {/* Quick stats */}
             <div className="flex flex-wrap gap-6 mt-12">
               {[
                 { icon: "🏪", label: "Local Mandi Quality" },
@@ -522,8 +607,6 @@ export default function App() {
               tap.
             </p>
           </motion.div>
-
-          {/* Rate type label */}
           <div className="text-center mb-10">
             <span
               className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold ${
@@ -537,7 +620,6 @@ export default function App() {
                 : "📦 Wholesale Rates Showing"}
             </span>
           </div>
-
           <div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
             data-ocid="products.list"
@@ -560,8 +642,6 @@ export default function App() {
               </motion.div>
             ))}
           </div>
-
-          {/* Order Summary */}
           <AnimatePresence>
             {itemCount > 0 && (
               <motion.div
@@ -628,7 +708,6 @@ export default function App() {
               गाज़ियाबाद और दिल्ली एनसीआर में थोक और रिटेल सप्लाई
             </p>
           </motion.div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -680,7 +759,6 @@ export default function App() {
       <footer id="contact" className="bg-brand-dark text-white py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
-            {/* Brand */}
             <div>
               <div className="font-heading text-2xl font-bold mb-1">
                 <span className="text-cta">A.S.K</span>{" "}
@@ -698,8 +776,6 @@ export default function App() {
                 गाज़ियाबाद और दिल्ली एनसीआर के विशेषज्ञ
               </p>
             </div>
-
-            {/* Quick Links */}
             <div>
               <h4 className="font-heading font-bold uppercase tracking-wider text-sm mb-4 text-white/80">
                 Quick Links
@@ -718,8 +794,6 @@ export default function App() {
                 ))}
               </ul>
             </div>
-
-            {/* Contact */}
             <div>
               <h4 className="font-heading font-bold uppercase tracking-wider text-sm mb-4 text-white/80">
                 Sampark Karein | संपर्क करें
@@ -757,7 +831,6 @@ export default function App() {
               </div>
             </div>
           </div>
-
           <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-white/40 text-xs">
             <span>
               © {new Date().getFullYear()} A.S.K Fruit & Vegetables Supplier.
@@ -812,6 +885,9 @@ export default function App() {
           )}
         </button>
       </motion.div>
+
+      {/* ── PWA INSTALL PROMPT ── */}
+      <InstallPrompt />
     </div>
   );
 }
@@ -844,7 +920,6 @@ function ProductCard({
       <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center text-5xl">
         {product.emoji}
       </div>
-
       <div>
         <h3 className="font-heading text-lg font-bold text-brand-dark">
           {product.name}
@@ -870,8 +945,6 @@ function ProductCard({
           </span>
         </div>
       </div>
-
-      {/* Quantity Selector */}
       <div
         className="flex items-center gap-3 bg-secondary rounded-full px-2 py-1"
         data-ocid={`products.qty.${index}`}
@@ -899,8 +972,6 @@ function ProductCard({
           +
         </button>
       </div>
-
-      {/* Subtotal */}
       <AnimatePresence mode="wait">
         {quantity > 0 ? (
           <motion.div

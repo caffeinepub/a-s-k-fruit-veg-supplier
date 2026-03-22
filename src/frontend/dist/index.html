@@ -1,12 +1,38 @@
-<html lang="en">
+<html lang="hi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title></title>
-    <script type="module" crossorigin src="/assets/index-Dcp_La-l.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DD_W1pLX.css">
+    <title>A.S.K Fruit &amp; Vegetables Supplier | फल और सब्जी के थोक विक्रेता</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="A.S.K Sabzi" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="A.S.K Sabzi" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#1a6b2e" />
+    <meta name="description" content="Fresh fruit & vegetables supplier in Ghaziabad & Delhi NCR. Order on WhatsApp." />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="/assets/generated/ask-logo-icon.dim_512x512.png" />
+    <link rel="icon" type="image/png" href="/assets/generated/ask-logo-icon.dim_192x192.png" />
+
+    <!-- Apple Splash Screen (Green/White) -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script type="module" crossorigin src="/assets/index-xtYQ2YgJ.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-WlozwnYp.css">
   </head>
-  <body>
+  <body style="background-color: #1a6b2e;">
     <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>
