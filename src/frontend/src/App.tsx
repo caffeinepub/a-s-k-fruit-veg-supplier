@@ -7,6 +7,8 @@ import {
   Menu,
   Phone,
   ShoppingBag,
+  ShoppingCart,
+  Trash2,
   Truck,
   X,
 } from "lucide-react";
@@ -195,6 +197,66 @@ const RATES_WA_URL = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(RATES
 
 type OrderType = "retail" | "wholesale";
 
+function buildInvoiceWhatsAppUrl(
+  quantities: Record<string, number>,
+  orderType: OrderType,
+): string | null {
+  const items = PRODUCTS.filter((p) => quantities[p.id] > 0);
+  if (items.length === 0) return null;
+
+  const price = (p: Product) =>
+    orderType === "retail" ? p.retailPrice : p.wholesalePrice;
+
+  const now = new Date();
+  const dateStr = `${String(now.getDate()).padStart(2, "0")}/${String(now.getMonth() + 1).padStart(2, "0")}/${now.getFullYear()}`;
+  const typeLabel = orderType === "retail" ? "Retail" : "Wholesale";
+
+  const orderLines = items
+    .map((p, i) => {
+      const qty = quantities[p.id];
+      const rate = price(p);
+      const amount = qty * rate;
+      const sno = String(i + 1).padStart(2, " ");
+      const itemLabel = `${p.name} (${p.hindiName})`;
+      return `${sno}. ${itemLabel.padEnd(18)} ${String(`${qty} kg`).padEnd(6)} ₹${String(`${rate}/kg`).padEnd(8)} ₹${amount}`;
+    })
+    .join("\n");
+
+  const totalAmt = items.reduce(
+    (sum, p) => sum + quantities[p.id] * price(p),
+    0,
+  );
+
+  const message = [
+    "╔══════════════════════════════╗",
+    "    A.S.K FRUIT & VEGETABLES",
+    "         SUPPLIER",
+    "  फल और सब्ज़ी के थोक विक्रेता",
+    "╚══════════════════════════════╝",
+    "",
+    "📍 Shop No. Sahibabad SB20, Ghaziabad",
+    "📞 +91 8700722663",
+    `📅 Date: ${dateStr}`,
+    "",
+    `Order Type: ${typeLabel}`,
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+    "",
+    "ORDER SUMMARY | ऑर्डर सूची",
+    "──────────────────────────────",
+    "S.No  Item               Qty    Rate      Amount",
+    orderLines,
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+    `TOTAL ITEMS: ${items.length}`,
+    `TOTAL AMOUNT: ₹${totalAmt}`,
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+    "",
+    "🙏 Shukriya! Thank you for your order.",
+    "हम जल्द ही संपर्क करेंगे।",
+  ].join("\n");
+
+  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
 function buildWhatsAppUrl(
   quantities: Record<string, number>,
   orderType: OrderType,
@@ -382,12 +444,29 @@ export default function App() {
     window.open(url, "_blank");
   };
 
+  const handleGenerateInvoice = () => {
+    const url = buildInvoiceWhatsAppUrl(quantities, orderType);
+    if (!url) {
+      toast.error("Please add at least one item to your cart!");
+      return;
+    }
+    window.open(url, "_blank");
+  };
+
+  const handleClearCart = () => {
+    setQuantities(Object.fromEntries(PRODUCTS.map((p) => [p.id, 0])));
+    toast.success("Cart cleared | कार्ट साफ हो गया");
+  };
+
   const itemCount = totalItems(quantities);
   const orderTotal = totalCost(quantities, orderType);
+
+  const cartItems = PRODUCTS.filter((p) => quantities[p.id] > 0);
 
   const navLinks = [
     { label: "Home", href: "#home" },
     { label: "Sabzi & Rates", href: "#products" },
+    { label: "Smart Cart 🛒", href: "#smart-cart" },
     { label: "Leadership", href: "#leadership" },
     { label: "About", href: "#about" },
     { label: "Sampark", href: "#contact" },
@@ -419,12 +498,12 @@ export default function App() {
                 </span>
               </div>
             </div>
-            <nav className="hidden md:flex items-center gap-5">
+            <nav className="hidden md:flex items-center gap-4">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  data-ocid={`nav.${link.label.toLowerCase().replace(/ /g, "_")}.link`}
+                  data-ocid={`nav.${link.label.toLowerCase().replace(/[^a-z0-9]/g, "_")}.link`}
                   className="text-white/80 hover:text-white text-sm font-medium transition-colors"
                 >
                   {link.label}
@@ -632,8 +711,8 @@ export default function App() {
               Sabzi & Rates
             </h2>
             <p className="text-muted-foreground mt-3 max-w-xl mx-auto text-sm">
-              Select items & quantity, then place your order on WhatsApp in one
-              tap.
+              Select items & quantity, then generate a professional invoice and
+              send via WhatsApp.
             </p>
           </motion.div>
           <div className="text-center mb-10">
@@ -671,6 +750,210 @@ export default function App() {
               </motion.div>
             ))}
           </div>
+
+          {/* ── SMART CART ── */}
+          <AnimatePresence>
+            {itemCount > 0 && (
+              <motion.div
+                id="smart-cart"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 24 }}
+                transition={{ duration: 0.4 }}
+                className="mt-14"
+                data-ocid="smart_cart.panel"
+              >
+                {/* Header */}
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-brand-dark flex items-center justify-center">
+                    <ShoppingCart className="w-5 h-5 text-cta" />
+                  </div>
+                  <div>
+                    <h2 className="font-heading text-2xl font-black text-brand-dark uppercase leading-tight">
+                      Smart Cart
+                    </h2>
+                    <p className="font-hindi text-sm text-brand-mid font-semibold">
+                      स्मार्ट कार्ट 🛒
+                    </p>
+                  </div>
+                  <div className="ml-auto">
+                    <span
+                      className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
+                        orderType === "retail"
+                          ? "bg-cta/15 text-cta border border-cta/30"
+                          : "bg-brand-mid/15 text-brand-mid border border-brand-mid/30"
+                      }`}
+                    >
+                      {orderType === "retail" ? "🏠 Retail" : "📦 Wholesale"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Cart Table */}
+                <div className="bg-white rounded-2xl shadow-lg border border-border overflow-hidden">
+                  {/* Table Header */}
+                  <div className="bg-brand-dark text-white">
+                    <div className="grid grid-cols-12 gap-2 px-4 py-3 text-xs font-bold uppercase tracking-wider">
+                      <div className="col-span-1 text-center">#</div>
+                      <div className="col-span-5">Item | सब्ज़ी</div>
+                      <div className="col-span-2 text-center">Qty</div>
+                      <div className="col-span-2 text-right">Rate</div>
+                      <div className="col-span-2 text-right">Amount</div>
+                    </div>
+                  </div>
+
+                  {/* Cart Rows */}
+                  <div className="divide-y divide-border">
+                    {cartItems.map((product, i) => {
+                      const rate =
+                        orderType === "retail"
+                          ? product.retailPrice
+                          : product.wholesalePrice;
+                      const qty = quantities[product.id];
+                      const amount = qty * rate;
+                      return (
+                        <motion.div
+                          key={product.id}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -10 }}
+                          transition={{ duration: 0.2, delay: i * 0.04 }}
+                          className="grid grid-cols-12 gap-2 px-4 py-3 items-center hover:bg-secondary/50 transition-colors"
+                          data-ocid={`smart_cart.item.${i + 1}`}
+                        >
+                          <div className="col-span-1 text-center">
+                            <span className="w-6 h-6 rounded-full bg-cta/15 text-cta text-xs font-bold flex items-center justify-center">
+                              {i + 1}
+                            </span>
+                          </div>
+                          <div className="col-span-5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xl">{product.emoji}</span>
+                              <div>
+                                <p className="font-semibold text-brand-dark text-sm">
+                                  {product.name}
+                                </p>
+                                <p className="font-hindi text-xs text-muted-foreground">
+                                  {product.hindiName}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-span-2 text-center">
+                            <span className="inline-block bg-secondary text-brand-dark text-xs font-bold px-2 py-1 rounded-lg">
+                              {qty} kg
+                            </span>
+                          </div>
+                          <div className="col-span-2 text-right">
+                            <span className="text-sm text-muted-foreground">
+                              ₹{rate}/kg
+                            </span>
+                          </div>
+                          <div className="col-span-2 text-right">
+                            <span className="font-bold text-cta text-sm">
+                              ₹{amount}
+                            </span>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Summary Row */}
+                  <div className="bg-brand-dark/5 border-t-2 border-brand-dark/20 px-4 py-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                      <div className="flex items-center gap-4">
+                        <div className="text-center">
+                          <p className="text-xs text-muted-foreground uppercase tracking-wide">
+                            Total Items
+                          </p>
+                          <p className="font-heading text-2xl font-black text-brand-dark">
+                            {itemCount}
+                          </p>
+                        </div>
+                        <div className="w-px h-10 bg-border" />
+                        <div className="text-center">
+                          <p className="text-xs text-muted-foreground uppercase tracking-wide">
+                            Total Amount
+                          </p>
+                          <p className="font-heading text-2xl font-black text-cta">
+                            ₹{orderTotal}
+                          </p>
+                        </div>
+                        <div className="hidden sm:block">
+                          <p className="font-hindi text-xs text-muted-foreground">
+                            {orderType === "retail" ? "रिटेल रेट" : "थोक रेट"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="mt-6 flex flex-col sm:flex-row gap-4">
+                  {/* Generate Invoice Button */}
+                  <motion.button
+                    type="button"
+                    onClick={handleGenerateInvoice}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    data-ocid="smart_cart.generate_invoice.primary_button"
+                    className="flex-1 flex items-center justify-center gap-3 bg-whatsapp hover:bg-whatsapp/90 text-white font-bold px-8 py-5 rounded-2xl text-base shadow-xl transition-colors"
+                  >
+                    <WhatsAppIcon className="w-6 h-6 flex-shrink-0" />
+                    <div className="text-left">
+                      <p className="font-heading text-base leading-tight">
+                        Generate Order Summary
+                      </p>
+                      <p className="font-hindi text-xs opacity-85 leading-tight">
+                        ऑर्डर समरी बनाएं
+                      </p>
+                    </div>
+                    <span className="ml-auto text-xs bg-white/20 px-2 py-1 rounded-lg font-normal">
+                      Invoice
+                    </span>
+                  </motion.button>
+
+                  {/* Clear Cart Button */}
+                  <motion.button
+                    type="button"
+                    onClick={handleClearCart}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    data-ocid="smart_cart.clear.delete_button"
+                    className="flex items-center justify-center gap-2 bg-white border-2 border-red-200 hover:border-red-400 hover:bg-red-50 text-red-500 font-semibold px-6 py-5 rounded-2xl text-sm transition-all"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    <div className="text-left">
+                      <p className="leading-tight">Clear Cart</p>
+                      <p className="font-hindi text-xs opacity-75 leading-tight">
+                        कार्ट साफ करें
+                      </p>
+                    </div>
+                  </motion.button>
+                </div>
+
+                {/* Invoice Preview Note */}
+                <div className="mt-4 flex items-start gap-2 bg-green-50 border border-green-200 rounded-xl px-4 py-3">
+                  <span className="text-green-600 text-sm mt-0.5">📋</span>
+                  <p className="text-xs text-green-700 leading-relaxed">
+                    <span className="font-semibold">
+                      Professional Invoice Format:
+                    </span>{" "}
+                    Your order summary will be sent as a formatted invoice
+                    directly to WhatsApp with itemized list, quantities, rates,
+                    and total amount.
+                    <span className="font-hindi block mt-0.5">
+                      आपका ऑर्डर एक प्रोफेशनल इनवॉइस के रूप में WhatsApp पर भेजा जाएगा।
+                    </span>
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Old summary panel kept for legacy - replaced by smart cart above */}
           <AnimatePresence>
             {itemCount > 0 && (
               <motion.div
@@ -678,33 +961,20 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
                 transition={{ duration: 0.35 }}
-                className="mt-10 bg-brand-dark rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center justify-between gap-4"
-                data-ocid="order.summary.panel"
+                className="mt-6 bg-brand-dark/10 border border-brand-dark/20 rounded-2xl p-4 text-center"
               >
-                <div>
-                  <p className="text-sm text-white/60 uppercase tracking-wide">
-                    Aapka Order | आपका ऑर्डर
-                  </p>
-                  <p className="text-2xl font-bold mt-1">
-                    {itemCount} item{itemCount !== 1 ? "s" : ""} ·{" "}
-                    <span className="text-cta">₹{orderTotal}</span>
-                  </p>
-                  <p className="text-xs text-white/50 mt-0.5 font-hindi">
-                    {orderType === "retail" ? "रिटेल रेट" : "थोक रेट"}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleOrder}
-                  data-ocid="order.whatsapp.submit_button"
-                  className="flex items-center gap-3 bg-whatsapp hover:bg-whatsapp/90 text-white font-bold px-8 py-4 rounded-full text-lg shadow-lg transition-all hover:scale-105 active:scale-95"
+                <p className="text-brand-dark text-sm font-semibold">
+                  👆 Scroll up to see your Smart Cart | ऊपर स्क्रॉल करके अपना स्मार्ट
+                  कार्ट देखें
+                </p>
+                <a
+                  href="#smart-cart"
+                  data-ocid="order.view_cart.button"
+                  className="inline-flex items-center gap-2 mt-2 bg-brand-dark text-white font-bold px-5 py-2.5 rounded-full text-sm hover:bg-brand-mid transition-colors"
                 >
-                  <WhatsAppIcon className="w-6 h-6" />
-                  <span>Order Now</span>
-                  <span className="font-hindi text-sm opacity-90">
-                    | अभी ऑर्डर करें
-                  </span>
-                </button>
+                  <ShoppingCart className="w-4 h-4" />
+                  View Smart Cart
+                </a>
               </motion.div>
             )}
           </AnimatePresence>
@@ -764,7 +1034,7 @@ export default function App() {
                   href={RATES_WA_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  data-ocid={`leadership.partner.${i + 1}.whatsapp`}
+                  data-ocid={`leadership.partner.${i + 1}.button`}
                   className="flex items-center gap-2 bg-whatsapp/10 hover:bg-whatsapp/20 text-whatsapp border border-whatsapp/30 px-4 py-2 rounded-full text-xs font-semibold transition-colors"
                 >
                   <WhatsAppIcon className="w-3.5 h-3.5" />
@@ -883,19 +1153,20 @@ export default function App() {
               </h4>
               <ul className="space-y-2">
                 {[
-                  "Home",
-                  "Sabzi & Rates",
-                  "Leadership",
-                  "About Us",
-                  "Sampark",
+                  { label: "Home", href: "#home" },
+                  { label: "Sabzi & Rates", href: "#products" },
+                  { label: "Smart Cart 🛒", href: "#smart-cart" },
+                  { label: "Leadership", href: "#leadership" },
+                  { label: "About Us", href: "#about" },
+                  { label: "Sampark", href: "#contact" },
                 ].map((l) => (
-                  <li key={l}>
+                  <li key={l.label}>
                     <a
-                      href={`#${l.toLowerCase().replace(/ /g, "-")}`}
-                      data-ocid={`footer.${l.toLowerCase().replace(/ /g, "_")}.link`}
+                      href={l.href}
+                      data-ocid={`footer.${l.label.toLowerCase().replace(/[^a-z0-9]/g, "_")}.link`}
                       className="text-white/60 hover:text-white text-sm transition-colors"
                     >
-                      {l}
+                      {l.label}
                     </a>
                   </li>
                 ))}
@@ -1110,7 +1381,7 @@ function ProductCard({
           onClick={() => onAdjust(0.5)}
           data-ocid={`products.plus.${index}`}
           className="w-9 h-9 rounded-full bg-brand-dark text-white flex items-center justify-center font-bold hover:bg-brand-mid transition-colors text-lg leading-none"
-          aria-label={`Increase ${product.name} quantity`}
+          aria-label={`Increase ${product.name} quantity}`}
         >
           +
         </button>
