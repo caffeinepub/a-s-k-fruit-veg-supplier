@@ -218,10 +218,12 @@ function buildInvoiceWhatsAppUrl(
   const nameLabel = customerName.trim() || "Not provided";
 
   const message = [
-    "New Order for A.S.K:",
+    "--- A.S.K ORDER SUMMARY ---",
+    `Customer: ${nameLabel}`,
+    "Items:",
     itemLines,
-    "-----------------------",
-    `Customer Name: ${nameLabel}`,
+    "---------------------------",
+    "Please confirm the rates.",
   ].join("\n");
 
   return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -372,21 +374,21 @@ function InstallPrompt() {
 
 const PARTNERS = [
   {
-    name: "Adnan",
-    role: "Managing Partner",
-    hindiRole: "प्रबंध भागीदार",
+    name: "Adnan A.S.K",
+    role: "Partner & Operations",
+    hindiRole: "संचालन प्रमुख",
     initial: "A",
   },
   {
-    name: "Sufiyan A.S.K",
-    role: "Managing Partner",
-    hindiRole: "प्रबंध भागीदार",
+    name: "Sufiyan Qureshi",
+    role: "Partner & Management",
+    hindiRole: "प्रबंधन प्रमुख",
     initial: "S",
   },
   {
     name: "Shad A.S.K",
-    role: "Managing Partner",
-    hindiRole: "प्रबंध भागीदार",
+    role: "Partner & Finance",
+    hindiRole: "वित्त प्रमुख",
     initial: "S",
   },
 ];
@@ -494,6 +496,19 @@ export default function App() {
                   {link.label}
                 </a>
               ))}
+              <a
+                href={`https://wa.me/${WA_NUMBER}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-ocid="nav.whatsapp.button"
+                className="flex items-center gap-2 bg-whatsapp text-white px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
+              >
+                <WhatsAppIcon className="w-4 h-4" />
+                <span>Order Now</span>
+                <span className="font-hindi text-xs opacity-80">
+                  | अभी ऑर्डर करें
+                </span>
+              </a>
             </nav>
             <button
               type="button"
@@ -597,6 +612,19 @@ export default function App() {
                 className="inline-flex items-center gap-2 bg-cta hover:bg-cta/90 text-white font-bold px-8 py-4 rounded-full text-lg shadow-lg transition-all hover:scale-105 active:scale-95 font-heading"
               >
                 🛒 Rates Dekho
+              </a>
+              <a
+                href={`https://wa.me/${WA_NUMBER}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-ocid="hero.whatsapp.button"
+                className="inline-flex items-center gap-2 bg-whatsapp hover:bg-whatsapp/90 text-white font-bold px-8 py-4 rounded-full text-lg shadow-lg transition-all hover:scale-105 active:scale-95"
+              >
+                <WhatsAppIcon className="w-5 h-5" />
+                <span>Order Now</span>
+                <span className="font-hindi text-sm opacity-90">
+                  | अभी ऑर्डर करें
+                </span>
               </a>
             </div>
             <div className="flex flex-wrap gap-6 mt-12">
@@ -991,21 +1019,9 @@ export default function App() {
             <span className="text-brand-mid text-sm font-bold uppercase tracking-widest">
               Our Leadership
             </span>
-            <div className="flex items-center justify-center gap-3 mt-2">
-              <img
-                src="/assets/uploads/IMG_2664-1.jpeg"
-                alt="A.S.K Golden Eagle"
-                className="w-10 h-10 rounded-full object-cover shadow"
-              />
-              <h2 className="font-heading text-4xl font-black text-brand-dark uppercase">
-                Team A.S.K
-              </h2>
-              <img
-                src="/assets/uploads/IMG_2664-1.jpeg"
-                alt="A.S.K Golden Eagle"
-                className="w-10 h-10 rounded-full object-cover shadow"
-              />
-            </div>
+            <h2 className="font-heading text-4xl font-black text-brand-dark uppercase mt-2">
+              Meet the Partners
+            </h2>
             <p className="text-muted-foreground mt-3 max-w-xl mx-auto text-sm">
               A.S.K is led by a dedicated team of partners committed to
               delivering the freshest produce and the best service across
@@ -1388,6 +1404,17 @@ function ProductCard({
           </span>
         </div>
       </div>
+      {/* Rate Enquiry Button */}
+      <a
+        href={RATES_WA_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-ocid={`products.rate_enquiry.${index}`}
+        className="flex items-center gap-1.5 bg-whatsapp/10 hover:bg-whatsapp/20 text-whatsapp border border-whatsapp/25 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors"
+      >
+        <WhatsAppIcon className="w-3 h-3" />
+        Ask Rate | रेट पूछें
+      </a>
       <div
         className="w-full flex flex-col gap-2"
         data-ocid={`products.qty.${index}`}
