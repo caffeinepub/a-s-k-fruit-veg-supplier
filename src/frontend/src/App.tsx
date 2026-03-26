@@ -25,170 +25,411 @@ interface Product {
   retailPrice: number;
   wholesalePrice: number;
   unit: string;
+  category: string;
+  hindiCategory: string;
 }
 
+const CATEGORIES = [
+  {
+    id: "roots",
+    label: "Roots & Tubers",
+    hindiLabel: "जड़ें और कंद",
+    color: "bg-amber-100 border-amber-400 text-amber-800",
+    dot: "bg-amber-500",
+  },
+  {
+    id: "greens",
+    label: "Fresh Leafy Greens",
+    hindiLabel: "हरी पत्तेदार सब्जियां",
+    color: "bg-emerald-100 border-emerald-400 text-emerald-800",
+    dot: "bg-emerald-500",
+  },
+  {
+    id: "vegetables",
+    label: "Vegetables",
+    hindiLabel: "सब्जियां",
+    color: "bg-orange-100 border-orange-400 text-orange-800",
+    dot: "bg-orange-500",
+  },
+];
+
 const PRODUCTS: Product[] = [
+  // Roots & Tubers
   {
     id: "aloo",
     name: "Aloo",
     hindiName: "आलू",
     emoji: "🥔",
-    retailPrice: 20,
-    wholesalePrice: 18,
+    retailPrice: 10,
+    wholesalePrice: 10,
     unit: "kg",
-  },
-  {
-    id: "tamatar",
-    name: "Tamatar",
-    hindiName: "टमाटर",
-    emoji: "🍅",
-    retailPrice: 32,
-    wholesalePrice: 29,
-    unit: "kg",
-  },
-  {
-    id: "lehsun",
-    name: "Lehsun",
-    hindiName: "लहसुन",
-    emoji: "🧄",
-    retailPrice: 160,
-    wholesalePrice: 150,
-    unit: "kg",
-  },
-  {
-    id: "pyaz",
-    name: "Pyaz",
-    hindiName: "प्याज़",
-    emoji: "🧅",
-    retailPrice: 30,
-    wholesalePrice: 28,
-    unit: "kg",
-  },
-  {
-    id: "adrak",
-    name: "Adrak",
-    hindiName: "अदरक",
-    emoji: "🫚",
-    retailPrice: 100,
-    wholesalePrice: 90,
-    unit: "kg",
+    category: "roots",
+    hindiCategory: "जड़ें और कंद",
   },
   {
     id: "gajar",
     name: "Gajar",
     hindiName: "गाजर",
     emoji: "🥕",
-    retailPrice: 30,
-    wholesalePrice: 28,
+    retailPrice: 27,
+    wholesalePrice: 27,
     unit: "kg",
+    category: "roots",
+    hindiCategory: "जड़ें और कंद",
   },
   {
     id: "mooli",
     name: "Mooli",
     hindiName: "मूली",
     emoji: "🌿",
-    retailPrice: 22,
-    wholesalePrice: 20,
+    retailPrice: 15,
+    wholesalePrice: 15,
     unit: "kg",
+    category: "roots",
+    hindiCategory: "जड़ें और कंद",
+  },
+  {
+    id: "arbi",
+    name: "Arbi",
+    hindiName: "अरबी",
+    emoji: "🫚",
+    retailPrice: 55,
+    wholesalePrice: 55,
+    unit: "kg",
+    category: "roots",
+    hindiCategory: "जड़ें और कंद",
   },
   {
     id: "chukandar",
     name: "Chukandar",
     hindiName: "चुकन्दर",
     emoji: "🫀",
-    retailPrice: 35,
-    wholesalePrice: 30,
+    retailPrice: 28,
+    wholesalePrice: 28,
     unit: "kg",
+    category: "roots",
+    hindiCategory: "जड़ें और कंद",
   },
+  // Fresh Leafy Greens
   {
     id: "palak",
     name: "Palak",
     hindiName: "पालक",
     emoji: "🥬",
-    retailPrice: 18,
-    wholesalePrice: 15,
+    retailPrice: 17,
+    wholesalePrice: 17,
     unit: "kg",
+    category: "greens",
+    hindiCategory: "हरी पत्तेदार सब्जियां",
   },
   {
-    id: "pattagobhi",
-    name: "Pattagobhi",
-    hindiName: "पत्तागोभी",
+    id: "methi",
+    name: "Methi",
+    hindiName: "मेथी",
+    emoji: "🌿",
+    retailPrice: 30,
+    wholesalePrice: 30,
+    unit: "kg",
+    category: "greens",
+    hindiCategory: "हरी पत्तेदार सब्जियां",
+  },
+  {
+    id: "bathua",
+    name: "Bathua",
+    hindiName: "बथुआ",
+    emoji: "🍃",
+    retailPrice: 50,
+    wholesalePrice: 50,
+    unit: "kg",
+    category: "greens",
+    hindiCategory: "हरी पत्तेदार सब्जियां",
+  },
+  {
+    id: "sarson",
+    name: "Sarson ka Saag",
+    hindiName: "सरसों का साग",
     emoji: "🥦",
-    retailPrice: 12,
-    wholesalePrice: 10,
+    retailPrice: 30,
+    wholesalePrice: 30,
     unit: "kg",
+    category: "greens",
+    hindiCategory: "हरी पत्तेदार सब्जियां",
   },
   {
-    id: "phoolgobhi",
-    name: "Phoolgobhi",
-    hindiName: "फूलगोभी",
-    emoji: "🥦",
-    retailPrice: 100,
-    wholesalePrice: 90,
+    id: "pudina",
+    name: "Pudina",
+    hindiName: "पुदीना",
+    emoji: "🌱",
+    retailPrice: 60,
+    wholesalePrice: 60,
     unit: "kg",
+    category: "greens",
+    hindiCategory: "हरी पत्तेदार सब्जियां",
   },
   {
-    id: "shimla-mirch",
-    name: "Shimla Mirch",
-    hindiName: "शिमला मिर्च",
-    emoji: "🫑",
-    retailPrice: 90,
-    wholesalePrice: 80,
-    unit: "kg",
+    id: "dhaniya",
+    name: "Dhaniya",
+    hindiName: "धनिया",
+    emoji: "🌿",
+    retailPrice: 30,
+    wholesalePrice: 30,
+    unit: "unit",
+    category: "greens",
+    hindiCategory: "हरी पत्तेदार सब्जियां",
   },
+  // Vegetables
   {
-    id: "baigan",
-    name: "Baigan",
+    id: "baingan",
+    name: "Baingan",
     hindiName: "बैंगन",
     emoji: "🍆",
-    retailPrice: 45,
+    retailPrice: 40,
     wholesalePrice: 40,
     unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "tamatar",
+    name: "Tamatar",
+    hindiName: "टमाटर",
+    emoji: "🍅",
+    retailPrice: 27,
+    wholesalePrice: 27,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "pyaaz",
+    name: "Pyaaz",
+    hindiName: "प्याज़",
+    emoji: "🧅",
+    retailPrice: 24,
+    wholesalePrice: 24,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "bhindi",
+    name: "Bhindi",
+    hindiName: "भिंडी",
+    emoji: "🫛",
+    retailPrice: 70,
+    wholesalePrice: 70,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
   },
   {
     id: "lauki",
     name: "Lauki",
     hindiName: "लौकी",
     emoji: "🥒",
-    retailPrice: 45,
-    wholesalePrice: 40,
+    retailPrice: 28,
+    wholesalePrice: 28,
     unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
   },
   {
-    id: "kaddu",
-    name: "Kaddu",
-    hindiName: "कद्दू",
-    emoji: "🎃",
-    retailPrice: 45,
-    wholesalePrice: 40,
+    id: "tori",
+    name: "Tori",
+    hindiName: "तोरी",
+    emoji: "🥬",
+    retailPrice: 44,
+    wholesalePrice: 44,
     unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
   },
   {
-    id: "kheera",
-    name: "Kheera",
-    hindiName: "खीरा",
+    id: "karela",
+    name: "Karela",
+    hindiName: "करेला",
     emoji: "🥒",
     retailPrice: 55,
+    wholesalePrice: 55,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "parwal",
+    name: "Parwal",
+    hindiName: "परवल",
+    emoji: "🫑",
+    retailPrice: 60,
+    wholesalePrice: 60,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "mirch",
+    name: "Mirch",
+    hindiName: "मिर्च",
+    emoji: "🌶️",
+    retailPrice: 50,
     wholesalePrice: 50,
     unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "shimla",
+    name: "Shimla Mirch",
+    hindiName: "शिमला मिर्च",
+    emoji: "🫑",
+    retailPrice: 56,
+    wholesalePrice: 56,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "lal-pili",
+    name: "Lal Pili Shimla",
+    hindiName: "लाल पीली शिमला",
+    emoji: "🌈",
+    retailPrice: 160,
+    wholesalePrice: 160,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "adrak",
+    name: "Adrak",
+    hindiName: "अदरक",
+    emoji: "🫚",
+    retailPrice: 86,
+    wholesalePrice: 86,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "lahsun",
+    name: "Lahsun Chila",
+    hindiName: "लहसुन छिला",
+    emoji: "🧄",
+    retailPrice: 160,
+    wholesalePrice: 160,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "patta-gobhi",
+    name: "Patta Gobhi",
+    hindiName: "पत्ता गोभी",
+    emoji: "🥬",
+    retailPrice: 16,
+    wholesalePrice: 16,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "phool-gobhi",
+    name: "Phool Gobhi",
+    hindiName: "फूल गोभी",
+    emoji: "🥦",
+    retailPrice: 55,
+    wholesalePrice: 55,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "broccoli",
+    name: "Broccoli",
+    hindiName: "ब्रोकोली",
+    emoji: "🥦",
+    retailPrice: 160,
+    wholesalePrice: 160,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "matar",
+    name: "Matar Safal",
+    hindiName: "मटर सफल",
+    emoji: "🫛",
+    retailPrice: 75,
+    wholesalePrice: 75,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "sweet-corn",
+    name: "Sweet Corn",
+    hindiName: "स्वीट कॉर्न",
+    emoji: "🌽",
+    retailPrice: 120,
+    wholesalePrice: 120,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
   },
   {
     id: "beans",
     name: "Beans",
     hindiName: "बीन्स",
     emoji: "🫘",
-    retailPrice: 90,
-    wholesalePrice: 80,
+    retailPrice: 55,
+    wholesalePrice: 55,
     unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "kaddu",
+    name: "Kaddu",
+    hindiName: "कद्दू",
+    emoji: "🎃",
+    retailPrice: 22,
+    wholesalePrice: 22,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
   },
   {
     id: "mushroom",
     name: "Mushroom",
     hindiName: "मशरूम",
     emoji: "🍄",
-    retailPrice: 220,
-    wholesalePrice: 200,
+    retailPrice: 180,
+    wholesalePrice: 180,
     unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "sprouts",
+    name: "Sprouts Daal",
+    hindiName: "स्प्राउट्स दाल",
+    emoji: "🌱",
+    retailPrice: 140,
+    wholesalePrice: 140,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
+  },
+  {
+    id: "salad-patta",
+    name: "Salad Patta",
+    hindiName: "सलाद पत्ता",
+    emoji: "🥗",
+    retailPrice: 40,
+    wholesalePrice: 40,
+    unit: "kg",
+    category: "vegetables",
+    hindiCategory: "सब्जियां",
   },
 ];
 
@@ -700,34 +941,112 @@ export default function App() {
                 : "📦 Wholesale Rates Showing"}
             </span>
           </div>
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-            data-ocid="products.list"
-          >
-            {filteredProducts.map((product, i) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.05 }}
-              >
-                <ProductCard
-                  product={product}
-                  quantity={quantities[product.id]}
-                  onAdjust={(delta) => adjust(product.id, delta)}
-                  onQuantityChange={(v) =>
-                    setQuantities((prev) => ({ ...prev, [product.id]: v }))
-                  }
-                  unitType={unitTypes[product.id]}
-                  onUnitChange={(u) =>
-                    setUnitTypes((prev) => ({ ...prev, [product.id]: u }))
-                  }
-                  index={i + 1}
-                  orderType={orderType}
-                />
-              </motion.div>
-            ))}
+          <div data-ocid="products.list" className="space-y-12">
+            {searchQuery ? (
+              <div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredProducts.map((product, i) => (
+                    <motion.div
+                      key={product.id}
+                      initial={{ opacity: 0, y: 24 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: i * 0.05 }}
+                    >
+                      <ProductCard
+                        product={product}
+                        quantity={quantities[product.id]}
+                        onAdjust={(delta) => adjust(product.id, delta)}
+                        onQuantityChange={(v) =>
+                          setQuantities((prev) => ({
+                            ...prev,
+                            [product.id]: v,
+                          }))
+                        }
+                        unitType={unitTypes[product.id]}
+                        onUnitChange={(u) =>
+                          setUnitTypes((prev) => ({ ...prev, [product.id]: u }))
+                        }
+                        index={i + 1}
+                        orderType={orderType}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+                {filteredProducts.length === 0 && (
+                  <div
+                    className="text-center py-12 text-muted-foreground"
+                    data-ocid="products.empty_state"
+                  >
+                    <p className="text-lg font-semibold">No items found</p>
+                    <p className="font-hindi text-sm mt-1">कोई सब्ज़ी नहीं मिली</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              CATEGORIES.map((cat) => {
+                const catProducts = PRODUCTS.filter(
+                  (p) => p.category === cat.id,
+                );
+                let globalIndex = PRODUCTS.indexOf(catProducts[0]);
+                return (
+                  <motion.div
+                    key={cat.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <div
+                      className={`inline-flex items-center gap-3 border-2 rounded-2xl px-5 py-2.5 mb-6 ${cat.color}`}
+                    >
+                      <span className={`w-3 h-3 rounded-full ${cat.dot}`} />
+                      <h3 className="font-heading text-lg font-black uppercase tracking-wide">
+                        {cat.label}
+                      </h3>
+                      <span className="font-hindi text-base font-semibold opacity-75">
+                        {cat.hindiLabel}
+                      </span>
+                      <span className="text-xs font-bold opacity-60 ml-1">
+                        ({catProducts.length} items)
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {catProducts.map((product, i) => (
+                        <motion.div
+                          key={product.id}
+                          initial={{ opacity: 0, y: 24 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: i * 0.05 }}
+                        >
+                          <ProductCard
+                            product={product}
+                            quantity={quantities[product.id]}
+                            onAdjust={(delta) => adjust(product.id, delta)}
+                            onQuantityChange={(v) =>
+                              setQuantities((prev) => ({
+                                ...prev,
+                                [product.id]: v,
+                              }))
+                            }
+                            unitType={unitTypes[product.id]}
+                            onUnitChange={(u) =>
+                              setUnitTypes((prev) => ({
+                                ...prev,
+                                [product.id]: u,
+                              }))
+                            }
+                            index={globalIndex + i + 1}
+                            orderType={orderType}
+                          />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                );
+              })
+            )}
           </div>
 
           {/* ── SMART CART ── */}
@@ -1474,6 +1793,35 @@ function ProductCard({
           </motion.div>
         )}
       </AnimatePresence>
+      <button
+        type="button"
+        data-ocid={`products.order.${index}`}
+        onClick={() => {
+          const qty = quantity > 0 ? quantity : 1;
+          const unit = unitType;
+          const msg = [
+            "New Order for A.S.K:",
+            `- ${product.name}: ${qty} ${unit} @ ₹${activePrice}/${product.unit}`,
+            "-----------------------",
+            "Customer Name: ",
+          ].join("\n");
+          window.open(
+            `https://wa.me/918700722663?text=${encodeURIComponent(msg)}`,
+            "_blank",
+          );
+        }}
+        className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5b] active:scale-95 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-sm"
+      >
+        <svg
+          className="w-4 h-4"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+        Order on WhatsApp
+      </button>
     </div>
   );
 }
