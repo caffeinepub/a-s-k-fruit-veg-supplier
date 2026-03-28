@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ask-sabzi-v1';
+const CACHE_NAME = 'ask-sabzi-v2';
 const URLS_TO_CACHE = [
   '/',
   '/manifest.json',

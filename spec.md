@@ -1,36 +1,32 @@
 # A.S.K Fruit & Veg Supplier
 
 ## Current State
-Version 13 live. All product cards and buttons link to MyBillBook store (https://mybillbook.in/store/a_s_k_company). Top banner promotes the digital store. Smart Cart was previously removed. Leadership section and Golden Eagle logo are present.
+The site has the Midnight Royalty theme (black/gold), Smart Cart, WhatsApp ordering, full inventory, Leadership section, and a REGISTER/LOGIN button in the navigation that currently does nothing.
+
+The backend is a minimal Motoko actor with only a `greet` function. No authentication or user management exists yet.
 
 ## Requested Changes (Diff)
 
 ### Add
-- Smart Cart system: each product card gets an 'Add to Cart' / quantity input
-- Floating 'View My Order' sticky button
-- Customer name input field
-- 'Send Order to WhatsApp' button that composes a message in format:
-  New Order for A.S.K:
-  - Item Name: [Quantity]
-  -----------------------
-  Customer Name: [Name]
-- WhatsApp number: +91 8700722663
+- VVIP Partner Register/Login flow using Internet Identity (authorization component)
+- A modal or dedicated page triggered by the REGISTER/LOGIN nav button
+- After login, show a VVIP Partner dashboard/welcome area with:
+  - Partner name/identity greeting
+  - Access to partner-only pricing ("Partner Price" revealed for products)
+  - Logout button
+- Backend: register a logged-in user as a VVIP Partner, store their principal, track registration timestamp
 
 ### Modify
-- Remove MyBillBook store banner at top
-- Remove all MyBillBook store links from product cards and nav/hero buttons
-- Replace 'Order Now' buttons with 'Add to Cart' that adds item to cart
-- Product cards show quantity selector and Add to Cart
+- REGISTER/LOGIN button in nav now triggers the Internet Identity login flow
+- After successful login + registration as VVIP Partner, update the product cards to reveal the partner price (can be a fixed discount, e.g. 15% off retail, or just show a "VVIP Partner" badge on cards)
 
 ### Remove
-- MyBillBook store banner
-- All href links to mybillbook.in/store/a_s_k_company
+- Nothing removed
 
 ## Implementation Plan
-1. Remove MyBillBook banner and all store links
-2. Restore Smart Cart state: cartItems map (itemName -> {qty, unit})
-3. Each product card: quantity number input + Kg/Bag toggle + Add to Cart button
-4. Floating 'View My Order' button (sticky bottom-right) showing item count
-5. Order modal/drawer: list of items, customer name input, Send to WhatsApp button
-6. WhatsApp message format as specified
-7. Keep Leadership section, Golden Eagle logo, all PWA features unchanged
+1. Add authorization component (Internet Identity)
+2. Generate backend with `registerVVIPPartner`, `getVVIPPartnerStatus`, `getAllVVIPPartners` (admin) functions
+3. Frontend: wire REGISTER/LOGIN button to Internet Identity login
+4. After login, show registration dialog if not yet registered as VVIP Partner
+5. Once registered, show VVIP badge and unlock partner pricing on product cards
+6. Add logout button to nav when logged in

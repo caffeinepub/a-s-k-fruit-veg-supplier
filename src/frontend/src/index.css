@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -12,61 +12,65 @@
 }
 
 @font-face {
-  font-family: "Fraunces";
-  src: url("/assets/fonts/Fraunces.woff2") format("woff2");
-  font-weight: 300 900;
+  font-family: "Playfair Display";
+  src: url("/assets/fonts/PlayfairDisplay.woff2") format("woff2");
+  font-weight: 400 800;
   font-display: swap;
 }
 
 @layer base {
   :root {
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    /* Dark forest green: mandi/bazaar feel */
-    --brand-dark: 0.26 0.085 155;
-    /* Medium green */
-    --brand-mid: 0.4 0.1 155;
-    /* Light green */
-    --brand-light: 0.55 0.13 152;
-    /* CTA warm saffron-orange: mandi vibes */
-    --cta-orange: 0.68 0.19 48;
-    /* WhatsApp green */
-    --whatsapp: 0.75 0.18 150;
-    /* Gold */
-    --gold: 0.8 0.15 78;
+    /* Midnight Royalty – Black & Gold */
+    /* Gold primary: #D4AF37 */
+    --gold: 0.76 0.13 82;
+    /* Gold highlight: #FFD700 */
+    --gold-highlight: 0.85 0.17 87;
+    /* Gold muted: #B8962E */
+    --gold-muted: 0.65 0.11 79;
+    /* Deep matte black */
+    --black-base: 0.08 0 0;
 
-    --background: 0.98 0.005 90;
-    --foreground: 0.14 0.02 155;
-    --card: 1 0 0;
-    --card-foreground: 0.14 0.02 155;
-    --popover: 1 0 0;
-    --popover-foreground: 0.14 0.02 155;
-    --primary: 0.26 0.085 155;
-    --primary-foreground: 0.985 0 0;
-    --secondary: 0.95 0.015 100;
-    --secondary-foreground: 0.26 0.085 155;
-    --muted: 0.95 0.015 100;
-    --muted-foreground: 0.5 0.02 155;
-    --accent: 0.68 0.19 48;
-    --accent-foreground: 0.985 0 0;
+    --background: 0.08 0 0;
+    --foreground: 0.76 0.13 82;
+    --card: 0.11 0.005 80;
+    --card-foreground: 0.76 0.13 82;
+    --popover: 0.11 0.005 80;
+    --popover-foreground: 0.76 0.13 82;
+    --primary: 0.76 0.13 82;
+    --primary-foreground: 0.08 0 0;
+    --secondary: 0.14 0.008 80;
+    --secondary-foreground: 0.76 0.13 82;
+    --muted: 0.14 0.008 80;
+    --muted-foreground: 0.55 0.08 80;
+    --accent: 0.76 0.13 82;
+    --accent-foreground: 0.08 0 0;
     --destructive: 0.577 0.245 27.325;
     --destructive-foreground: 0.985 0 0;
-    --border: 0.88 0.02 100;
-    --input: 0.88 0.02 100;
-    --ring: 0.4 0.1 155;
-    --chart-1: 0.646 0.222 41.116;
-    --chart-2: 0.6 0.118 184.704;
-    --chart-3: 0.398 0.07 227.392;
-    --chart-4: 0.828 0.189 84.429;
-    --chart-5: 0.769 0.188 70.08;
-    --sidebar: 0.985 0 0;
-    --sidebar-foreground: 0.145 0 0;
-    --sidebar-primary: 0.205 0 0;
-    --sidebar-primary-foreground: 0.985 0 0;
-    --sidebar-accent: 0.97 0 0;
-    --sidebar-accent-foreground: 0.205 0 0;
-    --sidebar-border: 0.922 0 0;
-    --sidebar-ring: 0.708 0 0;
+    --border: 0.76 0.13 82 / 0.35;
+    --input: 0.14 0.008 80;
+    --ring: 0.76 0.13 82;
+    --chart-1: 0.76 0.13 82;
+    --chart-2: 0.65 0.11 79;
+    --chart-3: 0.85 0.17 87;
+    --chart-4: 0.55 0.08 80;
+    --chart-5: 0.4 0.06 80;
+    --sidebar: 0.1 0.005 80;
+    --sidebar-foreground: 0.76 0.13 82;
+    --sidebar-primary: 0.76 0.13 82;
+    --sidebar-primary-foreground: 0.08 0 0;
+    --sidebar-accent: 0.14 0.008 80;
+    --sidebar-accent-foreground: 0.76 0.13 82;
+    --sidebar-border: 0.76 0.13 82 / 0.25;
+    --sidebar-ring: 0.76 0.13 82;
+
+    /* brand/cta aliases kept for compat */
+    --brand-dark: 0.08 0 0;
+    --brand-mid: 0.76 0.13 82;
+    --brand-light: 0.85 0.17 87;
+    --cta-orange: 0.76 0.13 82;
+    --whatsapp: 0.75 0.18 150;
   }
 
   * {
@@ -74,17 +78,177 @@
   }
   body {
     @apply bg-background text-foreground font-body;
+    background-color: #0a0a0a;
   }
-
   html {
     scroll-behavior: smooth;
   }
-
   .font-hindi {
-    font-family: "Noto Sans Devanagari", "Hind", sans-serif;
+    font-family: "Noto Sans Devanagari", sans-serif;
   }
+}
 
-  .bg-mandi-bg {
-    background-color: oklch(0.97 0.012 100);
+/* ── Marble background ── */
+.marble-bg {
+  background-color: #0a0a0a;
+  background-image: radial-gradient(
+      ellipse at 20% 30%,
+      rgba(30, 25, 10, 0.55) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 80% 70%,
+      rgba(25, 20, 5, 0.45) 0%,
+      transparent 55%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(212, 175, 55, 0.03) 0%,
+      transparent 50%,
+      rgba(212, 175, 55, 0.02) 100%
+    );
+}
+
+/* ── Gold text glow ── */
+.gold-glow {
+  text-shadow: 0 0 18px rgba(212, 175, 55, 0.55), 0 0 40px
+    rgba(212, 175, 55, 0.25);
+}
+.gold-glow-sm {
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+/* ── Logo golden aura ── */
+.logo-aura {
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.18), 0 0 24px 8px
+    rgba(212, 175, 55, 0.35), 0 0 60px 20px rgba(212, 175, 55, 0.15);
+}
+
+/* ── Gold border card ── */
+.gold-card {
+  background: #0d0d0d;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 8px;
+}
+.gold-card:hover {
+  border-color: rgba(212, 175, 55, 0.75);
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.18);
+}
+
+/* ── Gold button ── */
+.btn-gold {
+  background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #b8962e 100%);
+  color: #0a0a0a;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: filter 0.2s, box-shadow 0.2s;
+}
+.btn-gold:hover {
+  filter: brightness(1.12);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.5);
+}
+
+/* ── Gold outline button ── */
+.btn-gold-outline {
+  background: transparent;
+  color: #d4af37;
+  border: 1px solid #d4af37;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-gold-outline:hover {
+  background: rgba(212, 175, 55, 0.1);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+}
+
+/* ── Mandi intelligence animations ── */
+@keyframes rise-arrow {
+  0% {
+    stroke-dashoffset: 300;
+    opacity: 0;
   }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+@keyframes float-particle {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-90px) scale(0.3);
+    opacity: 0;
+  }
+}
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+  }
+}
+@keyframes shimmer-text {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+.shimmer-gold {
+  background: linear-gradient(
+    90deg,
+    #b8962e 0%,
+    #ffd700 40%,
+    #d4af37 60%,
+    #b8962e 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-text 3s linear infinite;
+}
+.rise-path {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: rise-arrow 2.4s ease-out forwards;
+}
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d4af37;
+  animation: float-particle 2s ease-in infinite;
+}
+.vvip-btn-pulse {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+/* ── WhatsApp button ── */
+.btn-whatsapp {
+  background: #25d366;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+.btn-whatsapp:hover {
+  filter: brightness(1.1);
 }

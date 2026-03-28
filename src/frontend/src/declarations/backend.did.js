@@ -8,14 +8,100 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const UserRole = IDL.Variant({
+  'admin' : IDL.Null,
+  'user' : IDL.Null,
+  'guest' : IDL.Null,
+});
+export const Time = IDL.Int;
+export const VVIPPartnerProfile = IDL.Record({
+  'principal' : IDL.Principal,
+  'businessName' : IDL.Text,
+  'fullName' : IDL.Text,
+  'isActive' : IDL.Bool,
+  'phone' : IDL.Text,
+  'registrationTime' : Time,
+});
+export const UserProfile = IDL.Record({ 'name' : IDL.Text });
+export const VVIPPartnerId = IDL.Nat;
+
 export const idlService = IDL.Service({
-  'greet' : IDL.Func([IDL.Text], [IDL.Text], ['query']),
+  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'getAllVVIPPartners' : IDL.Func([], [IDL.Vec(VVIPPartnerProfile)], ['query']),
+  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getGreeting' : IDL.Func([], [IDL.Text], ['query']),
+  'getUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(UserProfile)],
+      ['query'],
+    ),
+  'getVVIPPartnerProfile' : IDL.Func(
+      [],
+      [IDL.Opt(VVIPPartnerProfile)],
+      ['query'],
+    ),
+  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'isVVIPPartner' : IDL.Func([], [IDL.Bool], ['query']),
+  'registerVVIPPartner' : IDL.Func(
+      [IDL.Text, IDL.Text, IDL.Text],
+      [VVIPPartnerId],
+      [],
+    ),
+  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
-  return IDL.Service({ 'greet' : IDL.Func([IDL.Text], [IDL.Text], ['query']) });
+  const UserRole = IDL.Variant({
+    'admin' : IDL.Null,
+    'user' : IDL.Null,
+    'guest' : IDL.Null,
+  });
+  const Time = IDL.Int;
+  const VVIPPartnerProfile = IDL.Record({
+    'principal' : IDL.Principal,
+    'businessName' : IDL.Text,
+    'fullName' : IDL.Text,
+    'isActive' : IDL.Bool,
+    'phone' : IDL.Text,
+    'registrationTime' : Time,
+  });
+  const UserProfile = IDL.Record({ 'name' : IDL.Text });
+  const VVIPPartnerId = IDL.Nat;
+  
+  return IDL.Service({
+    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'getAllVVIPPartners' : IDL.Func(
+        [],
+        [IDL.Vec(VVIPPartnerProfile)],
+        ['query'],
+      ),
+    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getGreeting' : IDL.Func([], [IDL.Text], ['query']),
+    'getUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserProfile)],
+        ['query'],
+      ),
+    'getVVIPPartnerProfile' : IDL.Func(
+        [],
+        [IDL.Opt(VVIPPartnerProfile)],
+        ['query'],
+      ),
+    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'isVVIPPartner' : IDL.Func([], [IDL.Bool], ['query']),
+    'registerVVIPPartner' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text],
+        [VVIPPartnerId],
+        [],
+      ),
+    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  });
 };
 
 export const init = ({ IDL }) => { return []; };

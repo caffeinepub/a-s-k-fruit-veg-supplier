@@ -16,10 +16,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Plus Jakarta Sans', 'sans-serif'],
-        display: ['Fraunces', 'serif'],
-        heading: ['Montserrat', 'Plus Jakarta Sans', 'sans-serif'],
-        hindi: ['Noto Sans Devanagari', 'Plus Jakarta Sans', 'sans-serif'],
+        body: ["Plus Jakarta Sans", "sans-serif"],
+        display: ["Playfair Display", "serif"],
+        heading: ["Montserrat", "Plus Jakarta Sans", "sans-serif"],
+        hindi: ["Noto Sans Devanagari", "Plus Jakarta Sans", "sans-serif"],
       },
       colors: {
         border: "oklch(var(--border))",
@@ -88,7 +88,8 @@ export default {
       },
       boxShadow: {
         xs: "0 1px 2px 0 rgba(0,0,0,0.05)",
-        card: "0 4px 20px 0 rgba(15,59,46,0.10)",
+        card: "0 4px 20px 0 rgba(212,175,55,0.12)",
+        gold: "0 0 24px rgba(212,175,55,0.4)",
       },
       keyframes: {
         "accordion-down": {
