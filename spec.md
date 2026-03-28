@@ -1,32 +1,39 @@
-# A.S.K Fruit & Veg Supplier
+# A.S.K Fruit & Veg Supplier — Final VVIP Business Overhaul
 
 ## Current State
-The site has the Midnight Royalty theme (black/gold), Smart Cart, WhatsApp ordering, full inventory, Leadership section, and a REGISTER/LOGIN button in the navigation that currently does nothing.
-
-The backend is a minimal Motoko actor with only a `greet` function. No authentication or user management exists yet.
+- Site has login/registration (VVIP Auth) with Internet Identity
+- Prices shown are base prices; VVIP prices require login
+- "LOGIN TO VIEW PARTNER PRICE" label below prices
+- Navigation includes REGISTER/LOGIN button
+- Footer lacks '3-Brothers Quality Guarantee'
+- Nav has extra items beyond HOME, ABOUT, MANDI LIVE, CONTACT
+- Products have auth-gated VVIP price feature
 
 ## Requested Changes (Diff)
 
 ### Add
-- VVIP Partner Register/Login flow using Internet Identity (authorization component)
-- A modal or dedicated page triggered by the REGISTER/LOGIN nav button
-- After login, show a VVIP Partner dashboard/welcome area with:
-  - Partner name/identity greeting
-  - Access to partner-only pricing ("Partner Price" revealed for products)
-  - Logout button
-- Backend: register a logged-in user as a VVIP Partner, store their principal, track registration timestamp
+- 'Standard Delivery Price' golden label under each price
+- 'WHATSAPP VVIP RATE' button under every product (replaces login prompt)
+- '3-Brothers Quality Guarantee' text in footer
+- Public prices = Base price + ₹15 for all items
 
 ### Modify
-- REGISTER/LOGIN button in nav now triggers the Internet Identity login flow
-- After successful login + registration as VVIP Partner, update the product cards to reveal the partner price (can be a fixed discount, e.g. 15% off retail, or just show a "VVIP Partner" badge on cards)
+- Remove all login/registration UI and auth gates — fully open catalog
+- Nav: only HOME, ABOUT, MANDI LIVE, CONTACT (remove REGISTER/LOGIN and other items)
+- Replace "LOGIN TO VIEW PARTNER PRICE" text with WHATSAPP VVIP RATE button
+- WHATSAPP VVIP RATE link: https://wa.me/918700722663?text=Hi%20Sufiyan,%20I%20want%20the%20Wholesale%20VVIP%20Price%20for%20[Product_Name]%20for%20my%20Banquet
+- Product_Name in link must be dynamically replaced with actual product name
 
 ### Remove
-- Nothing removed
+- All Login/Register buttons and flows
+- VVIPAuth component usage
+- Any auth-dependent logic
 
 ## Implementation Plan
-1. Add authorization component (Internet Identity)
-2. Generate backend with `registerVVIPPartner`, `getVVIPPartnerStatus`, `getAllVVIPPartners` (admin) functions
-3. Frontend: wire REGISTER/LOGIN button to Internet Identity login
-4. After login, show registration dialog if not yet registered as VVIP Partner
-5. Once registered, show VVIP badge and unlock partner pricing on product cards
-6. Add logout button to nav when logged in
+1. Update all 34 inventory items: displayed price = base + 15
+2. Add 'Standard Delivery Price' label under each price
+3. Replace all login prompts/buttons with WHATSAPP VVIP RATE button linking to wa.me with dynamic product name
+4. Remove REGISTER/LOGIN from nav; keep only HOME, ABOUT, MANDI LIVE, CONTACT
+5. Add '3-Brothers Quality Guarantee' in footer
+6. Remove VVIPAuth component and all auth imports/usage
+7. Maintain Black Marble & Gold theme throughout

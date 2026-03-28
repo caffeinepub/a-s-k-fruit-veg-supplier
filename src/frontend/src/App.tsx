@@ -1,9 +1,3 @@
-import {
-  VVIPMobileNavButton,
-  VVIPNavButton,
-  VVIPPriceBadge,
-  VVIPStatusBar,
-} from "@/components/VVIPAuth";
 import { Toaster } from "@/components/ui/sonner";
 import {
   Mail,
@@ -46,7 +40,7 @@ const PRODUCTS: Product[] = [
     id: "aloo",
     name: "Aloo",
     hindiName: "आलू",
-    retailPrice: 10,
+    retailPrice: 25,
     unit: "kg",
     category: "roots",
   },
@@ -54,7 +48,7 @@ const PRODUCTS: Product[] = [
     id: "gajar",
     name: "Gajar",
     hindiName: "गाजर",
-    retailPrice: 27,
+    retailPrice: 42,
     unit: "kg",
     category: "roots",
   },
@@ -62,7 +56,7 @@ const PRODUCTS: Product[] = [
     id: "mooli",
     name: "Mooli",
     hindiName: "मूली",
-    retailPrice: 15,
+    retailPrice: 30,
     unit: "kg",
     category: "roots",
   },
@@ -70,7 +64,7 @@ const PRODUCTS: Product[] = [
     id: "arbi",
     name: "Arbi",
     hindiName: "अरबी",
-    retailPrice: 55,
+    retailPrice: 70,
     unit: "kg",
     category: "roots",
   },
@@ -78,7 +72,7 @@ const PRODUCTS: Product[] = [
     id: "chukandar",
     name: "Chukandar",
     hindiName: "चुकन्दर",
-    retailPrice: 28,
+    retailPrice: 43,
     unit: "kg",
     category: "roots",
   },
@@ -87,7 +81,7 @@ const PRODUCTS: Product[] = [
     id: "palak",
     name: "Palak",
     hindiName: "पालक",
-    retailPrice: 17,
+    retailPrice: 32,
     unit: "kg",
     category: "greens",
   },
@@ -95,7 +89,7 @@ const PRODUCTS: Product[] = [
     id: "methi",
     name: "Methi",
     hindiName: "मेथी",
-    retailPrice: 30,
+    retailPrice: 45,
     unit: "kg",
     category: "greens",
   },
@@ -103,7 +97,7 @@ const PRODUCTS: Product[] = [
     id: "bathua",
     name: "Bathua",
     hindiName: "बथुआ",
-    retailPrice: 50,
+    retailPrice: 65,
     unit: "kg",
     category: "greens",
   },
@@ -111,7 +105,7 @@ const PRODUCTS: Product[] = [
     id: "sarson",
     name: "Sarson ka Saag",
     hindiName: "सरसों का साग",
-    retailPrice: 30,
+    retailPrice: 45,
     unit: "kg",
     category: "greens",
   },
@@ -119,7 +113,7 @@ const PRODUCTS: Product[] = [
     id: "pudina",
     name: "Pudina",
     hindiName: "पुदीना",
-    retailPrice: 60,
+    retailPrice: 75,
     unit: "kg",
     category: "greens",
   },
@@ -127,7 +121,7 @@ const PRODUCTS: Product[] = [
     id: "dhaniya",
     name: "Dhaniya",
     hindiName: "धनिया",
-    retailPrice: 30,
+    retailPrice: 45,
     unit: "unit",
     category: "greens",
   },
@@ -136,7 +130,7 @@ const PRODUCTS: Product[] = [
     id: "baingan",
     name: "Baingan",
     hindiName: "बैंगन",
-    retailPrice: 40,
+    retailPrice: 55,
     unit: "kg",
     category: "vegetables",
   },
@@ -144,7 +138,7 @@ const PRODUCTS: Product[] = [
     id: "tamatar",
     name: "Tamatar",
     hindiName: "टमाटर",
-    retailPrice: 27,
+    retailPrice: 42,
     unit: "kg",
     category: "vegetables",
   },
@@ -152,7 +146,7 @@ const PRODUCTS: Product[] = [
     id: "pyaaz",
     name: "Pyaaz",
     hindiName: "प्याज़",
-    retailPrice: 24,
+    retailPrice: 39,
     unit: "kg",
     category: "vegetables",
   },
@@ -160,7 +154,7 @@ const PRODUCTS: Product[] = [
     id: "bhindi",
     name: "Bhindi",
     hindiName: "भिंडी",
-    retailPrice: 70,
+    retailPrice: 85,
     unit: "kg",
     category: "vegetables",
   },
@@ -168,7 +162,7 @@ const PRODUCTS: Product[] = [
     id: "lauki",
     name: "Lauki",
     hindiName: "लौकी",
-    retailPrice: 28,
+    retailPrice: 43,
     unit: "kg",
     category: "vegetables",
   },
@@ -176,7 +170,7 @@ const PRODUCTS: Product[] = [
     id: "tori",
     name: "Tori",
     hindiName: "तोरी",
-    retailPrice: 44,
+    retailPrice: 59,
     unit: "kg",
     category: "vegetables",
   },
@@ -184,7 +178,7 @@ const PRODUCTS: Product[] = [
     id: "karela",
     name: "Karela",
     hindiName: "करेला",
-    retailPrice: 55,
+    retailPrice: 70,
     unit: "kg",
     category: "vegetables",
   },
@@ -192,7 +186,7 @@ const PRODUCTS: Product[] = [
     id: "parwal",
     name: "Parwal",
     hindiName: "परवल",
-    retailPrice: 60,
+    retailPrice: 75,
     unit: "kg",
     category: "vegetables",
   },
@@ -200,7 +194,7 @@ const PRODUCTS: Product[] = [
     id: "mirch",
     name: "Mirch",
     hindiName: "मिर्च",
-    retailPrice: 50,
+    retailPrice: 65,
     unit: "kg",
     category: "vegetables",
   },
@@ -224,7 +218,7 @@ const PRODUCTS: Product[] = [
     id: "adrak",
     name: "Adrak",
     hindiName: "अदरक",
-    retailPrice: 86,
+    retailPrice: 101,
     unit: "kg",
     category: "vegetables",
   },
@@ -256,7 +250,7 @@ const PRODUCTS: Product[] = [
     id: "broccoli",
     name: "Broccoli",
     hindiName: "ब्रोकोली",
-    retailPrice: 160,
+    retailPrice: 175,
     unit: "kg",
     category: "vegetables",
   },
@@ -280,7 +274,7 @@ const PRODUCTS: Product[] = [
     id: "beans",
     name: "Beans",
     hindiName: "बीन्स",
-    retailPrice: 55,
+    retailPrice: 70,
     unit: "kg",
     category: "vegetables",
   },
@@ -288,7 +282,7 @@ const PRODUCTS: Product[] = [
     id: "kaddu",
     name: "Kaddu",
     hindiName: "कद्दू",
-    retailPrice: 22,
+    retailPrice: 37,
     unit: "kg",
     category: "vegetables",
   },
@@ -296,7 +290,7 @@ const PRODUCTS: Product[] = [
     id: "mushroom",
     name: "Mushroom",
     hindiName: "मशरूम",
-    retailPrice: 180,
+    retailPrice: 195,
     unit: "kg",
     category: "vegetables",
   },
@@ -820,10 +814,21 @@ function ProductCard({
           <p className="text-xs" style={{ color: "rgba(212,175,55,0.55)" }}>
             per {product.unit}
           </p>
-          <VVIPPriceBadge
-            retailPrice={product.retailPrice}
-            unit={product.unit}
-          />
+          <p
+            className="text-xs mt-0.5 font-semibold"
+            style={{ color: "#D4AF37" }}
+          >
+            Standard Delivery Price
+          </p>
+          <a
+            href={`https://wa.me/918700722663?text=${encodeURIComponent(`Hi Sufiyan, I want the Wholesale VVIP Price for ${product.name} for my Banquet.`)}`}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-gold w-full py-1.5 text-xs font-black uppercase tracking-widest rounded text-center block mt-1"
+            data-ocid={`product.whatsapp_vvip.${index}`}
+          >
+            📲 WHATSAPP VVIP RATE
+          </a>
         </div>
       </div>
 
@@ -938,11 +943,10 @@ export default function App() {
   );
 
   const navLinks = [
-    { label: "ABOUT US", href: "#about" },
-    { label: "OUR PROCESS", href: "#process" },
+    { label: "HOME", href: "#home" },
+    { label: "ABOUT", href: "#about" },
     { label: "MANDI LIVE", href: "#mandi" },
     { label: "CONTACT", href: "#contact" },
-    { label: "ORDER SAMPLES", href: "#products" },
   ];
 
   return (
@@ -1019,7 +1023,6 @@ export default function App() {
               ))}
             </nav>
             <div className="ml-auto flex items-center gap-3">
-              <VVIPNavButton />
               <button
                 type="button"
                 className="md:hidden p-2 btn-gold-outline rounded"
@@ -1063,14 +1066,11 @@ export default function App() {
                     {link.label}
                   </a>
                 ))}
-                <VVIPMobileNavButton />
               </nav>
             </motion.div>
           )}
         </AnimatePresence>
       </header>
-
-      <VVIPStatusBar />
 
       {/* ── HERO ── */}
       <section
@@ -1203,7 +1203,12 @@ export default function App() {
                   >
                     ₹{item.price}/kg
                   </p>
-                  <VVIPPriceBadge retailPrice={item.price} unit="kg" />
+                  <p
+                    className="text-xs mt-0.5 font-semibold"
+                    style={{ color: "#D4AF37" }}
+                  >
+                    Standard Delivery Price
+                  </p>
                 </div>
                 <button
                   type="button"
@@ -1801,6 +1806,12 @@ export default function App() {
               ask.global.exports.official@gmail.com
             </span>
           </div>
+          <p
+            className="text-sm font-bold mt-4 tracking-widest uppercase"
+            style={{ color: "#D4AF37" }}
+          >
+            ✦ 3-Brothers Quality Guarantee ✦
+          </p>
           <div
             className="w-32 h-px mx-auto my-5"
             style={{
