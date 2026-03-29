@@ -996,6 +996,13 @@ export default function App() {
                   borderRadius: "50%",
                   objectFit: "cover",
                   cursor: "pointer",
+                  display: "block",
+                  boxShadow:
+                    "0 0 24px 8px rgba(212,175,55,0.55), 0 0 48px 16px rgba(212,175,55,0.25)",
+                  border: "2px solid rgba(212,175,55,0.5)",
+                }}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/assets/IMG_2664.jpeg";
                 }}
               />
             </a>
