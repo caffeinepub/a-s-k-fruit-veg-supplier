@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ask-sabzi-v2';
+const CACHE_NAME = 'ask-sabzi-v4';
 const URLS_TO_CACHE = [
   '/',
   '/manifest.json',
@@ -18,22 +18,24 @@ self.addEventListener('activate', (event) => {
     )
   );
   self.clients.claim();
+  // Force reload all open windows so users immediately see the latest no-login interface
+  self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+    clients.forEach((client) => client.navigate(client.url));
+  });
 });
 
 self.addEventListener('fetch', (event) => {
-  // Only handle GET requests for same-origin or cached assets
   if (event.request.method !== 'GET') return;
+  // Network-first: always fetch fresh, fall back to cache
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).then((response) => {
-        // Cache successful same-origin responses
-        if (response && response.status === 200 && response.type === 'basic') {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-        }
-        return response;
-      }).catch(() => cached || new Response('Offline', { status: 503 }));
-    })
+    fetch(event.request).then((response) => {
+      if (response && response.status === 200 && response.type === 'basic') {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+      }
+      return response;
+    }).catch(() =>
+      caches.match(event.request).then((cached) => cached || new Response('Offline', { status: 503 }))
+    )
   );
 });

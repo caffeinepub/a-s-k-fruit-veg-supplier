@@ -915,6 +915,7 @@ export default function App() {
   const [customerName, setCustomerName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   const adjust = (id: string, delta: number) => {
     setQuantities((prev) => ({ ...prev, [id]: Math.max(0, prev[id] + delta) }));
@@ -969,8 +970,8 @@ export default function App() {
             <div
               className="absolute rounded-full"
               style={{
-                width: "120px",
-                height: "120px",
+                width: "140px",
+                height: "140px",
                 background:
                   "radial-gradient(circle, rgba(212,175,55,0.3) 0%, rgba(212,175,55,0.08) 60%, transparent 80%)",
                 top: "-10px",
@@ -978,17 +979,42 @@ export default function App() {
                 transform: "translateX(-50%)",
               }}
             />
-            <img
-              src="/assets/uploads/IMG_2664-1.jpeg"
-              alt="A.S.K VVIP Eagle Logo"
-              className="logo-aura relative z-10"
-              style={{
-                width: "90px",
-                height: "90px",
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-            />
+            {logoError ? (
+              <div
+                className="relative z-10 flex items-center justify-center"
+                style={{
+                  width: "120px",
+                  height: "120px",
+                  borderRadius: "50%",
+                  border: "2px solid #D4AF37",
+                  background: "rgba(0,0,0,0.8)",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#D4AF37",
+                    fontSize: "28px",
+                    fontWeight: "bold",
+                    letterSpacing: "2px",
+                  }}
+                >
+                  A.S.K
+                </span>
+              </div>
+            ) : (
+              <img
+                src="/assets/uploads/IMG_2664-1.jpeg"
+                alt="A.S.K VVIP Eagle Logo"
+                className="logo-aura relative z-10"
+                onError={() => setLogoError(true)}
+                style={{
+                  width: "120px",
+                  height: "120px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
+              />
+            )}
           </div>
           <div className="text-center">
             <h1
