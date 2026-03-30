@@ -13,6 +13,17 @@ export const UserRole = IDL.Variant({
   'user' : IDL.Null,
   'guest' : IDL.Null,
 });
+export const Order = IDL.Record({
+  'id' : IDL.Nat,
+  'status' : IDL.Text,
+  'itemsSummary' : IDL.Text,
+  'clientName' : IDL.Text,
+  'vehicleNumber' : IDL.Text,
+  'createdAt' : IDL.Int,
+  'isArchived' : IDL.Bool,
+  'updatedAt' : IDL.Int,
+  'statusMessage' : IDL.Text,
+});
 export const Time = IDL.Int;
 export const VVIPPartnerProfile = IDL.Record({
   'principal' : IDL.Principal,
@@ -23,15 +34,30 @@ export const VVIPPartnerProfile = IDL.Record({
   'registrationTime' : Time,
 });
 export const UserProfile = IDL.Record({ 'name' : IDL.Text });
+export const OrderStatus = IDL.Record({
+  'status' : IDL.Text,
+  'timestamp' : IDL.Int,
+});
 export const VVIPPartnerId = IDL.Nat;
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'clearHistory' : IDL.Func([], [], []),
+  'confirmOrder' : IDL.Func([IDL.Nat], [IDL.Bool], []),
+  'createOrder' : IDL.Func([IDL.Text, IDL.Text], [IDL.Nat], []),
+  'deliverOrder' : IDL.Func([IDL.Nat], [IDL.Bool], []),
+  'dispatchOrder' : IDL.Func([IDL.Nat, IDL.Text], [IDL.Bool], []),
+  'getActiveOrders' : IDL.Func([], [IDL.Vec(Order)], ['query']),
   'getAllVVIPPartners' : IDL.Func([], [IDL.Vec(VVIPPartnerProfile)], ['query']),
+  'getArchivedOrders' : IDL.Func([], [IDL.Vec(Order)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getGreeting' : IDL.Func([], [IDL.Text], ['query']),
+  'getOrder' : IDL.Func([IDL.Nat], [IDL.Opt(Order)], ['query']),
+  'getOrdersCount' : IDL.Func([], [IDL.Nat], ['query']),
+  'getStatus' : IDL.Func([], [IDL.Text], ['query']),
+  'getStatusHistory' : IDL.Func([], [IDL.Vec(OrderStatus)], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
@@ -50,6 +76,8 @@ export const idlService = IDL.Service({
       [],
     ),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'setStatus' : IDL.Func([IDL.Text], [], []),
+  'startSourcing' : IDL.Func([IDL.Nat], [IDL.Bool], []),
 });
 
 export const idlInitArgs = [];
@@ -59,6 +87,17 @@ export const idlFactory = ({ IDL }) => {
     'admin' : IDL.Null,
     'user' : IDL.Null,
     'guest' : IDL.Null,
+  });
+  const Order = IDL.Record({
+    'id' : IDL.Nat,
+    'status' : IDL.Text,
+    'itemsSummary' : IDL.Text,
+    'clientName' : IDL.Text,
+    'vehicleNumber' : IDL.Text,
+    'createdAt' : IDL.Int,
+    'isArchived' : IDL.Bool,
+    'updatedAt' : IDL.Int,
+    'statusMessage' : IDL.Text,
   });
   const Time = IDL.Int;
   const VVIPPartnerProfile = IDL.Record({
@@ -70,19 +109,34 @@ export const idlFactory = ({ IDL }) => {
     'registrationTime' : Time,
   });
   const UserProfile = IDL.Record({ 'name' : IDL.Text });
+  const OrderStatus = IDL.Record({
+    'status' : IDL.Text,
+    'timestamp' : IDL.Int,
+  });
   const VVIPPartnerId = IDL.Nat;
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'clearHistory' : IDL.Func([], [], []),
+    'confirmOrder' : IDL.Func([IDL.Nat], [IDL.Bool], []),
+    'createOrder' : IDL.Func([IDL.Text, IDL.Text], [IDL.Nat], []),
+    'deliverOrder' : IDL.Func([IDL.Nat], [IDL.Bool], []),
+    'dispatchOrder' : IDL.Func([IDL.Nat, IDL.Text], [IDL.Bool], []),
+    'getActiveOrders' : IDL.Func([], [IDL.Vec(Order)], ['query']),
     'getAllVVIPPartners' : IDL.Func(
         [],
         [IDL.Vec(VVIPPartnerProfile)],
         ['query'],
       ),
+    'getArchivedOrders' : IDL.Func([], [IDL.Vec(Order)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getGreeting' : IDL.Func([], [IDL.Text], ['query']),
+    'getOrder' : IDL.Func([IDL.Nat], [IDL.Opt(Order)], ['query']),
+    'getOrdersCount' : IDL.Func([], [IDL.Nat], ['query']),
+    'getStatus' : IDL.Func([], [IDL.Text], ['query']),
+    'getStatusHistory' : IDL.Func([], [IDL.Vec(OrderStatus)], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
@@ -101,6 +155,8 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'setStatus' : IDL.Func([IDL.Text], [], []),
+    'startSourcing' : IDL.Func([IDL.Nat], [IDL.Bool], []),
   });
 };
 

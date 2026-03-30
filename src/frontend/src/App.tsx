@@ -11,6 +11,9 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import AdminPanel from "./components/AdminPanel";
+import MDDashboard from "./components/MDDashboard";
+import TrackingPage from "./components/TrackingPage";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Types & Data
@@ -372,153 +375,6 @@ function totalItems(q: Record<string, number>) {
 // ────────────────────────────────────────────────────────────────────────────
 // SVG Icons (line-art golden)
 // ────────────────────────────────────────────────────────────────────────────
-function GingerIcon() {
-  return (
-    <svg
-      role="img"
-      aria-label="Ginger root icon"
-      width="64"
-      height="64"
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M20 44 C14 38 14 26 22 20 C30 14 42 16 46 24 C50 32 46 44 38 46 C32 48 26 44 20 44Z"
-        stroke="#D4AF37"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M30 44 C28 50 26 56 28 60"
-        stroke="#D4AF37"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M38 46 C42 50 46 54 44 60"
-        stroke="#D4AF37"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M24 22 C20 18 18 12 22 8"
-        stroke="#D4AF37"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M22 30 Q32 26 42 30"
-        stroke="#D4AF37"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M20 36 Q32 32 44 36"
-        stroke="#D4AF37"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function TomatoIcon() {
-  return (
-    <svg
-      role="img"
-      aria-label="Tomato icon"
-      width="64"
-      height="64"
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <circle cx="32" cy="36" r="20" stroke="#D4AF37" strokeWidth="2" />
-      <path
-        d="M32 16 L32 8"
-        stroke="#D4AF37"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M28 12 C24 6 18 10 20 16"
-        stroke="#D4AF37"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M36 12 C40 6 46 10 44 16"
-        stroke="#D4AF37"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M18 28 Q32 24 46 28"
-        stroke="#D4AF37"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M16 36 Q32 32 48 36"
-        stroke="#D4AF37"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function OnionIcon() {
-  return (
-    <svg
-      role="img"
-      aria-label="Onion icon"
-      width="64"
-      height="64"
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <ellipse
-        cx="32"
-        cy="38"
-        rx="20"
-        ry="18"
-        stroke="#D4AF37"
-        strokeWidth="2"
-      />
-      <ellipse
-        cx="32"
-        cy="38"
-        rx="14"
-        ry="12"
-        stroke="#D4AF37"
-        strokeWidth="1.5"
-      />
-      <ellipse
-        cx="32"
-        cy="38"
-        rx="8"
-        ry="7"
-        stroke="#D4AF37"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M32 20 L32 12"
-        stroke="#D4AF37"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M26 16 C22 8 28 6 32 12"
-        stroke="#D4AF37"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
 
 // ────────────────────────────────────────────────────────────────────────────
 // VVIP Featured Products
@@ -529,21 +385,21 @@ const FEATURED = [
     label: "Sahibabad Ginger",
     hindiName: "अदरक",
     price: 86,
-    icon: <GingerIcon />,
+    image: "/assets/generated/ginger-fresh.dim_400x400.png",
   },
   {
     id: "tamatar",
     label: "VVIP Tomatoes",
     hindiName: "टमाटर",
     price: 27,
-    icon: <TomatoIcon />,
+    image: "/assets/generated/tomatoes-fresh.dim_400x400.png",
   },
   {
     id: "pyaaz",
     label: "Premium Onions",
     hindiName: "प्याज़",
     price: 24,
-    icon: <OnionIcon />,
+    image: "/assets/generated/onions-fresh.dim_400x400.png",
   },
 ];
 
@@ -729,7 +585,6 @@ function MandiIntelligence() {
               [230, 35],
             ].map(([x, y]) => (
               <circle
-                // biome-ignore lint/suspicious/noArrayIndexKey: static ordered data points
                 key={`${x}-${y}`}
                 cx={x}
                 cy={y}
@@ -946,6 +801,7 @@ export default function App() {
     { label: "HOME", href: "#home" },
     { label: "ABOUT", href: "#about" },
     { label: "MANDI LIVE", href: "#mandi" },
+    { label: "📦 TRACK ORDER", href: "#track" },
     { label: "CONTACT", href: "#contact" },
   ];
 
@@ -1196,8 +1052,24 @@ export default function App() {
                 className="gold-card p-8 flex flex-col items-center text-center gap-4"
                 data-ocid={`featured.item.${i + 1}`}
               >
-                <div className="w-20 h-20 flex items-center justify-center">
-                  {item.icon}
+                <div className="relative w-24 h-24 flex items-center justify-center">
+                  <div
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background:
+                        "radial-gradient(circle, rgba(212,175,55,0.35) 0%, rgba(212,175,55,0.1) 60%, transparent 80%)",
+                    }}
+                  />
+                  <img
+                    src={item.image}
+                    alt={item.label}
+                    className="relative z-10 w-24 h-24 rounded-full object-cover"
+                    style={{
+                      boxShadow:
+                        "0 0 20px 6px rgba(212,175,55,0.5), 0 0 40px 12px rgba(212,175,55,0.2)",
+                      border: "2px solid rgba(212,175,55,0.6)",
+                    }}
+                  />
                 </div>
                 <div>
                   <h3
@@ -1614,7 +1486,14 @@ export default function App() {
                 src="/assets/uploads/IMG_2664-1.jpeg"
                 alt="Eagle Logo"
                 className="w-10 h-10 rounded-full object-cover"
-                style={{ boxShadow: "0 0 12px rgba(212,175,55,0.4)" }}
+                style={{
+                  boxShadow:
+                    "0 0 18px rgba(212,175,55,0.55), 0 0 6px rgba(212,175,55,0.3)",
+                  border: "2px solid rgba(212,175,55,0.5)",
+                }}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/assets/IMG_2664.jpeg";
+                }}
               />
               <h2
                 className="font-heading text-3xl sm:text-4xl font-black uppercase tracking-widest gold-glow"
@@ -1626,7 +1505,14 @@ export default function App() {
                 src="/assets/uploads/IMG_2664-1.jpeg"
                 alt="Eagle Logo"
                 className="w-10 h-10 rounded-full object-cover"
-                style={{ boxShadow: "0 0 12px rgba(212,175,55,0.4)" }}
+                style={{
+                  boxShadow:
+                    "0 0 18px rgba(212,175,55,0.55), 0 0 6px rgba(212,175,55,0.3)",
+                  border: "2px solid rgba(212,175,55,0.5)",
+                }}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/assets/IMG_2664.jpeg";
+                }}
               />
             </div>
             <p
@@ -1648,14 +1534,28 @@ export default function App() {
                 className="gold-card p-8 text-center"
                 data-ocid={`team.item.${i + 1}`}
               >
-                <div
-                  className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-black"
-                  style={{
-                    background: "linear-gradient(135deg, #D4AF37, #B8962E)",
-                    color: "#0A0A0A",
-                  }}
-                >
-                  {partner.initial}
+                <div className="relative mx-auto mb-4 w-20 h-20">
+                  <div
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background:
+                        "radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 80%)",
+                    }}
+                  />
+                  <img
+                    src="/assets/generated/team-vvip-placeholder.dim_200x200.png"
+                    alt={partner.name}
+                    className="relative z-10 w-20 h-20 rounded-full object-cover"
+                    style={{
+                      boxShadow:
+                        "0 0 18px rgba(212,175,55,0.55), 0 0 6px rgba(212,175,55,0.3)",
+                      border: "2px solid rgba(212,175,55,0.6)",
+                    }}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        "/assets/uploads/IMG_2664-1.jpeg";
+                    }}
+                  />
                 </div>
                 <h3
                   className="font-heading font-black text-lg uppercase tracking-wide"
@@ -1761,14 +1661,143 @@ export default function App() {
           borderTop: "1px solid rgba(212,175,55,0.2)",
         }}
       >
-        <div className="max-w-3xl mx-auto px-4 text-center">
+        <div className="max-w-3xl mx-auto px-4">
           <h2
-            className="font-heading text-3xl font-black uppercase tracking-widest mb-8 gold-glow"
+            className="font-heading text-3xl font-black uppercase tracking-widest mb-8 gold-glow text-center"
             style={{ color: "#D4AF37" }}
           >
             CONTACT
           </h2>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+
+          {/* Hardcoded Key Contacts */}
+          <div
+            className="rounded-2xl overflow-hidden mb-8"
+            style={{
+              border: "1px solid rgba(212,175,55,0.25)",
+              background: "#0d0d0d",
+            }}
+          >
+            <div
+              className="px-5 py-3"
+              style={{
+                background: "rgba(212,175,55,0.08)",
+                borderBottom: "1px solid rgba(212,175,55,0.15)",
+              }}
+            >
+              <p
+                className="text-xs font-bold uppercase tracking-widest"
+                style={{ color: "rgba(212,175,55,0.7)" }}
+              >
+                Key Contacts
+              </p>
+            </div>
+            {/* MD Sufiyan */}
+            <div
+              className="flex items-center justify-between px-5 py-4"
+              style={{ borderBottom: "1px solid rgba(212,175,55,0.08)" }}
+            >
+              <div>
+                <p
+                  className="text-xs uppercase tracking-widest"
+                  style={{ color: "rgba(212,175,55,0.45)" }}
+                >
+                  MD — Strategy & Support
+                </p>
+                <p className="text-sm font-bold" style={{ color: "#D4AF37" }}>
+                  Sufiyan A.S.K
+                </p>
+                <p
+                  className="text-xs font-mono"
+                  style={{ color: "rgba(212,175,55,0.55)" }}
+                >
+                  8700722663
+                </p>
+              </div>
+              <a
+                href="https://wa.me/918700722663"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide"
+                style={{
+                  background: "rgba(37,211,102,0.15)",
+                  border: "1px solid rgba(37,211,102,0.4)",
+                  color: "#25d366",
+                }}
+                data-ocid="contact.md.whatsapp"
+              >
+                💬 WhatsApp
+              </a>
+            </div>
+            {/* CEO Adnan */}
+            <div
+              className="flex items-center justify-between px-5 py-4"
+              style={{ borderBottom: "1px solid rgba(212,175,55,0.08)" }}
+            >
+              <div>
+                <p
+                  className="text-xs uppercase tracking-widest"
+                  style={{ color: "rgba(212,175,55,0.45)" }}
+                >
+                  CEO — Operations
+                </p>
+                <p className="text-sm font-bold" style={{ color: "#D4AF37" }}>
+                  Adnan A.S.K
+                </p>
+                <p
+                  className="text-xs font-mono"
+                  style={{ color: "rgba(212,175,55,0.55)" }}
+                >
+                  8527865856
+                </p>
+              </div>
+              <a
+                href="tel:+918527865856"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide"
+                style={{
+                  background: "rgba(212,175,55,0.15)",
+                  border: "1px solid rgba(212,175,55,0.4)",
+                  color: "#D4AF37",
+                }}
+                data-ocid="contact.ceo.call"
+              >
+                📞 Direct Call
+              </a>
+            </div>
+            {/* Finance Shad */}
+            <div className="flex items-center justify-between px-5 py-4">
+              <div>
+                <p
+                  className="text-xs uppercase tracking-widest"
+                  style={{ color: "rgba(212,175,55,0.45)" }}
+                >
+                  Finance — System Registry
+                </p>
+                <p className="text-sm font-bold" style={{ color: "#D4AF37" }}>
+                  Shad A.S.K
+                </p>
+                <p
+                  className="text-xs font-mono"
+                  style={{ color: "rgba(212,175,55,0.55)" }}
+                >
+                  9318404289
+                </p>
+              </div>
+              <a
+                href="tel:+919318404289"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide"
+                style={{
+                  background: "rgba(167,139,250,0.12)",
+                  border: "1px solid rgba(167,139,250,0.35)",
+                  color: "#a78bfa",
+                }}
+                data-ocid="contact.finance.call"
+              >
+                🏦 Registry
+              </a>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
@@ -1789,6 +1818,15 @@ export default function App() {
         </div>
       </section>
 
+      {/* ── TRACKING PAGE ── */}
+      <TrackingPage />
+
+      {/* ── ADMIN PANEL ── */}
+      <AdminPanel />
+
+      {/* ── MD STRATEGIC DASHBOARD ── */}
+      <MDDashboard />
+
       {/* ── FOOTER ── */}
       <footer
         className="py-10 text-center"
@@ -1802,7 +1840,14 @@ export default function App() {
             src="/assets/uploads/IMG_2664-1.jpeg"
             alt="A.S.K Eagle"
             className="w-12 h-12 rounded-full mx-auto mb-4 object-cover"
-            style={{ boxShadow: "0 0 16px rgba(212,175,55,0.35)" }}
+            style={{
+              boxShadow:
+                "0 0 20px rgba(212,175,55,0.6), 0 0 8px rgba(212,175,55,0.35)",
+              border: "2px solid rgba(212,175,55,0.6)",
+            }}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/assets/IMG_2664.jpeg";
+            }}
           />
           <p
             className="font-heading font-black text-lg uppercase tracking-widest mb-1"
@@ -1847,6 +1892,24 @@ export default function App() {
               caffeine.ai
             </a>
           </p>
+          <div className="mt-4 flex justify-center gap-8">
+            <a
+              href="#admin"
+              className="text-xs tracking-widest"
+              style={{ color: "rgba(212,175,55,0.25)" }}
+              data-ocid="footer.admin.link"
+            >
+              Admin Panel
+            </a>
+            <a
+              href="#md-dashboard"
+              className="text-xs tracking-widest"
+              style={{ color: "rgba(212,175,55,0.25)" }}
+              data-ocid="footer.md.link"
+            >
+              MD Dashboard
+            </a>
+          </div>
         </div>
       </footer>
     </div>

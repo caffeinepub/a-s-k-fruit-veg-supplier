@@ -89,11 +89,12 @@ export class ExternalBlob {
         return this;
     }
 }
+export interface OrderStatus {
+    status: string;
+    timestamp: bigint;
+}
 export type Time = bigint;
 export type VVIPPartnerId = bigint;
-export interface UserProfile {
-    name: string;
-}
 export interface VVIPPartnerProfile {
     principal: Principal;
     businessName: string;
@@ -101,6 +102,20 @@ export interface VVIPPartnerProfile {
     isActive: boolean;
     phone: string;
     registrationTime: Time;
+}
+export interface Order {
+    id: bigint;
+    status: string;
+    itemsSummary: string;
+    clientName: string;
+    vehicleNumber: string;
+    createdAt: bigint;
+    isArchived: boolean;
+    updatedAt: bigint;
+    statusMessage: string;
+}
+export interface UserProfile {
+    name: string;
 }
 export enum UserRole {
     admin = "admin",
@@ -110,18 +125,31 @@ export enum UserRole {
 export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    clearHistory(): Promise<void>;
+    confirmOrder(id: bigint): Promise<boolean>;
+    createOrder(clientName: string, itemsSummary: string): Promise<bigint>;
+    deliverOrder(id: bigint): Promise<boolean>;
+    dispatchOrder(id: bigint, vehicleNumber: string): Promise<boolean>;
+    getActiveOrders(): Promise<Array<Order>>;
     getAllVVIPPartners(): Promise<Array<VVIPPartnerProfile>>;
+    getArchivedOrders(): Promise<Array<Order>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getGreeting(): Promise<string>;
+    getOrder(id: bigint): Promise<Order | null>;
+    getOrdersCount(): Promise<bigint>;
+    getStatus(): Promise<string>;
+    getStatusHistory(): Promise<Array<OrderStatus>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     getVVIPPartnerProfile(): Promise<VVIPPartnerProfile | null>;
     isCallerAdmin(): Promise<boolean>;
     isVVIPPartner(): Promise<boolean>;
     registerVVIPPartner(fullName: string, phone: string, businessName: string): Promise<VVIPPartnerId>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
+    setStatus(status: string): Promise<void>;
+    startSourcing(id: bigint): Promise<boolean>;
 }
-import type { UserProfile as _UserProfile, UserRole as _UserRole, VVIPPartnerProfile as _VVIPPartnerProfile } from "./declarations/backend.did.d.ts";
+import type { Order as _Order, UserProfile as _UserProfile, UserRole as _UserRole, VVIPPartnerProfile as _VVIPPartnerProfile } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
@@ -152,6 +180,90 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async clearHistory(): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.clearHistory();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.clearHistory();
+            return result;
+        }
+    }
+    async confirmOrder(arg0: bigint): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.confirmOrder(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.confirmOrder(arg0);
+            return result;
+        }
+    }
+    async createOrder(arg0: string, arg1: string): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createOrder(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createOrder(arg0, arg1);
+            return result;
+        }
+    }
+    async deliverOrder(arg0: bigint): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deliverOrder(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deliverOrder(arg0);
+            return result;
+        }
+    }
+    async dispatchOrder(arg0: bigint, arg1: string): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.dispatchOrder(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.dispatchOrder(arg0, arg1);
+            return result;
+        }
+    }
+    async getActiveOrders(): Promise<Array<Order>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getActiveOrders();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getActiveOrders();
+            return result;
+        }
+    }
     async getAllVVIPPartners(): Promise<Array<VVIPPartnerProfile>> {
         if (this.processError) {
             try {
@@ -163,6 +275,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getAllVVIPPartners();
+            return result;
+        }
+    }
+    async getArchivedOrders(): Promise<Array<Order>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getArchivedOrders();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getArchivedOrders();
             return result;
         }
     }
@@ -208,6 +334,62 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async getOrder(arg0: bigint): Promise<Order | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getOrder(arg0);
+                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getOrder(arg0);
+            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getOrdersCount(): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getOrdersCount();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getOrdersCount();
+            return result;
+        }
+    }
+    async getStatus(): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getStatus();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getStatus();
+            return result;
+        }
+    }
+    async getStatusHistory(): Promise<Array<OrderStatus>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getStatusHistory();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getStatusHistory();
+            return result;
+        }
+    }
     async getUserProfile(arg0: Principal): Promise<UserProfile | null> {
         if (this.processError) {
             try {
@@ -226,14 +408,14 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.getVVIPPartnerProfile();
-                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+                return from_candid_opt_n7(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getVVIPPartnerProfile();
-            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+            return from_candid_opt_n7(this._uploadFile, this._downloadFile, result);
         }
     }
     async isCallerAdmin(): Promise<boolean> {
@@ -292,6 +474,34 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async setStatus(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setStatus(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setStatus(arg0);
+            return result;
+        }
+    }
+    async startSourcing(arg0: bigint): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.startSourcing(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.startSourcing(arg0);
+            return result;
+        }
+    }
 }
 function from_candid_UserRole_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
     return from_candid_variant_n5(_uploadFile, _downloadFile, value);
@@ -299,7 +509,10 @@ function from_candid_UserRole_n4(_uploadFile: (file: ExternalBlob) => Promise<Ui
 function from_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
     return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_VVIPPartnerProfile]): VVIPPartnerProfile | null {
+function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_Order]): Order | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_VVIPPartnerProfile]): VVIPPartnerProfile | null {
     return value.length === 0 ? null : value[0];
 }
 function from_candid_variant_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {

@@ -1,39 +1,40 @@
-# A.S.K Fruit & Veg Supplier — Final VVIP Business Overhaul
+# A.S.K Fresh Supply Ecosystem — Final Deployment
 
 ## Current State
-- Site has login/registration (VVIP Auth) with Internet Identity
-- Prices shown are base prices; VVIP prices require login
-- "LOGIN TO VIEW PARTNER PRICE" label below prices
-- Navigation includes REGISTER/LOGIN button
-- Footer lacks '3-Brothers Quality Guarantee'
-- Nav has extra items beyond HOME, ABOUT, MANDI LIVE, CONTACT
-- Products have auth-gated VVIP price feature
+- AdminPanel.tsx: Password-protected dashboard for Adnan & Shad. Manages orders with 4 status actions (Confirm, Sourcing, Dispatch, Delivered). Polls at 5s intervals.
+- TrackingPage.tsx: Client-facing live tracking page. Polls at 3s intervals. Shows timeline steps with vehicle info.
+- App.tsx: Main catalog, WhatsApp ordering, leadership section, footer with contact info.
+- No MD Strategic Dashboard exists for Sufiyan.
+- Contact info is scattered; not hardcoded as a central contact block.
+- No truck animation on the tracking page when status is "Out for Delivery".
 
 ## Requested Changes (Diff)
 
 ### Add
-- 'Standard Delivery Price' golden label under each price
-- 'WHATSAPP VVIP RATE' button under every product (replaces login prompt)
-- '3-Brothers Quality Guarantee' text in footer
-- Public prices = Base price + ₹15 for all items
+- **MDDashboard.tsx**: New MD Strategic Dashboard for Sufiyan A.S.K with:
+  - Secure password-protected login (password: `SUFIYAN@786`)
+  - Strategic overview: total active orders, delivered today, order status distribution
+  - Read-only list of all active orders with client names and statuses
+  - Hardcoded contact block for CEO (Adnan) direct call and Finance (Shad) phone
+  - Route accessible via `#md-dashboard` hash in App.tsx
+- **Live Truck Animation**: On TrackingPage, when status is "Out for Delivery", show an animated truck SVG with horizontal sliding motion (CSS keyframe), pulsing golden trail, and a banner "Your order is on the way!"
+- **Contacts Block**: Hardcoded contact cards in the Admin and MD panels:
+  - MD (Sufiyan): Strategy & Support → WhatsApp link `wa.me/918700722663`
+  - CEO (Adnan): 8527865856 → `tel:918527865856` direct call
+  - Finance (Shad): 9318404289 → displayed as System Registry
 
 ### Modify
-- Remove all login/registration UI and auth gates — fully open catalog
-- Nav: only HOME, ABOUT, MANDI LIVE, CONTACT (remove REGISTER/LOGIN and other items)
-- Replace "LOGIN TO VIEW PARTNER PRICE" text with WHATSAPP VVIP RATE button
-- WHATSAPP VVIP RATE link: https://wa.me/918700722663?text=Hi%20Sufiyan,%20I%20want%20the%20Wholesale%20VVIP%20Price%20for%20[Product_Name]%20for%20my%20Banquet
-- Product_Name in link must be dynamically replaced with actual product name
+- **TrackingPage.tsx**: Change poll interval from 3000ms to 500ms for near-instant status updates (0.5s latency target)
+- **AdminPanel.tsx**: Add a pinned contacts section at the bottom showing the 3 key contacts; update poll interval from 5s to 2s for tighter sync
+- **App.tsx**: Add nav/footer link to MD Dashboard (`#md-dashboard`); add contact cards to footer with direct-call and WhatsApp links for all 3 executives
+- **sw.js**: Bump Service Worker to v9 for cache refresh
 
 ### Remove
-- All Login/Register buttons and flows
-- VVIPAuth component usage
-- Any auth-dependent logic
+- Nothing removed; all existing features preserved
 
 ## Implementation Plan
-1. Update all 34 inventory items: displayed price = base + 15
-2. Add 'Standard Delivery Price' label under each price
-3. Replace all login prompts/buttons with WHATSAPP VVIP RATE button linking to wa.me with dynamic product name
-4. Remove REGISTER/LOGIN from nav; keep only HOME, ABOUT, MANDI LIVE, CONTACT
-5. Add '3-Brothers Quality Guarantee' in footer
-6. Remove VVIPAuth component and all auth imports/usage
-7. Maintain Black Marble & Gold theme throughout
+1. Create `src/frontend/src/components/MDDashboard.tsx` with secure login, strategic stats, order list, and contacts
+2. Update `src/frontend/src/components/TrackingPage.tsx`: poll interval 500ms, add truck animation component for "Out for Delivery" status
+3. Update `src/frontend/src/components/AdminPanel.tsx`: poll interval 2s, add contacts footer section
+4. Update `src/frontend/src/App.tsx`: add MD Dashboard hash route render, update footer contacts with direct-call links
+5. Bump `src/frontend/public/sw.js` to v9

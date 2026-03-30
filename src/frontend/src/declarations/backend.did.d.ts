@@ -10,6 +10,18 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface Order {
+  'id' : bigint,
+  'status' : string,
+  'itemsSummary' : string,
+  'clientName' : string,
+  'vehicleNumber' : string,
+  'createdAt' : bigint,
+  'isArchived' : boolean,
+  'updatedAt' : bigint,
+  'statusMessage' : string,
+}
+export interface OrderStatus { 'status' : string, 'timestamp' : bigint }
 export type Time = bigint;
 export interface UserProfile { 'name' : string }
 export type UserRole = { 'admin' : null } |
@@ -27,16 +39,29 @@ export interface VVIPPartnerProfile {
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'clearHistory' : ActorMethod<[], undefined>,
+  'confirmOrder' : ActorMethod<[bigint], boolean>,
+  'createOrder' : ActorMethod<[string, string], bigint>,
+  'deliverOrder' : ActorMethod<[bigint], boolean>,
+  'dispatchOrder' : ActorMethod<[bigint, string], boolean>,
+  'getActiveOrders' : ActorMethod<[], Array<Order>>,
   'getAllVVIPPartners' : ActorMethod<[], Array<VVIPPartnerProfile>>,
+  'getArchivedOrders' : ActorMethod<[], Array<Order>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getGreeting' : ActorMethod<[], string>,
+  'getOrder' : ActorMethod<[bigint], [] | [Order]>,
+  'getOrdersCount' : ActorMethod<[], bigint>,
+  'getStatus' : ActorMethod<[], string>,
+  'getStatusHistory' : ActorMethod<[], Array<OrderStatus>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'getVVIPPartnerProfile' : ActorMethod<[], [] | [VVIPPartnerProfile]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'isVVIPPartner' : ActorMethod<[], boolean>,
   'registerVVIPPartner' : ActorMethod<[string, string, string], VVIPPartnerId>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'setStatus' : ActorMethod<[string], undefined>,
+  'startSourcing' : ActorMethod<[bigint], boolean>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];
