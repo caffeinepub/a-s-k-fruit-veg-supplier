@@ -32,8 +32,8 @@ interface Order {
 }
 
 const ADMINS = [
-  { name: "Adnan A.S.K", password: "ADNAN@786" },
-  { name: "Shad A.S.K", password: "SHAD@786" },
+  { name: "Adnan A.S.K", username: "Adnan", password: "BOSS123" },
+  { name: "Shad A.S.K", username: "Shad", password: "CASH456" },
 ];
 
 function formatTs(ts: bigint): string {
@@ -91,7 +91,7 @@ export default function AdminPanel() {
   const { actor } = useActor();
 
   // Auth state
-  const [selectedAdmin, setSelectedAdmin] = useState<string | null>(null);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
@@ -104,6 +104,11 @@ export default function AdminPanel() {
   const [updatingOrder, setUpdatingOrder] = useState<bigint | null>(null);
   const [showArchived, setShowArchived] = useState(false);
   const [showCreate, setShowCreate] = useState(true);
+
+  // Clear old sessions on mount
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   // Create order
   const [clientName, setClientName] = useState("");
@@ -162,24 +167,21 @@ export default function AdminPanel() {
   }, [activeOrders.length]);
 
   const handleLogin = () => {
-    if (!selectedAdmin) {
-      setAuthError("Please select a user.");
-      return;
-    }
-    const admin = ADMINS.find((a) => a.name === selectedAdmin);
+    const admin = ADMINS.find((a) => a.username === username);
     if (!admin || admin.password !== password) {
-      setAuthError("Incorrect password. Please try again.");
+      setAuthError("Incorrect username or password.");
       return;
     }
     setLoggedIn(true);
     setAdminName(admin.name);
     setAuthError("");
+    toast.success("A.S.K System Secured & Live", { duration: 4000 });
   };
 
   const handleLogout = () => {
     setLoggedIn(false);
     setAdminName("");
-    setSelectedAdmin(null);
+    setUsername("");
     setPassword("");
     setActiveOrders([]);
     setArchivedOrders([]);
@@ -315,43 +317,32 @@ export default function AdminPanel() {
             </p>
           </div>
 
-          {/* User Selection */}
+          {/* Username */}
           <p
             className="text-xs font-bold uppercase tracking-widest mb-3"
             style={{ color: "rgba(212,175,55,0.7)" }}
           >
-            Select User
+            Username
           </p>
-          <div className="grid grid-cols-2 gap-3 mb-5">
-            {ADMINS.map((admin) => (
-              <button
-                type="button"
-                key={admin.name}
-                onClick={() => {
-                  setSelectedAdmin(admin.name);
-                  setAuthError("");
-                }}
-                data-ocid="admin.select.button"
-                className="py-4 rounded-xl font-bold text-sm uppercase tracking-wide transition-all"
-                style={{
-                  background:
-                    selectedAdmin === admin.name
-                      ? "rgba(212,175,55,0.2)"
-                      : "rgba(212,175,55,0.05)",
-                  border:
-                    selectedAdmin === admin.name
-                      ? "2px solid #D4AF37"
-                      : "1px solid rgba(212,175,55,0.25)",
-                  color:
-                    selectedAdmin === admin.name
-                      ? "#D4AF37"
-                      : "rgba(212,175,55,0.6)",
-                }}
-              >
-                {admin.name}
-              </button>
-            ))}
-          </div>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setAuthError("");
+            }}
+            onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+            placeholder="Enter username"
+            data-ocid="admin.username.input"
+            className="w-full px-4 py-4 rounded-xl text-base font-mono mb-4 outline-none transition-all"
+            style={{
+              background: "rgba(212,175,55,0.07)",
+              border: authError
+                ? "1.5px solid #ef4444"
+                : "1.5px solid rgba(212,175,55,0.35)",
+              color: "#D4AF37",
+            }}
+          />
 
           {/* Password */}
           <p

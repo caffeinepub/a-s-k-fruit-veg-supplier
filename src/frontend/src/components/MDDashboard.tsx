@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 interface Order {
   id: bigint;
@@ -25,7 +26,8 @@ interface Order {
   isArchived: boolean;
 }
 
-const MD_PASSWORD = "SUFIYAN@786";
+const MD_USERNAME = "Chief";
+const MD_PASSWORD = "ASK786";
 
 function statusColor(status: string): string {
   switch (status) {
@@ -88,7 +90,9 @@ export default function MDDashboard() {
   const { actor } = useActor();
 
   // Auth
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [authError, setAuthError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -98,6 +102,16 @@ export default function MDDashboard() {
   const [loading, setLoading] = useState(false);
 
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Check for stored session on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("ask_md_session");
+    if (stored === "1") {
+      setLoggedIn(true);
+    } else {
+      localStorage.removeItem("ask_md_session");
+    }
+  }, []);
 
   const fetchOrders = useCallback(async () => {
     if (!actor) return;
@@ -126,17 +140,24 @@ export default function MDDashboard() {
   }, [loggedIn, actor, fetchOrders]);
 
   const handleLogin = () => {
-    if (password !== MD_PASSWORD) {
-      setAuthError("Access denied. Incorrect strategic password.");
+    if (username !== MD_USERNAME || password !== MD_PASSWORD) {
+      setAuthError("Access denied. Incorrect credentials.");
       return;
+    }
+    if (rememberMe) {
+      localStorage.setItem("ask_md_session", "1");
     }
     setLoggedIn(true);
     setAuthError("");
+    toast.success("A.S.K System Secured & Live", { duration: 4000 });
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("ask_md_session");
     setLoggedIn(false);
     setPassword("");
+    setUsername("");
+    setRememberMe(false);
     setActiveOrders([]);
     setArchivedOrders([]);
     if (pollRef.current) clearInterval(pollRef.current);
@@ -198,6 +219,33 @@ export default function MDDashboard() {
             </p>
           </div>
 
+          {/* Username */}
+          <p
+            className="text-xs font-bold uppercase tracking-widest mb-3"
+            style={{ color: "rgba(212,175,55,0.7)" }}
+          >
+            Username
+          </p>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setAuthError("");
+            }}
+            onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+            placeholder="Enter username"
+            data-ocid="md.username.input"
+            className="w-full px-4 py-4 rounded-xl text-base font-mono mb-4 outline-none"
+            style={{
+              background: "rgba(212,175,55,0.07)",
+              border: authError
+                ? "1.5px solid #ef4444"
+                : "1.5px solid rgba(212,175,55,0.35)",
+              color: "#D4AF37",
+            }}
+          />
+
           <p
             className="text-xs font-bold uppercase tracking-widest mb-3"
             style={{ color: "rgba(212,175,55,0.7)" }}
@@ -223,6 +271,24 @@ export default function MDDashboard() {
               color: "#D4AF37",
             }}
           />
+
+          {/* Remember Me */}
+          <div className="flex items-center gap-2 mb-4">
+            <input
+              type="checkbox"
+              id="remember-me"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              style={{ accentColor: "#D4AF37" }}
+            />
+            <label
+              htmlFor="remember-me"
+              className="text-sm"
+              style={{ color: "rgba(212,175,55,0.75)" }}
+            >
+              Remember Me
+            </label>
+          </div>
 
           {authError && (
             <p

@@ -1,40 +1,52 @@
-# A.S.K Fresh Supply Ecosystem — Final Deployment
+# A.S.K Fresh Supply
 
 ## Current State
-- AdminPanel.tsx: Password-protected dashboard for Adnan & Shad. Manages orders with 4 status actions (Confirm, Sourcing, Dispatch, Delivered). Polls at 5s intervals.
-- TrackingPage.tsx: Client-facing live tracking page. Polls at 3s intervals. Shows timeline steps with vehicle info.
-- App.tsx: Main catalog, WhatsApp ordering, leadership section, footer with contact info.
-- No MD Strategic Dashboard exists for Sufiyan.
-- Contact info is scattered; not hardcoded as a central contact block.
-- No truck animation on the tracking page when status is "Out for Delivery".
+- AdminPanel.tsx has ADMINS array with `{name, password}`: Adnan A.S.K / ADNAN@786 and Shad A.S.K / SHAD@786. Login uses a "Select User" button grid + password field.
+- MDDashboard.tsx has a single `MD_PASSWORD = "SUFIYAN@786"`. Login has only a password field. No "Remember Me" feature.
+- Both panels already show the A.S.K eagle logo on their login screens.
+- No localStorage is used for session persistence in either panel.
+- No confirmation message on login success.
 
 ## Requested Changes (Diff)
 
 ### Add
-- **MDDashboard.tsx**: New MD Strategic Dashboard for Sufiyan A.S.K with:
-  - Secure password-protected login (password: `SUFIYAN@786`)
-  - Strategic overview: total active orders, delivered today, order status distribution
-  - Read-only list of all active orders with client names and statuses
-  - Hardcoded contact block for CEO (Adnan) direct call and Finance (Shad) phone
-  - Route accessible via `#md-dashboard` hash in App.tsx
-- **Live Truck Animation**: On TrackingPage, when status is "Out for Delivery", show an animated truck SVG with horizontal sliding motion (CSS keyframe), pulsing golden trail, and a banner "Your order is on the way!"
-- **Contacts Block**: Hardcoded contact cards in the Admin and MD panels:
-  - MD (Sufiyan): Strategy & Support → WhatsApp link `wa.me/918700722663`
-  - CEO (Adnan): 8527865856 → `tel:918527865856` direct call
-  - Finance (Shad): 9318404289 → displayed as System Registry
+- Username input field to AdminPanel login (replacing the grid of name buttons)
+- Username input field to MDDashboard login
+- "Remember Me" checkbox to MDDashboard login, persisting username+auth to localStorage so Chief stays logged in across page refreshes
+- Toast / banner confirmation message "A.S.K System Secured & Live" displayed once on first successful login after credentials reset
+- localStorage.clear() call on component mount to wipe all previous sessions
 
 ### Modify
-- **TrackingPage.tsx**: Change poll interval from 3000ms to 500ms for near-instant status updates (0.5s latency target)
-- **AdminPanel.tsx**: Add a pinned contacts section at the bottom showing the 3 key contacts; update poll interval from 5s to 2s for tighter sync
-- **App.tsx**: Add nav/footer link to MD Dashboard (`#md-dashboard`); add contact cards to footer with direct-call and WhatsApp links for all 3 executives
-- **sw.js**: Bump Service Worker to v9 for cache refresh
+- AdminPanel ADMINS array:
+  - Adnan A.S.K → username: "Adnan", password: "BOSS123"
+  - Shad A.S.K → username: "Shad", password: "CASH456"
+- MDDashboard credentials → username: "Chief", password: "ASK786"
+- AdminPanel handleLogin to validate both username AND password
+- MDDashboard handleLogin to validate both username AND password
+- AdminPanel handleLogout to clear localStorage
+- MDDashboard handleLogout to clear localStorage
+- Ensure eagle logo (`/assets/uploads/IMG_2664-1.jpeg`) remains visible on login screens of all panels (already present, keep as-is)
 
 ### Remove
-- Nothing removed; all existing features preserved
+- Old "Select User" button grid from AdminPanel login (replace with username text input)
+- Old credential constants (ADNAN@786, SHAD@786, SUFIYAN@786)
 
 ## Implementation Plan
-1. Create `src/frontend/src/components/MDDashboard.tsx` with secure login, strategic stats, order list, and contacts
-2. Update `src/frontend/src/components/TrackingPage.tsx`: poll interval 500ms, add truck animation component for "Out for Delivery" status
-3. Update `src/frontend/src/components/AdminPanel.tsx`: poll interval 2s, add contacts footer section
-4. Update `src/frontend/src/App.tsx`: add MD Dashboard hash route render, update footer contacts with direct-call links
-5. Bump `src/frontend/public/sw.js` to v9
+1. **MDDashboard.tsx**:
+   - On mount: call `localStorage.removeItem('ask_md_session')` to wipe old sessions, then check for stored session if Remember Me was previously set
+   - Change MD_PASSWORD to ASK786, add MD_USERNAME = "Chief"
+   - Add `username` state and `rememberMe` boolean state
+   - Update handleLogin: validate username === "Chief" AND password === "ASK786"
+   - On successful login: if rememberMe, write `{loggedIn: true}` to localStorage under `ask_md_session`; show "A.S.K System Secured & Live" toast
+   - On mount: if `ask_md_session` stored, auto-login
+   - On logout: clear `ask_md_session` from localStorage
+   - Add username input field and Remember Me checkbox to login UI
+
+2. **AdminPanel.tsx**:
+   - On mount: call localStorage.clear() to wipe all previous sessions
+   - Change ADMINS to: `[{name:"Adnan A.S.K", username:"Adnan", password:"BOSS123"}, {name:"Shad A.S.K", username:"Shad", password:"CASH456"}]`
+   - Add `username` state
+   - Update handleLogin: find admin by matching username (case-sensitive), then check password
+   - Show "A.S.K System Secured & Live" toast on successful login
+   - Replace "Select User" button grid with a username text input field
+   - Keep logo, password input, and all other UI unchanged
