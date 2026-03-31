@@ -26,8 +26,8 @@ interface Order {
   isArchived: boolean;
 }
 
-const MD_USERNAME = "Chief";
-const MD_PASSWORD = "ASK786";
+const MD_USERNAME = "Chief_Sufiyan";
+const MD_PASSWORD = "SUFIYAN@78";
 
 function statusColor(status: string): string {
   switch (status) {
@@ -149,7 +149,7 @@ export default function MDDashboard() {
     }
     setLoggedIn(true);
     setAuthError("");
-    toast.success("A.S.K System Secured & Live", { duration: 4000 });
+    toast.success("SYSTEM READY & BRANDED", { duration: 4000 });
   };
 
   const handleLogout = () => {
@@ -215,7 +215,17 @@ export default function MDDashboard() {
               className="text-xs tracking-wider uppercase"
               style={{ color: "rgba(212,175,55,0.55)" }}
             >
-              Sufiyan A.S.K — Restricted Access
+              A.S.K VVIP STANDARD SUPPLY
+            </p>
+            <p
+              className="text-xs font-bold uppercase mt-1"
+              style={{
+                color: "#D4AF37",
+                fontFamily: "serif",
+                letterSpacing: "0.12em",
+              }}
+            >
+              SAHIBABAD, GHAZIABAD &amp; DELHI NCR
             </p>
           </div>
 

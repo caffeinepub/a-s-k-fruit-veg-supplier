@@ -32,8 +32,7 @@ interface Order {
 }
 
 const ADMINS = [
-  { name: "Adnan A.S.K", username: "Adnan", password: "BOSS123" },
-  { name: "Shad A.S.K", username: "Shad", password: "CASH456" },
+  { name: "Adnan A.S.K — CEO", username: "Adnan_CEO", password: "ADNAN@786" },
 ];
 
 function formatTs(ts: bigint): string {
@@ -175,7 +174,7 @@ export default function AdminPanel() {
     setLoggedIn(true);
     setAdminName(admin.name);
     setAuthError("");
-    toast.success("A.S.K System Secured & Live", { duration: 4000 });
+    toast.success("SYSTEM READY & BRANDED", { duration: 4000 });
   };
 
   const handleLogout = () => {
@@ -313,7 +312,17 @@ export default function AdminPanel() {
               className="text-xs tracking-wider"
               style={{ color: "rgba(212,175,55,0.6)" }}
             >
-              A.S.K VVIP DASHBOARD
+              A.S.K VVIP STANDARD SUPPLY
+            </p>
+            <p
+              className="text-xs tracking-widest font-bold uppercase mt-1"
+              style={{
+                color: "#D4AF37",
+                fontFamily: "serif",
+                letterSpacing: "0.12em",
+              }}
+            >
+              SAHIBABAD, GHAZIABAD &amp; DELHI NCR
             </p>
           </div>
 
