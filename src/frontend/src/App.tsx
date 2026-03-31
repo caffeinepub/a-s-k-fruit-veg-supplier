@@ -11,9 +11,6 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import AdminPanel from "./components/AdminPanel";
-import MDDashboard from "./components/MDDashboard";
-import TrackingPage from "./components/TrackingPage";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Types & Data
@@ -801,7 +798,6 @@ export default function App() {
     { label: "HOME", href: "#home" },
     { label: "ABOUT", href: "#about" },
     { label: "MANDI LIVE", href: "#mandi" },
-    { label: "📦 TRACK ORDER", href: "#track" },
     { label: "CONTACT", href: "#contact" },
   ];
 
@@ -843,6 +839,7 @@ export default function App() {
               }}
             >
               <img
+                loading="lazy"
                 src="/assets/uploads/IMG_2664-1.jpeg"
                 alt="A.S.K VVIP Eagle Logo"
                 className="logo-aura relative z-10"
@@ -1061,6 +1058,7 @@ export default function App() {
                     }}
                   />
                   <img
+                    loading="lazy"
                     src={item.image}
                     alt={item.label}
                     className="relative z-10 w-24 h-24 rounded-full object-cover"
@@ -1483,6 +1481,7 @@ export default function App() {
           >
             <div className="flex justify-center items-center gap-4 mb-3">
               <img
+                loading="lazy"
                 src="/assets/uploads/IMG_2664-1.jpeg"
                 alt="Eagle Logo"
                 className="w-10 h-10 rounded-full object-cover"
@@ -1502,6 +1501,7 @@ export default function App() {
                 Team A.S.K
               </h2>
               <img
+                loading="lazy"
                 src="/assets/uploads/IMG_2664-1.jpeg"
                 alt="Eagle Logo"
                 className="w-10 h-10 rounded-full object-cover"
@@ -1543,6 +1543,7 @@ export default function App() {
                     }}
                   />
                   <img
+                    loading="lazy"
                     src="/assets/generated/team-vvip-placeholder.dim_200x200.png"
                     alt={partner.name}
                     className="relative z-10 w-20 h-20 rounded-full object-cover"
@@ -1818,15 +1819,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── TRACKING PAGE ── */}
-      <TrackingPage />
-
-      {/* ── ADMIN PANEL ── */}
-      <AdminPanel />
-
-      {/* ── MD STRATEGIC DASHBOARD ── */}
-      <MDDashboard />
-
       {/* ── FOOTER ── */}
       <footer
         className="py-10 text-center"
@@ -1837,6 +1829,7 @@ export default function App() {
       >
         <div className="max-w-4xl mx-auto px-4">
           <img
+            loading="lazy"
             src="/assets/uploads/IMG_2664-1.jpeg"
             alt="A.S.K Eagle"
             className="w-12 h-12 rounded-full mx-auto mb-4 object-cover"
@@ -1892,24 +1885,6 @@ export default function App() {
               caffeine.ai
             </a>
           </p>
-          <div className="mt-4 flex justify-center gap-8">
-            <a
-              href="#admin"
-              className="text-xs tracking-widest"
-              style={{ color: "rgba(212,175,55,0.25)" }}
-              data-ocid="footer.admin.link"
-            >
-              Admin Panel
-            </a>
-            <a
-              href="#md-dashboard"
-              className="text-xs tracking-widest"
-              style={{ color: "rgba(212,175,55,0.25)" }}
-              data-ocid="footer.md.link"
-            >
-              MD Dashboard
-            </a>
-          </div>
         </div>
       </footer>
     </div>
