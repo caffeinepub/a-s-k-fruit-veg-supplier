@@ -969,22 +969,25 @@ export default function App() {
               }}
             >
               <MapPin className="w-3.5 h-3.5" />
-              Specialist in Ghaziabad & Delhi NCR Supply
+              NCR's Largest Institutional Supply Partner
             </div>
-            <h2 className="font-heading text-4xl sm:text-6xl font-black uppercase tracking-tight mb-4 gold-glow shimmer-gold">
-              VVIP SUPPLY
+            <h2 className="font-heading text-3xl sm:text-5xl font-black uppercase tracking-tight mb-6 gold-glow shimmer-gold leading-tight">
+              A.S.K Fresh Supply: Building the Empire of Freshness
             </h2>
             <p
-              className="font-hindi text-xl mb-4"
-              style={{ color: "rgba(212,175,55,0.75)" }}
+              className="text-base sm:text-lg leading-relaxed mb-8 max-w-2xl mx-auto"
+              style={{ color: "rgba(212,175,55,0.8)" }}
             >
-              फल और सब्जी के थोक विक्रेता — गाज़ियाबाद और दिल्ली एनसीआर
+              NCR&apos;s largest institutional supply partner sourcing directly
+              from 3 major Mandis (Sahibabad SB-20, Azadpur, Gazipur). 20+
+              dedicated delivery vehicles, 100% GST compliant, and serving the
+              elite sectors of Hospitals, Aviation, and Education.
             </p>
             <p
-              className="text-sm tracking-wider mb-8"
-              style={{ color: "rgba(212,175,55,0.55)" }}
+              className="text-xs tracking-widest mb-8 uppercase"
+              style={{ color: "rgba(212,175,55,0.45)" }}
             >
-              Wholesale &amp; Retail Supply · All Fruits Available · Fresh Daily
+              All Fruits Available · Fresh Daily · GST Compliant
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <motion.a
