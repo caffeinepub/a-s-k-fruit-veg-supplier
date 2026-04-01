@@ -1466,6 +1466,95 @@ export default function App() {
         )}
       </AnimatePresence>
 
+      {/* ── THE A.S.K EDGE ── */}
+      <section
+        id="ask-edge"
+        className="py-20"
+        style={{
+          background: "#060606",
+          borderTop: "1px solid rgba(212,175,55,0.2)",
+        }}
+      >
+        <div className="max-w-6xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2
+              className="font-heading text-3xl sm:text-4xl font-black uppercase tracking-widest gold-glow mb-3"
+              style={{ color: "#D4AF37" }}
+            >
+              The A.S.K Edge
+            </h2>
+            <p
+              className="text-sm tracking-widest uppercase"
+              style={{ color: "rgba(212,175,55,0.5)" }}
+            >
+              Why Institutions Choose Us
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            {[
+              {
+                icon: "🚛",
+                title: "20+ Owned Fleet",
+                desc: "Zero dependency on outside transport. We guarantee 5:00 AM delivery with our dedicated vehicles.",
+              },
+              {
+                icon: "🏪",
+                title: "Triple Mandi Sourcing",
+                desc: "Direct procurement from Sahibabad (SB-20), Azadpur, and Gazipur to ensure the most competitive market rates.",
+              },
+              {
+                icon: "📋",
+                title: "Corporate Grade Transparency",
+                desc: "100% GST invoicing and professional contract management for seamless audits.",
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="rounded-2xl p-8 text-center flex flex-col items-center gap-4"
+                style={{
+                  background: "rgba(212,175,55,0.04)",
+                  border: "1px solid rgba(212,175,55,0.25)",
+                  boxShadow: "0 0 24px rgba(212,175,55,0.08)",
+                }}
+              >
+                <div
+                  className="text-5xl mb-2 flex items-center justify-center w-20 h-20 rounded-full"
+                  style={{
+                    background: "rgba(212,175,55,0.08)",
+                    border: "2px solid rgba(212,175,55,0.3)",
+                    boxShadow: "0 0 20px rgba(212,175,55,0.2)",
+                  }}
+                >
+                  {item.icon}
+                </div>
+                <h3
+                  className="text-lg font-bold uppercase tracking-wider"
+                  style={{ color: "#D4AF37" }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "rgba(212,175,55,0.7)" }}
+                >
+                  {item.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── LEADERSHIP ── */}
       <section
         id="about"
