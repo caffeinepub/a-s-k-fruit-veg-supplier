@@ -1,35 +1,37 @@
-# A.S.K Fruit & Veg Supplier
+# A.S.K Fresh Supply - Corporate Rebrand
 
 ## Current State
-App.tsx imports and renders three private panel components:
-- `AdminPanel` (CEO/Finance login + order management)
-- `MDDashboard` (MD Strategic login + stats)
-- `TrackingPage` (client order tracking — depends on admin panels for data)
-- `VVIPAuth` component also exists
-
-Footer contains two low-opacity links: `Admin Panel` (#admin) and `MD Dashboard` (#md-dashboard).
-Nav contains a 📦 TRACK ORDER button linking to #track.
-
-Service Worker is at v9.
+The site uses a 'Midnight Royalty' (black marble + brushed gold) theme. Hero section says 'Building the Empire of Freshness'. Existing sections: The A.S.K Edge, Sectors We Serve, Quality Policy, Leadership, Product Inventory.
 
 ## Requested Changes (Diff)
 
 ### Add
-- Nothing new
+- New primary theme: Dark Navy Blue (#002366) + Gold (#D4AF37) replacing black marble theme
+- Google Fonts: Montserrat (Bold) for headings, Open Sans for body text
+- New main banner headline: "A.S.K Fresh Supply: Delivering Excellence from 1 to 1,00,000+ Guests."
+- New sub-header: "NCR's Only Supply Chain Partner with Zero-Wastage Guarantee and Infinite Scaling Capability."
+- New 'The MD Standard' section with 3 feature cards:
+  1. SB-20 Sahibabad Quality (Hand-picked, A-Grade Produce only)
+  2. Cheetah Logistics (GPS-Tracked, Time-Bound Delivery across Greater Noida & NCR)
+  3. Price-Lock Guarantee (Monthly Fixed-Rate Contracts for Budget Stability)
+- Client portfolio section showing: The Eastern, Sandal Tree, Riva (as logos/name plates)
+- Footer text updated: "A.S.K Fresh Supply - Building the Future of Institutional Catering by 2036."
 
 ### Modify
-- `App.tsx`: Remove imports of AdminPanel, MDDashboard, TrackingPage, VVIPAuth. Remove their JSX usage. Remove footer admin/MD links. Remove TRACK ORDER nav link if present. Bump SW version.
-- `public/sw.js` (or equivalent): Bump cache version to v10 to force all users to get clean reload.
+- Global color scheme: black/dark backgrounds → Dark Navy Blue (#002366), gold accents remain (#D4AF37)
+- Typography: apply Montserrat Bold for all headings, Open Sans for body
+- Hero section: update headline and sub-headline text
+- Footer: update tagline text
 
 ### Remove
-- `src/frontend/src/components/AdminPanel.tsx` — delete entirely
-- `src/frontend/src/components/MDDashboard.tsx` — delete entirely
-- `src/frontend/src/components/TrackingPage.tsx` — delete entirely
-- `src/frontend/src/components/VVIPAuth.tsx` — delete entirely
+- Black marble / matte black backgrounds globally
+- Old hero headline 'Building the Empire of Freshness'
 
 ## Implementation Plan
-1. Read App.tsx fully to find all panel references and TRACK ORDER nav link
-2. Edit App.tsx: remove 3 imports, remove 3 JSX blocks (TrackingPage, AdminPanel, MDDashboard), remove footer admin links div
-3. Delete the 4 component files
-4. Find and update service worker file — bump version to v10
-5. Validate (lint + build)
+1. Add Montserrat + Open Sans fonts via Google Fonts import in index.css
+2. Update CSS variables/theme colors: replace #000/#0a0a0a with #002366 navy, keep #D4AF37 gold
+3. Update hero headline and sub-headline text
+4. Add 'The MD Standard' section with 3 feature cards (icons: shield/star, truck/speed, lock/price)
+5. Add 'Our Clients' / Portfolio section with The Eastern, Sandal Tree, Riva nameplates
+6. Update footer tagline to new 2036 vision text
+7. Apply Montserrat to heading elements, Open Sans to body text globally

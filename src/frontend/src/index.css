@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@400;600&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -22,51 +22,53 @@
   :root {
     --radius: 0.5rem;
 
-    /* Midnight Royalty – Black & Gold */
+    /* Corporate Navy & Gold */
     /* Gold primary: #D4AF37 */
     --gold: 0.76 0.13 82;
     /* Gold highlight: #FFD700 */
     --gold-highlight: 0.85 0.17 87;
     /* Gold muted: #B8962E */
     --gold-muted: 0.65 0.11 79;
-    /* Deep matte black */
-    --black-base: 0.08 0 0;
+    /* Dark Navy Blue: #002366 */
+    --navy-base: 0.19 0.07 264;
+    /* Darker Navy: #001847 */
+    --navy-dark: 0.14 0.06 264;
 
-    --background: 0.08 0 0;
-    --foreground: 0.76 0.13 82;
-    --card: 0.11 0.005 80;
-    --card-foreground: 0.76 0.13 82;
-    --popover: 0.11 0.005 80;
-    --popover-foreground: 0.76 0.13 82;
+    --background: 0.19 0.07 264;
+    --foreground: 0.95 0 0;
+    --card: 0.15 0.055 264;
+    --card-foreground: 0.95 0 0;
+    --popover: 0.15 0.055 264;
+    --popover-foreground: 0.95 0 0;
     --primary: 0.76 0.13 82;
-    --primary-foreground: 0.08 0 0;
-    --secondary: 0.14 0.008 80;
-    --secondary-foreground: 0.76 0.13 82;
-    --muted: 0.14 0.008 80;
-    --muted-foreground: 0.55 0.08 80;
+    --primary-foreground: 0.1 0 0;
+    --secondary: 0.22 0.065 264;
+    --secondary-foreground: 0.95 0 0;
+    --muted: 0.22 0.065 264;
+    --muted-foreground: 0.65 0.04 264;
     --accent: 0.76 0.13 82;
-    --accent-foreground: 0.08 0 0;
+    --accent-foreground: 0.1 0 0;
     --destructive: 0.577 0.245 27.325;
     --destructive-foreground: 0.985 0 0;
-    --border: 0.76 0.13 82 / 0.35;
-    --input: 0.14 0.008 80;
+    --border: 0.76 0.13 82 / 0.3;
+    --input: 0.22 0.065 264;
     --ring: 0.76 0.13 82;
     --chart-1: 0.76 0.13 82;
     --chart-2: 0.65 0.11 79;
     --chart-3: 0.85 0.17 87;
     --chart-4: 0.55 0.08 80;
     --chart-5: 0.4 0.06 80;
-    --sidebar: 0.1 0.005 80;
-    --sidebar-foreground: 0.76 0.13 82;
+    --sidebar: 0.15 0.055 264;
+    --sidebar-foreground: 0.95 0 0;
     --sidebar-primary: 0.76 0.13 82;
-    --sidebar-primary-foreground: 0.08 0 0;
-    --sidebar-accent: 0.14 0.008 80;
-    --sidebar-accent-foreground: 0.76 0.13 82;
+    --sidebar-primary-foreground: 0.1 0 0;
+    --sidebar-accent: 0.22 0.065 264;
+    --sidebar-accent-foreground: 0.95 0 0;
     --sidebar-border: 0.76 0.13 82 / 0.25;
     --sidebar-ring: 0.76 0.13 82;
 
-    /* brand/cta aliases kept for compat */
-    --brand-dark: 0.08 0 0;
+    /* brand/cta aliases */
+    --brand-dark: 0.19 0.07 264;
     --brand-mid: 0.76 0.13 82;
     --brand-light: 0.85 0.17 87;
     --cta-orange: 0.76 0.13 82;
@@ -77,8 +79,19 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-body;
-    background-color: #0a0a0a;
+    @apply bg-background text-foreground;
+    font-family: "Open Sans", "Plus Jakarta Sans", sans-serif;
+    background-color: #002366;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-heading {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
   }
   html {
     scroll-behavior: smooth;
@@ -86,24 +99,27 @@
   .font-hindi {
     font-family: "Noto Sans Devanagari", sans-serif;
   }
+  .font-body {
+    font-family: "Open Sans", "Plus Jakarta Sans", sans-serif;
+  }
 }
 
-/* ── Marble background ── */
+/* ── Navy background ── */
 .marble-bg {
-  background-color: #0a0a0a;
+  background-color: #002366;
   background-image: radial-gradient(
       ellipse at 20% 30%,
-      rgba(30, 25, 10, 0.55) 0%,
+      rgba(0, 48, 128, 0.6) 0%,
       transparent 60%
     ),
     radial-gradient(
       ellipse at 80% 70%,
-      rgba(25, 20, 5, 0.45) 0%,
+      rgba(0, 24, 71, 0.5) 0%,
       transparent 55%
     ),
     linear-gradient(
       135deg,
-      rgba(212, 175, 55, 0.03) 0%,
+      rgba(212, 175, 55, 0.04) 0%,
       transparent 50%,
       rgba(212, 175, 55, 0.02) 100%
     );
@@ -126,19 +142,19 @@
 
 /* ── Gold border card ── */
 .gold-card {
-  background: #0d0d0d;
+  background: #001a4d;
   border: 1px solid rgba(212, 175, 55, 0.4);
   border-radius: 8px;
 }
 .gold-card:hover {
   border-color: rgba(212, 175, 55, 0.75);
-  box-shadow: 0 0 18px rgba(212, 175, 55, 0.18);
+  box-shadow: 0 4px 24px rgba(212, 175, 55, 0.2);
 }
 
 /* ── Gold button ── */
 .btn-gold {
   background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #b8962e 100%);
-  color: #0a0a0a;
+  color: #001230;
   font-weight: 700;
   border: none;
   border-radius: 6px;
@@ -160,7 +176,7 @@
   transition: background 0.2s, box-shadow 0.2s;
 }
 .btn-gold-outline:hover {
-  background: rgba(212, 175, 55, 0.1);
+  background: rgba(212, 175, 55, 0.12);
   box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
 }
 

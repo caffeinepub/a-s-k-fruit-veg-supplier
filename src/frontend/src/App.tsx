@@ -487,7 +487,7 @@ function MandiIntelligence() {
     <section
       className="relative w-full py-20 overflow-hidden"
       style={{
-        background: "#0A0A0A",
+        background: "#002366",
         borderTop: "1px solid rgba(212,175,55,0.35)",
         borderBottom: "1px solid rgba(212,175,55,0.35)",
       }}
@@ -727,7 +727,7 @@ function ProductCard({
           }
           className="w-14 text-center text-sm font-bold rounded px-2 py-1.5 focus:outline-none"
           style={{
-            background: "#161006",
+            background: "#001333",
             border: "1px solid rgba(212,175,55,0.4)",
             color: "#D4AF37",
           }}
@@ -810,7 +810,7 @@ export default function App() {
       <header
         className="fixed top-0 left-0 right-0 z-50"
         style={{
-          background: "rgba(10,10,10,0.97)",
+          background: "rgba(0,24,71,0.98)",
           borderBottom: "1px solid rgba(212,175,55,0.3)",
         }}
       >
@@ -923,7 +923,7 @@ export default function App() {
             >
               <nav
                 className="flex flex-col px-4 py-3 gap-3"
-                style={{ background: "#0A0A0A" }}
+                style={{ background: "#002366" }}
               >
                 {navLinks.map((link) => (
                   <a
@@ -946,7 +946,7 @@ export default function App() {
       <section
         id="home"
         className="relative min-h-screen flex items-center justify-center pt-64 pb-20"
-        style={{ background: "#0A0A0A" }}
+        style={{ background: "#002366" }}
       >
         <div
           className="absolute inset-0 pointer-events-none"
@@ -972,16 +972,15 @@ export default function App() {
               NCR's Largest Institutional Supply Partner
             </div>
             <h2 className="font-heading text-3xl sm:text-5xl font-black uppercase tracking-tight mb-6 gold-glow shimmer-gold leading-tight">
-              A.S.K Fresh Supply: Building the Empire of Freshness
+              A.S.K Fresh Supply: Delivering Excellence from 1 to 1,00,000+
+              Guests.
             </h2>
             <p
               className="text-base sm:text-lg leading-relaxed mb-8 max-w-2xl mx-auto"
               style={{ color: "rgba(212,175,55,0.8)" }}
             >
-              NCR&apos;s largest institutional supply partner sourcing directly
-              from 3 major Mandis (Sahibabad SB-20, Azadpur, Gazipur). 20+
-              dedicated delivery vehicles, 100% GST compliant, and serving the
-              elite sectors of Hospitals, Aviation, and Education.
+              NCR&apos;s Only Supply Chain Partner with Zero-Wastage Guarantee
+              and Infinite Scaling Capability.
             </p>
             <p
               className="text-xs tracking-widest mb-8 uppercase"
@@ -1013,11 +1012,118 @@ export default function App() {
         </div>
       </section>
 
+      {/* ── THE MD STANDARD ── */}
+      <section
+        id="md-standard"
+        className="py-20"
+        style={{
+          background: "#001230",
+          borderTop: "1px solid rgba(212,175,55,0.25)",
+        }}
+      >
+        <div className="max-w-6xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <span
+              className="inline-block px-4 py-1.5 mb-4 text-xs font-bold uppercase tracking-widest rounded-full"
+              style={{
+                background: "rgba(212,175,55,0.12)",
+                border: "1px solid rgba(212,175,55,0.35)",
+                color: "#D4AF37",
+              }}
+            >
+              ★ THE MD STANDARD
+            </span>
+            <h2
+              className="font-heading text-3xl sm:text-5xl font-black uppercase tracking-widest gold-glow mb-4"
+              style={{ color: "#D4AF37" }}
+            >
+              The MD Standard
+            </h2>
+            <p
+              className="text-base max-w-xl mx-auto"
+              style={{ color: "rgba(255,255,255,0.7)" }}
+            >
+              Three non-negotiable pillars that define every delivery we make.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            {[
+              {
+                icon: "⭐",
+                title: "SB-20 Sahibabad Quality",
+                desc: "Hand-picked, A-Grade Produce only. Sourced directly from Sahibabad's premier SB-20 wholesale market at the peak of freshness.",
+              },
+              {
+                icon: "🐆",
+                title: "Cheetah Logistics",
+                desc: "GPS-Tracked, Time-Bound Delivery across Greater Noida & NCR. Our fleet moves faster than the market, guaranteed.",
+              },
+              {
+                icon: "🔒",
+                title: "Price-Lock Guarantee",
+                desc: "Monthly Fixed-Rate Contracts for Budget Stability. Lock in your rates — no surprise cost escalations, ever.",
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="rounded-2xl p-8 text-center flex flex-col items-center gap-5 group cursor-default"
+                style={{
+                  background: "rgba(0,48,128,0.4)",
+                  border: "1px solid rgba(212,175,55,0.3)",
+                  boxShadow: "0 0 24px rgba(0,0,0,0.3)",
+                  transition:
+                    "transform 0.2s, box-shadow 0.2s, border-color 0.2s",
+                }}
+                whileHover={{
+                  y: -6,
+                  boxShadow: "0 8px 32px rgba(212,175,55,0.25)",
+                  borderColor: "rgba(212,175,55,0.7)",
+                }}
+                data-ocid={`md_standard.item.${i + 1}`}
+              >
+                <div
+                  className="text-5xl flex items-center justify-center w-20 h-20 rounded-full"
+                  style={{
+                    background: "rgba(212,175,55,0.1)",
+                    border: "2px solid rgba(212,175,55,0.35)",
+                    boxShadow: "0 0 24px rgba(212,175,55,0.2)",
+                  }}
+                >
+                  {item.icon}
+                </div>
+                <h3
+                  className="font-heading text-xl font-black uppercase tracking-wide"
+                  style={{ color: "#D4AF37" }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "rgba(255,255,255,0.78)" }}
+                >
+                  {item.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── VVIP FEATURED PRODUCTS ── */}
       <section
         id="featured"
         className="py-20"
-        style={{ background: "#080808" }}
+        style={{ background: "#001847" }}
       >
         <div className="max-w-6xl mx-auto px-4">
           <motion.div
@@ -1129,7 +1235,7 @@ export default function App() {
       <section
         id="products"
         className="py-20"
-        style={{ background: "#0A0A0A" }}
+        style={{ background: "#002366" }}
       >
         <div className="max-w-7xl mx-auto px-4">
           <motion.div
@@ -1271,7 +1377,7 @@ export default function App() {
                   className="rounded-xl overflow-hidden"
                   style={{
                     border: "1px solid rgba(212,175,55,0.5)",
-                    background: "#0D0D0D",
+                    background: "#001a4d",
                   }}
                 >
                   {/* Cart header */}
@@ -1320,7 +1426,7 @@ export default function App() {
                       onChange={(e) => setCustomerName(e.target.value)}
                       className="w-full max-w-sm px-4 py-2.5 text-sm rounded focus:outline-none"
                       style={{
-                        background: "#161006",
+                        background: "#001333",
                         border: "1px solid rgba(212,175,55,0.4)",
                         color: "#D4AF37",
                       }}
@@ -1471,7 +1577,7 @@ export default function App() {
         id="ask-edge"
         className="py-20"
         style={{
-          background: "#060606",
+          background: "#001540",
           borderTop: "1px solid rgba(212,175,55,0.2)",
         }}
       >
@@ -1555,12 +1661,255 @@ export default function App() {
         </div>
       </section>
 
+      {/* ── SECTORS WE SERVE ── */}
+      <section
+        className="py-20"
+        style={{
+          background: "#001230",
+          borderTop: "1px solid rgba(212,175,55,0.2)",
+        }}
+      >
+        <div className="max-w-5xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2
+              className="font-heading text-3xl sm:text-4xl font-black uppercase tracking-widest gold-glow mb-3"
+              style={{ color: "#D4AF37" }}
+            >
+              Sectors We Serve
+            </h2>
+            <p
+              className="text-sm tracking-wide"
+              style={{ color: "rgba(212,175,55,0.5)" }}
+            >
+              Trusted Supply Partner Across India's Most Demanding Industries
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {[
+              {
+                icon: "🏥",
+                title: "Hospitals & Healthcare",
+                subtitle: "Sterile Standards. Daily Freshness.",
+                desc: "Focused on sterile handling and daily fresh nutrition for medical-grade kitchen requirements.",
+              },
+              {
+                icon: "✈️",
+                title: "Aviation & Flight Kitchens",
+                subtitle: "International Grading. Zero Compromise.",
+                desc: "Meeting international grading standards for premium airlines and flight catering operations.",
+              },
+              {
+                icon: "🎓",
+                title: "Universities & Institutions",
+                subtitle: "Bulk Supply. Consistent Quality.",
+                desc: "Handling bulk daily essentials for large-scale mess operations across universities and institutions.",
+              },
+              {
+                icon: "🍽️",
+                title: "Cloud Kitchens & Banquets",
+                subtitle: "Precision Delivery. High Volume.",
+                desc: "Precision delivery for high-volume event catering and cloud kitchen operations.",
+              },
+            ].map((sector) => (
+              <motion.div
+                key={sector.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="rounded-xl p-6 flex gap-5 items-start"
+                style={{
+                  background: "rgba(212,175,55,0.04)",
+                  border: "1px solid rgba(212,175,55,0.25)",
+                  boxShadow: "0 4px 24px rgba(212,175,55,0.08)",
+                }}
+              >
+                <div
+                  className="text-4xl flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center"
+                  style={{
+                    background: "rgba(212,175,55,0.08)",
+                    border: "1px solid rgba(212,175,55,0.3)",
+                    boxShadow: "0 0 14px rgba(212,175,55,0.2)",
+                  }}
+                >
+                  {sector.icon}
+                </div>
+                <div>
+                  <h3
+                    className="font-heading text-lg font-bold uppercase tracking-wide mb-1"
+                    style={{ color: "#D4AF37" }}
+                  >
+                    {sector.title}
+                  </h3>
+                  <p
+                    className="text-xs uppercase tracking-widest mb-2"
+                    style={{ color: "rgba(212,175,55,0.6)" }}
+                  >
+                    {sector.subtitle}
+                  </p>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: "rgba(212,175,55,0.75)" }}
+                  >
+                    {sector.desc}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── TRUSTED BY ── */}
+      <section
+        className="py-20"
+        style={{
+          background: "#001230",
+          borderTop: "1px solid rgba(212,175,55,0.2)",
+        }}
+      >
+        <div className="max-w-5xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <span
+              className="inline-block px-4 py-1.5 mb-4 text-xs font-bold uppercase tracking-widest rounded-full"
+              style={{
+                background: "rgba(212,175,55,0.12)",
+                border: "1px solid rgba(212,175,55,0.35)",
+                color: "#D4AF37",
+              }}
+            >
+              ★ PORTFOLIO & AUTHORITY
+            </span>
+            <h2
+              className="font-heading text-3xl sm:text-4xl font-black uppercase tracking-widest gold-glow mb-3"
+              style={{ color: "#D4AF37" }}
+            >
+              Trusted By NCR&apos;s Finest
+            </h2>
+            <p
+              className="text-sm max-w-lg mx-auto"
+              style={{ color: "rgba(255,255,255,0.65)" }}
+            >
+              Leading hospitality brands and institutions across the NCR region
+              rely on A.S.K Fresh Supply for uninterrupted, premium-grade
+              produce.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            {[
+              { name: "The Eastern", tagline: "Premium Hospitality" },
+              { name: "Sandal Tree", tagline: "Fine Dining & Events" },
+              { name: "Riva", tagline: "Luxury Catering" },
+            ].map((client, i) => (
+              <motion.div
+                key={client.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="rounded-2xl p-10 text-center flex flex-col items-center gap-4"
+                style={{
+                  background:
+                    "linear-gradient(145deg, rgba(0,48,128,0.5) 0%, rgba(0,26,77,0.8) 100%)",
+                  border: "1px solid rgba(212,175,55,0.45)",
+                  boxShadow:
+                    "0 0 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(212,175,55,0.15)",
+                }}
+                data-ocid={`clients.item.${i + 1}`}
+              >
+                <div
+                  className="text-2xl flex items-center justify-center w-12 h-12 rounded-full"
+                  style={{
+                    background: "rgba(212,175,55,0.15)",
+                    border: "1.5px solid rgba(212,175,55,0.5)",
+                    color: "#D4AF37",
+                  }}
+                >
+                  ★
+                </div>
+                <h3
+                  className="font-heading text-2xl font-black tracking-wide"
+                  style={{ color: "#D4AF37" }}
+                >
+                  {client.name}
+                </h3>
+                <span
+                  className="text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"
+                  style={{
+                    background: "rgba(212,175,55,0.1)",
+                    border: "1px solid rgba(212,175,55,0.3)",
+                    color: "rgba(212,175,55,0.8)",
+                  }}
+                >
+                  {client.tagline}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── QUALITY POLICY ── */}
+      <section
+        className="py-16"
+        style={{
+          background: "#001540",
+          borderTop: "1px solid rgba(212,175,55,0.2)",
+          borderBottom: "1px solid rgba(212,175,55,0.1)",
+        }}
+      >
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2
+              className="font-heading text-2xl sm:text-3xl font-black uppercase tracking-widest mb-6 gold-glow"
+              style={{ color: "#D4AF37" }}
+            >
+              ✦ Quality Policy ✦
+            </h2>
+            <div
+              className="rounded-xl p-8 sm:p-10"
+              style={{
+                background: "rgba(212,175,55,0.04)",
+                border: "1px solid rgba(212,175,55,0.3)",
+                boxShadow: "0 0 30px rgba(212,175,55,0.08)",
+              }}
+            >
+              <p
+                className="text-base sm:text-lg font-bold leading-relaxed"
+                style={{ color: "#D4AF37" }}
+              >
+                Our Quality is Our Contract. We offer a 100% Replacement
+                Guarantee—if the quality isn't up to mark, we replace it
+                immediately, no questions asked. Our CEO Adnan personally
+                supervises night-time procurement at the Mandi to ensure only
+                'Grade-A' produce reaches your kitchen.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ── LEADERSHIP ── */}
       <section
         id="about"
         className="py-20"
         style={{
-          background: "#080808",
+          background: "#001847",
           borderTop: "1px solid rgba(212,175,55,0.2)",
         }}
       >
@@ -1688,7 +2037,7 @@ export default function App() {
         id="process"
         className="py-16"
         style={{
-          background: "#0A0A0A",
+          background: "#002366",
           borderTop: "1px solid rgba(212,175,55,0.15)",
         }}
       >
@@ -1750,7 +2099,7 @@ export default function App() {
         id="contact"
         className="py-16"
         style={{
-          background: "#080808",
+          background: "#001847",
           borderTop: "1px solid rgba(212,175,55,0.2)",
         }}
       >
@@ -1767,7 +2116,7 @@ export default function App() {
             className="rounded-2xl overflow-hidden mb-8"
             style={{
               border: "1px solid rgba(212,175,55,0.25)",
-              background: "#0d0d0d",
+              background: "#001a4d",
             }}
           >
             <div
@@ -1915,7 +2264,7 @@ export default function App() {
       <footer
         className="py-10 text-center"
         style={{
-          background: "#060606",
+          background: "#001540",
           borderTop: "1px solid rgba(212,175,55,0.25)",
         }}
       >
@@ -1958,6 +2307,13 @@ export default function App() {
             style={{ color: "#D4AF37" }}
           >
             ✦ 3-Brothers Quality Guarantee ✦
+          </p>
+          <p
+            className="text-sm mt-2 tracking-wide"
+            style={{ color: "rgba(212,175,55,0.7)" }}
+          >
+            A.S.K Fresh Supply — Building the Future of Institutional Catering
+            by 2036.
           </p>
           <div
             className="w-32 h-px mx-auto my-5"

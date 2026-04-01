@@ -16,7 +16,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ["Plus Jakarta Sans", "sans-serif"],
+        body: ["Open Sans", "Plus Jakarta Sans", "sans-serif"],
         display: ["Playfair Display", "serif"],
         heading: ["Montserrat", "Plus Jakarta Sans", "sans-serif"],
         hindi: ["Noto Sans Devanagari", "Plus Jakarta Sans", "sans-serif"],
