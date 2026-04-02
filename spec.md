@@ -1,31 +1,33 @@
-# A.S.K Fresh Supply – The Exotic Collection Section
+# A.S.K Fruit & Veg Supplier
 
 ## Current State
-The homepage has several sections: Hero, The A.S.K Edge, The MD Standard, Sectors We Serve, Quality Policy, and Our Leadership/Team A.S.K. The site uses a Dark Navy Blue (#002366) and Gold (#D4AF37) corporate theme.
+The site is a fully built Open Catalog with sections: Hero, A.S.K Edge, MD Standard, Sectors We Serve, Quality Policy, Exotic Collection, Our Corporate Infrastructure, Our Elite Clients, Client Spotlight, VIP Rate Card, Team A.S.K / Leadership, Contact, and Footer. All panels removed; pure public catalog.
 
 ## Requested Changes (Diff)
 
 ### Add
-- New section titled **'The Exotic Collection'** inserted between the Quality Policy section and the Leadership/Team A.S.K section.
-- A 5-item responsive image grid showcasing: Broccoli, Red/Yellow Bell Peppers, Asparagus, Avocado, Dragon Fruit.
-- Each card has: a high-quality photorealistic image, the produce name, and a golden badge label reading **'Hand-Picked & Triple-Graded'**.
-- Premium, clean design matching navy/gold theme with golden glow image treatment.
+- New section: **"A.S.K Equity Partnership – Growing Together"** placed just before the Footer (after the Contact section)
+  - Gold-and-Black theme (black background #0a0a0a or #111, gold accents #D4AF37) to give 'Corporate Leadership' feel — distinct from the navy blue used elsewhere
+  - Handshake or Growth Graph icon at the top of the section (SVG or emoji icon, styled in gold)
+  - A prominent premium-styled box (gold border, subtle gold gradient background) containing the full Hindi/English mix text:
+    - Bold heading: "A.S.K Equity Partnership – Hamara Saajha Bhavishya"
+    - Body text: Full paragraph as provided by user (Hindi/Roman-Hindi)
+  - Legal Commitment Clause line below the box: "We are fully committed to this vision and are ready to sign a Legal Agreement with our founding partners to ensure transparency and trust."
+  - CTA button: "Contact MD Sufiyan to Join the Vision" → links to WhatsApp wa.me/918700722663 with pre-filled message
+  - Mobile-friendly: font sizes readable on small screens, generous padding, no overflow
 
 ### Modify
-- None.
+- Nothing else changes
 
 ### Remove
-- None.
+- Nothing removed
 
 ## Implementation Plan
-1. Insert `ExoticCollection` section JSX between the Quality Policy `</section>` and the Leadership `<section id="about">` in App.tsx.
-2. Use generated images from `/assets/generated/` for each card:
-   - Broccoli: `exotic-broccoli.dim_600x600.jpg`
-   - Bell Peppers: `exotic-bell-peppers.dim_600x600.jpg`
-   - Asparagus: `exotic-asparagus.dim_600x600.jpg`
-   - Avocado: `exotic-avocado.dim_600x600.jpg`
-   - Dragon Fruit: `exotic-dragon-fruit.dim_600x600.jpg`
-3. Grid layout: `grid-cols-2` on mobile, `grid-cols-3` on md, `grid-cols-5` on xl — centered, with the 5th card centered in the last row on smaller breakpoints.
-4. Each card: rounded corners, dark navy background, golden border, image with golden glow, produce name in gold bold text, and a golden badge/pill below with 'Hand-Picked & Triple-Graded'.
-5. Section header: 'The Exotic Collection' in Montserrat Bold uppercase gold with a decorative golden divider and a subtitle like 'Sourced from the World's Finest Farms'.
-6. Add entrance animation (framer-motion whileInView) consistent with existing sections.
+1. Insert a new `<section>` component block in App.tsx between the Contact section closing tag and the Footer.
+2. Section uses black/deep-charcoal background (#0d0d0d) with gold (#D4AF37) borders and accents.
+3. Section heading: "A.S.K Equity Partnership – Growing Together" in gold, with a handshake SVG icon.
+4. Premium box: gold border (1–2px solid gold), subtle dark gold tint background, rounded corners, padding.
+5. Inside box: bold Hindi heading, full body text in readable font (Open Sans or system), slightly larger line-height for Hindi readability.
+6. Below box: legal clause line in smaller italic gold text.
+7. CTA button styled in gold background, black text, linking to WhatsApp Sufiyan with pre-filled message about Partnership Vision.
+8. Full mobile responsiveness with proper font sizing (min 16px body).

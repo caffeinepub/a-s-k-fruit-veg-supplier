@@ -773,6 +773,7 @@ export default function App() {
   const [formPhone, setFormPhone] = useState("");
   const [formMsg, setFormMsg] = useState("");
   const [formSent, setFormSent] = useState(false);
+  const [showRateCard, setShowRateCard] = useState(false);
 
   const adjust = (id: string, delta: number) => {
     setQuantities((prev) => ({ ...prev, [id]: Math.max(0, prev[id] + delta) }));
@@ -1183,6 +1184,7 @@ export default function App() {
                   />
                   <img
                     loading="lazy"
+                    decoding="async"
                     width={96}
                     height={96}
                     src={item.image}
@@ -1678,6 +1680,169 @@ export default function App() {
         </div>
       </section>
 
+      {/* ── VIP RATE CARD SECTION ── */}
+      <section
+        className="py-20"
+        style={{
+          background: "#001847",
+          borderTop: "2px solid rgba(212,175,55,0.4)",
+        }}
+      >
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-10"
+          >
+            <span
+              className="inline-block text-xs font-black uppercase tracking-widest px-5 py-2 rounded-full mb-5"
+              style={{
+                background: "rgba(212,175,55,0.12)",
+                border: "1px solid rgba(212,175,55,0.45)",
+                color: "#D4AF37",
+              }}
+            >
+              ★ FOR REGISTERED INSTITUTIONAL PARTNERS
+            </span>
+            <h2
+              className="font-heading text-3xl sm:text-4xl font-black uppercase tracking-widest gold-glow mb-4"
+              style={{ color: "#D4AF37" }}
+            >
+              Exclusive B2B Pricing for Elite Venues
+            </h2>
+            <p
+              className="text-base max-w-2xl mx-auto mb-8"
+              style={{ color: "rgba(255,255,255,0.75)" }}
+            >
+              Our VVIP rate structure is reserved for hotels, banquets,
+              hospitals, and aviation kitchens. Click below to view the current
+              rate card.
+            </p>
+            <motion.button
+              type="button"
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 8px 40px rgba(212,175,55,0.45)",
+              }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setShowRateCard(true)}
+              className="inline-flex items-center gap-3 px-10 py-4 text-lg font-black uppercase tracking-widest rounded-xl"
+              style={{
+                background: "linear-gradient(135deg, #D4AF37 0%, #FFD700 100%)",
+                color: "#001847",
+                boxShadow: "0 4px 24px rgba(212,175,55,0.35)",
+              }}
+              data-ocid="vip_rate_card.open_modal_button"
+            >
+              👁 View VVIP Rate Card
+            </motion.button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── VIP RATE CARD MODAL ── */}
+      <AnimatePresence>
+        {showRateCard && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 flex items-center justify-center p-4"
+            style={{ background: "rgba(0,0,0,0.85)", zIndex: 9999 }}
+            onClick={() => setShowRateCard(false)}
+            data-ocid="vip_rate_card.modal"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 30 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-3xl rounded-2xl overflow-hidden"
+              style={{
+                background: "#001847",
+                border: "2px solid rgba(212,175,55,0.6)",
+                boxShadow:
+                  "0 24px 80px rgba(0,0,0,0.7), 0 0 40px rgba(212,175,55,0.15)",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div
+                className="flex items-center justify-between px-6 py-4"
+                style={{
+                  background: "rgba(212,175,55,0.08)",
+                  borderBottom: "1px solid rgba(212,175,55,0.3)",
+                }}
+              >
+                <h3
+                  className="font-heading text-xl font-black uppercase tracking-widest"
+                  style={{ color: "#D4AF37" }}
+                >
+                  EXCLUSIVE B2B RATE CARD
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setShowRateCard(false)}
+                  className="flex items-center justify-center w-9 h-9 rounded-full font-bold text-lg transition-all"
+                  style={{
+                    background: "rgba(212,175,55,0.12)",
+                    border: "1px solid rgba(212,175,55,0.4)",
+                    color: "#D4AF37",
+                  }}
+                  data-ocid="vip_rate_card.close_button"
+                >
+                  ✕
+                </button>
+              </div>
+              {/* Rate Card Image */}
+              <div className="p-0 overflow-auto" style={{ maxHeight: "60vh" }}>
+                <img
+                  src="/assets/generated/vip-rate-card.dim_800x600.jpg"
+                  alt="A.S.K VVIP B2B Rate Card — Exclusive Pricing for Elite Institutional Partners"
+                  width={800}
+                  height={600}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full object-contain"
+                />
+              </div>
+              {/* Modal Footer */}
+              <div
+                className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-5"
+                style={{
+                  background: "rgba(212,175,55,0.06)",
+                  borderTop: "1px solid rgba(212,175,55,0.25)",
+                }}
+              >
+                <p
+                  className="text-sm text-center sm:text-left"
+                  style={{ color: "rgba(255,255,255,0.7)" }}
+                >
+                  Contact Sufiyan A.S.K for personalized B2B rates.
+                </p>
+                <a
+                  href="https://wa.me/918700722663?text=Hi%20Sufiyan%20A.S.K%2C%20I%20would%20like%20to%20discuss%20B2B%20pricing%20for%20my%20venue.%20Please%20share%20the%20VVIP%20Rate%20Card%20details."
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-2.5 text-sm font-black uppercase tracking-wider rounded-full"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
+                    color: "#fff",
+                    boxShadow: "0 4px 16px rgba(37,211,102,0.4)",
+                    touchAction: "manipulation",
+                  }}
+                  data-ocid="vip_rate_card.whatsapp_button"
+                >
+                  💬 Get Personalized Rates
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── SECTORS WE SERVE ── */}
       <section
         className="py-20"
@@ -2034,6 +2199,7 @@ export default function App() {
                     src={item.img}
                     alt={item.name}
                     loading="lazy"
+                    decoding="async"
                     width={800}
                     height={800}
                     className="w-full h-full object-cover"
@@ -2253,6 +2419,229 @@ export default function App() {
         </div>
       </section>
 
+      {/* ── CLIENT SPOTLIGHT ── */}
+      <section
+        className="py-20"
+        style={{
+          background: "#001540",
+          borderTop: "1px solid rgba(212,175,55,0.2)",
+        }}
+      >
+        <div className="max-w-5xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <span
+              className="inline-block text-xs font-black uppercase tracking-widest px-5 py-2 rounded-full mb-5"
+              style={{
+                background: "rgba(212,175,55,0.1)",
+                border: "1px solid rgba(212,175,55,0.4)",
+                color: "#D4AF37",
+              }}
+            >
+              ★ REAL PARTNERSHIPS. REAL RESULTS.
+            </span>
+            <h2
+              className="font-heading text-3xl sm:text-4xl font-black uppercase tracking-widest gold-glow mb-4"
+              style={{ color: "#D4AF37" }}
+            >
+              Client Spotlight
+            </h2>
+            <p
+              className="text-base max-w-2xl mx-auto"
+              style={{ color: "rgba(255,255,255,0.7)" }}
+            >
+              Years of trust, consistency, and Grade-A freshness delivered to
+              Delhi-NCR's finest.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            {/* The Eastern */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0 }}
+              whileHover={{
+                y: -6,
+                boxShadow: "0 16px 48px rgba(212,175,55,0.25)",
+              }}
+              className="rounded-2xl p-8 flex flex-col gap-5"
+              style={{
+                background: "rgba(0,35,100,0.6)",
+                border: "1.5px solid rgba(212,175,55,0.5)",
+                boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
+                transition: "all 0.3s ease",
+              }}
+              data-ocid="client_spotlight.item.1"
+            >
+              <div className="flex items-start gap-4">
+                <div
+                  className="text-4xl flex items-center justify-center w-16 h-16 rounded-2xl flex-shrink-0"
+                  style={{
+                    background: "rgba(212,175,55,0.12)",
+                    border: "1.5px solid rgba(212,175,55,0.4)",
+                    boxShadow: "0 0 20px rgba(212,175,55,0.2)",
+                  }}
+                >
+                  🏨
+                </div>
+                <div>
+                  <h3
+                    className="font-heading text-2xl font-black uppercase tracking-wide"
+                    style={{ color: "#FFD700" }}
+                  >
+                    The Eastern
+                  </h3>
+                  <p
+                    className="text-sm font-semibold uppercase tracking-widest mt-0.5"
+                    style={{ color: "rgba(212,175,55,0.7)" }}
+                  >
+                    Premium Banquet | Noida, NCR
+                  </p>
+                </div>
+              </div>
+              <blockquote
+                className="text-sm leading-relaxed italic border-l-2 pl-4"
+                style={{
+                  color: "rgba(255,255,255,0.75)",
+                  borderColor: "rgba(212,175,55,0.4)",
+                }}
+              >
+                "A.S.K supplies us with consistent, Grade-A vegetables daily.
+                Their 5 AM delivery means our kitchen starts on time, every
+                time."
+              </blockquote>
+              <div className="flex flex-wrap gap-2">
+                {["500+ Kg / Day", "3+ Years", "Zero Missed Deliveries"].map(
+                  (stat) => (
+                    <span
+                      key={stat}
+                      className="text-xs font-bold px-3 py-1.5 rounded-full"
+                      style={{
+                        background: "rgba(212,175,55,0.12)",
+                        border: "1px solid rgba(212,175,55,0.35)",
+                        color: "#D4AF37",
+                      }}
+                    >
+                      {stat}
+                    </span>
+                  ),
+                )}
+              </div>
+              <div
+                className="flex items-center justify-between pt-3"
+                style={{ borderTop: "1px solid rgba(212,175,55,0.2)" }}
+              >
+                <span
+                  className="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
+                  style={{
+                    background: "rgba(212,175,55,0.15)",
+                    border: "1px solid rgba(212,175,55,0.5)",
+                    color: "#D4AF37",
+                  }}
+                >
+                  ★ Flagship Client
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Riva */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.15 }}
+              whileHover={{
+                y: -6,
+                boxShadow: "0 16px 48px rgba(212,175,55,0.25)",
+              }}
+              className="rounded-2xl p-8 flex flex-col gap-5"
+              style={{
+                background: "rgba(0,35,100,0.6)",
+                border: "1.5px solid rgba(212,175,55,0.5)",
+                boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
+                transition: "all 0.3s ease",
+              }}
+              data-ocid="client_spotlight.item.2"
+            >
+              <div className="flex items-start gap-4">
+                <div
+                  className="text-4xl flex items-center justify-center w-16 h-16 rounded-2xl flex-shrink-0"
+                  style={{
+                    background: "rgba(212,175,55,0.12)",
+                    border: "1.5px solid rgba(212,175,55,0.4)",
+                    boxShadow: "0 0 20px rgba(212,175,55,0.2)",
+                  }}
+                >
+                  🍽️
+                </div>
+                <div>
+                  <h3
+                    className="font-heading text-2xl font-black uppercase tracking-wide"
+                    style={{ color: "#FFD700" }}
+                  >
+                    Riva
+                  </h3>
+                  <p
+                    className="text-sm font-semibold uppercase tracking-widest mt-0.5"
+                    style={{ color: "rgba(212,175,55,0.7)" }}
+                  >
+                    Fine Dining & Luxury Events | Delhi NCR
+                  </p>
+                </div>
+              </div>
+              <blockquote
+                className="text-sm leading-relaxed italic border-l-2 pl-4"
+                style={{
+                  color: "rgba(255,255,255,0.75)",
+                  borderColor: "rgba(212,175,55,0.4)",
+                }}
+              >
+                "The exotic produce from A.S.K has elevated our menu quality.
+                SB-20 grading is something our chefs trust completely."
+              </blockquote>
+              <div className="flex flex-wrap gap-2">
+                {["200+ Kg / Day", "2+ Years", "100% SB-20 Grade"].map(
+                  (stat) => (
+                    <span
+                      key={stat}
+                      className="text-xs font-bold px-3 py-1.5 rounded-full"
+                      style={{
+                        background: "rgba(212,175,55,0.12)",
+                        border: "1px solid rgba(212,175,55,0.35)",
+                        color: "#D4AF37",
+                      }}
+                    >
+                      {stat}
+                    </span>
+                  ),
+                )}
+              </div>
+              <div
+                className="flex items-center justify-between pt-3"
+                style={{ borderTop: "1px solid rgba(212,175,55,0.2)" }}
+              >
+                <span
+                  className="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
+                  style={{
+                    background: "rgba(212,175,55,0.15)",
+                    border: "1px solid rgba(212,175,55,0.5)",
+                    color: "#D4AF37",
+                  }}
+                >
+                  ★ Luxury Partner
+                </span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* ── LEADERSHIP ── */}
       <section
         id="about"
@@ -2272,6 +2661,7 @@ export default function App() {
             <div className="flex justify-center items-center gap-4 mb-3">
               <img
                 loading="lazy"
+                decoding="async"
                 width={40}
                 height={40}
                 src="/assets/uploads/IMG_2664-1.jpeg"
@@ -2294,6 +2684,7 @@ export default function App() {
               </h2>
               <img
                 loading="lazy"
+                decoding="async"
                 width={40}
                 height={40}
                 src="/assets/uploads/IMG_2664-1.jpeg"
@@ -2317,6 +2708,27 @@ export default function App() {
             </p>
           </motion.div>
 
+          {/* Mandi Supply Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="flex justify-center mb-8"
+          >
+            <span
+              className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest px-6 py-2.5 rounded-full"
+              style={{
+                background: "rgba(212,175,55,0.1)",
+                border: "1.5px solid rgba(212,175,55,0.5)",
+                color: "#D4AF37",
+                boxShadow: "0 0 20px rgba(212,175,55,0.12)",
+              }}
+            >
+              🌿 Direct Supply from Mandi with 3-Layer SB-20 Grading Standard
+            </span>
+          </motion.div>
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {PARTNERS.map((partner, i) => (
               <motion.div
@@ -2338,6 +2750,7 @@ export default function App() {
                   />
                   <img
                     loading="lazy"
+                    decoding="async"
                     width={80}
                     height={80}
                     src="/assets/generated/team-vvip-placeholder.dim_200x200.png"
@@ -2853,6 +3266,153 @@ export default function App() {
         </div>
       </section>
 
+      {/* ── EQUITY PARTNERSHIP ── */}
+      <motion.section
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
+        style={{
+          background: "#0d0d0d",
+          borderTop: "2px solid rgba(212,175,55,0.3)",
+          borderBottom: "2px solid rgba(212,175,55,0.3)",
+        }}
+        className="py-16 sm:py-20 px-4"
+        data-ocid="equity_partnership.section"
+      >
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Handshake Icon */}
+          <div className="flex justify-center mb-6">
+            <span
+              style={{
+                fontSize: "4rem",
+                filter: "drop-shadow(0 0 12px rgba(212,175,55,0.7))",
+                lineHeight: 1,
+              }}
+            >
+              🤝
+            </span>
+          </div>
+
+          {/* Section Title */}
+          <h2
+            className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-wide mb-4"
+            style={{
+              color: "#D4AF37",
+              fontFamily: "Montserrat, sans-serif",
+              textShadow: "0 0 30px rgba(212,175,55,0.35)",
+            }}
+          >
+            A.S.K Equity Partnership – Growing Together
+          </h2>
+          <div
+            style={{
+              width: "80px",
+              height: "3px",
+              background:
+                "linear-gradient(90deg, transparent, #D4AF37, transparent)",
+              margin: "0 auto 2.5rem",
+            }}
+          />
+
+          {/* Premium Box */}
+          <div
+            className="mx-auto text-left rounded-2xl p-5 sm:p-8"
+            style={{
+              maxWidth: "800px",
+              border: "2px solid #D4AF37",
+              background: "rgba(212,175,55,0.05)",
+              boxShadow:
+                "0 0 40px rgba(212,175,55,0.1), inset 0 0 60px rgba(0,0,0,0.3)",
+            }}
+            data-ocid="equity_partnership.card"
+          >
+            {/* Box Heading */}
+            <h3
+              className="text-xl sm:text-2xl font-black mb-5 text-center"
+              style={{
+                color: "#D4AF37",
+                fontFamily: "Montserrat, sans-serif",
+                letterSpacing: "0.03em",
+              }}
+            >
+              A.S.K Equity Partnership – Hamara Saajha Bhavishya
+            </h3>
+
+            {/* Body Text Paragraph 1 */}
+            <p
+              className="text-base sm:text-lg leading-relaxed break-words mb-5"
+              style={{ color: "#e8e0cc", whiteSpace: "pre-line" }}
+            >
+              A.S.K Fresh Supply sirf aaj ka vendor nahi, kal ka ek bada{" "}
+              <strong style={{ color: "#D4AF37" }}>Samrajya (Empire)</strong>{" "}
+              hai. Hum apne saath judne wale Banquets ko sirf &apos;Grahak&apos;
+              (Customer) nahi, balki{" "}
+              <strong style={{ color: "#D4AF37" }}>
+                &#39;Malik&#39; (Owner)
+              </strong>{" "}
+              banane mein yakeen rakhte hain.
+            </p>
+
+            {/* Body Text Paragraph 2 */}
+            <p
+              className="text-base sm:text-lg leading-relaxed break-words"
+              style={{ color: "#e8e0cc", whiteSpace: "pre-line" }}
+            >
+              Humne apni company ka{" "}
+              <strong style={{ color: "#D4AF37" }}>19% Equity Pool</strong> khas
+              taur par apne un loyal Banquet Partners ke liye reserve rakha hai
+              jo hamare vision mein shuruat se judenge. Jab A.S.K apne growth
+              milestones par pahuchegi aur ek{" "}
+              <strong style={{ color: "#D4AF37" }}>
+                Public Limited Company
+              </strong>{" "}
+              banne ki taraf badhegi (chahe usme waqt lage, par maqsad pakka
+              hai), tab ye 19% hissa hamare sabhi shuruati partners mein Barabar
+              (Equally) baanta jayega.
+            </p>
+          </div>
+
+          {/* Legal Commitment Clause */}
+          <p
+            className="mt-6 text-sm sm:text-base italic text-center px-2"
+            style={{
+              color: "rgba(212,175,55,0.8)",
+              maxWidth: "700px",
+              margin: "1.5rem auto 0",
+            }}
+            data-ocid="equity_partnership.panel"
+          >
+            &ldquo;We are fully committed to this vision and are ready to sign a
+            Legal Agreement with our founding partners to ensure transparency
+            and trust.&rdquo;
+          </p>
+
+          {/* CTA Button */}
+          <div
+            className="mt-8 flex justify-center"
+            data-ocid="equity_partnership.primary_button"
+          >
+            <a
+              href="https://wa.me/918700722663?text=Assalam%20Alaikum%20Sufiyan%20Bhai%2C%20I%20am%20interested%20in%20joining%20the%20A.S.K%20Equity%20Partnership%20Vision.%20Please%20share%20the%20details."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-8 py-4 rounded-full font-black uppercase tracking-widest text-sm sm:text-base transition-all duration-300 hover:brightness-110 hover:scale-105 active:scale-95"
+              style={{
+                background:
+                  "linear-gradient(135deg, #D4AF37 0%, #f0cc55 50%, #D4AF37 100%)",
+                color: "#000",
+                boxShadow:
+                  "0 4px 24px rgba(212,175,55,0.45), 0 0 0 2px rgba(212,175,55,0.2)",
+                fontFamily: "Montserrat, sans-serif",
+              }}
+            >
+              🤝 Contact MD Sufiyan to Join the Vision
+            </a>
+          </div>
+        </div>
+      </motion.section>
+
       {/* ── FOOTER ── */}
       <footer
         className="py-10 text-center"
@@ -2864,6 +3424,7 @@ export default function App() {
         <div className="max-w-4xl mx-auto px-4">
           <img
             loading="lazy"
+            decoding="async"
             width={48}
             height={48}
             src="/assets/uploads/IMG_2664-1.jpeg"
@@ -2932,7 +3493,7 @@ export default function App() {
       </footer>
       {/* ── FLOATING WHATSAPP BUTTON ── */}
       <a
-        href="https://wa.me/918700722663?text=Hi%20A.S.K%20Team!%20I%27d%20like%20to%20get%20a%20quote%20for%20fresh%20produce%20supply."
+        href="https://wa.me/918700722663?text=Hi%20A.S.K%20Team%2C%20I%20am%20from%20the%20Purchase%20Dept%20of%20%5BVenue%20Name%5D.%20Send%20me%20your%20Sample%20Catalog."
         target="_blank"
         rel="noreferrer"
         data-ocid="floating.whatsapp.cta"
