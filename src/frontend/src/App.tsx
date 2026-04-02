@@ -730,6 +730,7 @@ function ProductCard({
             background: "#001333",
             border: "1px solid rgba(212,175,55,0.4)",
             color: "#D4AF37",
+            fontSize: "16px",
           }}
           data-ocid={`product.qty_input.${index}`}
         />
@@ -767,6 +768,11 @@ export default function App() {
   const [customerName, setCustomerName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [formName, setFormName] = useState("");
+  const [formOrg, setFormOrg] = useState("");
+  const [formPhone, setFormPhone] = useState("");
+  const [formMsg, setFormMsg] = useState("");
+  const [formSent, setFormSent] = useState(false);
 
   const adjust = (id: string, delta: number) => {
     setQuantities((prev) => ({ ...prev, [id]: Math.max(0, prev[id] + delta) }));
@@ -839,7 +845,10 @@ export default function App() {
               }}
             >
               <img
-                loading="lazy"
+                loading="eager"
+                fetchPriority="high"
+                width={120}
+                height={120}
                 src="/assets/uploads/IMG_2664-1.jpeg"
                 alt="A.S.K VVIP Eagle Logo"
                 className="logo-aura relative z-10"
@@ -1174,6 +1183,8 @@ export default function App() {
                   />
                   <img
                     loading="lazy"
+                    width={96}
+                    height={96}
                     src={item.image}
                     alt={item.label}
                     className="relative z-10 w-24 h-24 rounded-full object-cover"
@@ -1912,11 +1923,195 @@ export default function App() {
 
       {/* ── THE EXOTIC COLLECTION ── */}
       <section
-        className="py-16 sm:py-20"
+        className="py-20 sm:py-28"
         style={{
-          background: "#001847",
-          borderTop: "1px solid rgba(212,175,55,0.2)",
-          borderBottom: "1px solid rgba(212,175,55,0.1)",
+          background: "linear-gradient(180deg, #001847 0%, #000d2e 100%)",
+          borderTop: "2px solid rgba(212,175,55,0.4)",
+          borderBottom: "2px solid rgba(212,175,55,0.4)",
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span
+              className="inline-block px-5 py-2 mb-5 text-xs font-bold uppercase tracking-widest rounded-full"
+              style={{
+                background: "rgba(212,175,55,0.12)",
+                border: "1px solid rgba(212,175,55,0.5)",
+                color: "#D4AF37",
+              }}
+            >
+              ✦ PREMIUM IMPORTED RANGE ✦
+            </span>
+            <h2
+              className="font-heading text-3xl sm:text-5xl font-black uppercase tracking-widest mb-4 gold-glow shimmer-gold"
+              style={{ color: "#D4AF37" }}
+            >
+              The Exotic Collection
+            </h2>
+            <p
+              className="text-base sm:text-lg max-w-2xl mx-auto"
+              style={{ color: "rgba(212,175,55,0.75)" }}
+            >
+              World-class produce sourced for Delhi-NCR's elite kitchens — every
+              item hand-selected, triple-graded.
+            </p>
+            <p
+              className="text-sm mt-2 uppercase tracking-widest"
+              style={{ color: "rgba(212,175,55,0.45)" }}
+            >
+              विश्व के सर्वश्रेष्ठ खेतों से | Sourced from the World's Finest Farms
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 sm:gap-8">
+            {[
+              {
+                name: "Broccoli",
+                hindiName: "ब्रोकोली",
+                price: "₹160/kg",
+                img: "/assets/generated/exotic-broccoli-hq.dim_800x800.jpg",
+              },
+              {
+                name: "Red & Yellow Bell Peppers",
+                hindiName: "लाल व पीली शिमला",
+                price: "₹160/kg",
+                img: "/assets/generated/exotic-bell-peppers-hq.dim_800x800.jpg",
+              },
+              {
+                name: "Asparagus",
+                hindiName: "एस्परैगस",
+                price: "On Request",
+                img: "/assets/generated/exotic-asparagus-hq.dim_800x800.jpg",
+              },
+              {
+                name: "Avocado",
+                hindiName: "एवोकाडो",
+                price: "On Request",
+                img: "/assets/generated/exotic-avocado-hq.dim_800x800.jpg",
+              },
+              {
+                name: "Dragon Fruit",
+                hindiName: "ड्रैगन फ्रूट",
+                price: "On Request",
+                img: "/assets/generated/exotic-dragon-fruit-hq.dim_800x800.jpg",
+              },
+            ].map((item, index) => (
+              <motion.div
+                key={item.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.4 }}
+                className="rounded-2xl overflow-hidden flex flex-col group"
+                style={{
+                  background: "rgba(0,15,50,0.9)",
+                  border: "1px solid rgba(212,175,55,0.4)",
+                  boxShadow:
+                    "0 8px 32px rgba(0,0,0,0.5), 0 0 0 0 rgba(212,175,55,0)",
+                  transition: "box-shadow 0.3s ease",
+                }}
+                data-ocid={`exotic.item.${index + 1}`}
+              >
+                {/* Image container */}
+                <div
+                  className="overflow-hidden relative"
+                  style={{ aspectRatio: "1/1" }}
+                >
+                  <div
+                    className="absolute inset-0 z-10 pointer-events-none"
+                    style={{
+                      background:
+                        "linear-gradient(to bottom, transparent 60%, rgba(0,10,40,0.8) 100%)",
+                    }}
+                  />
+                  <img
+                    src={item.img}
+                    alt={item.name}
+                    loading="lazy"
+                    width={800}
+                    height={800}
+                    className="w-full h-full object-cover"
+                    style={{
+                      transition: "transform 0.5s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.transform =
+                        "scale(1.08)";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.transform =
+                        "scale(1)";
+                    }}
+                  />
+                  {/* Golden glow overlay */}
+                  <div
+                    className="absolute inset-0 z-10 pointer-events-none opacity-0 group-hover:opacity-100"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse at center, rgba(212,175,55,0.15) 0%, transparent 70%)",
+                      transition: "opacity 0.4s ease",
+                    }}
+                  />
+                </div>
+                {/* Info */}
+                <div className="flex flex-col items-center gap-2 px-4 py-5">
+                  <p
+                    className="font-heading font-black text-base sm:text-lg text-center uppercase tracking-wide"
+                    style={{ color: "#D4AF37" }}
+                  >
+                    {item.name}
+                  </p>
+                  <p
+                    className="font-hindi text-xs"
+                    style={{ color: "rgba(212,175,55,0.55)" }}
+                  >
+                    {item.hindiName}
+                  </p>
+                  <p
+                    className="font-heading font-black text-base"
+                    style={{ color: "#FFD700" }}
+                  >
+                    {item.price}
+                  </p>
+                  <span
+                    className="text-xs uppercase tracking-wider text-center px-3 py-1.5 rounded-full mt-1"
+                    style={{
+                      background: "rgba(212,175,55,0.12)",
+                      border: "1px solid rgba(212,175,55,0.45)",
+                      color: "#D4AF37",
+                    }}
+                  >
+                    ✦ Hand-Picked & Triple-Graded
+                  </span>
+                  <a
+                    href={`https://wa.me/918700722663?text=${encodeURIComponent(`Hi Sufiyan, I need ${item.name} for my establishment. Please share VVIP pricing.`)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-gold w-full py-2 text-xs font-black uppercase tracking-widest rounded-lg text-center mt-1"
+                    data-ocid={`exotic.whatsapp.${index + 1}`}
+                  >
+                    📲 Get Quote
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── OUR ELITE CLIENTS ── */}
+      <section
+        className="py-20 sm:py-24"
+        style={{
+          background: "#002366",
+          borderTop: "2px solid rgba(212,175,55,0.4)",
+          borderBottom: "1px solid rgba(212,175,55,0.2)",
         }}
       >
         <div className="max-w-6xl mx-auto px-4">
@@ -1924,95 +2119,137 @@ export default function App() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-14"
           >
+            <span
+              className="inline-block px-5 py-2 mb-5 text-xs font-bold uppercase tracking-widest rounded-full"
+              style={{
+                background: "rgba(212,175,55,0.1)",
+                border: "1px solid rgba(212,175,55,0.4)",
+                color: "#D4AF37",
+              }}
+            >
+              ★ TRUSTED BY THE FINEST
+            </span>
             <h2
-              className="font-heading text-2xl sm:text-3xl font-black uppercase tracking-widest mb-3 gold-glow"
+              className="font-heading text-3xl sm:text-5xl font-black uppercase tracking-widest mb-4 gold-glow shimmer-gold"
               style={{ color: "#D4AF37" }}
             >
-              ✦ The Exotic Collection ✦
+              Our Elite Clients
             </h2>
             <p
-              className="text-sm uppercase tracking-widest"
-              style={{ color: "rgba(212,175,55,0.6)" }}
+              className="text-base sm:text-lg max-w-2xl mx-auto"
+              style={{ color: "rgba(255,255,255,0.75)" }}
             >
-              Sourced from the World&apos;s Finest Farms | विश्व के सर्वश्रेष्ठ खेतों से
+              Trusted by Delhi-NCR's most prestigious establishments. Our
+              standards are measured by the kitchens we serve.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
             {[
               {
-                name: "Broccoli",
-                img: "/assets/generated/exotic-broccoli.dim_600x600.jpg",
+                name: "The Eastern",
+                tagline: "Premium Banquet & Hospitality",
+                desc: "Supplying A-Grade seasonal vegetables and exotic produce to The Eastern's world-class kitchen operations.",
+                icon: "🏨",
+                badge: "★ VVIP Partner",
               },
               {
-                name: "Red & Yellow Bell Peppers",
-                img: "/assets/generated/exotic-bell-peppers.dim_600x600.jpg",
+                name: "Riva",
+                tagline: "Fine Dining & Luxury Catering",
+                desc: "A trusted supply chain partner for Riva's high-end culinary team, delivering freshness and consistency at every service.",
+                icon: "🍽️",
+                badge: "★ VVIP Partner",
               },
-              {
-                name: "Asparagus",
-                img: "/assets/generated/exotic-asparagus.dim_600x600.jpg",
-              },
-              {
-                name: "Avocado",
-                img: "/assets/generated/exotic-avocado.dim_600x600.jpg",
-              },
-              {
-                name: "Dragon Fruit",
-                img: "/assets/generated/exotic-dragon-fruit.dim_600x600.jpg",
-              },
-            ].map((item, index) => (
+            ].map((client, i) => (
               <motion.div
-                key={item.name}
-                initial={{ opacity: 0, y: 20 }}
+                key={client.name}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ scale: 1.04 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                className={`rounded-xl overflow-hidden flex flex-col${index === 4 ? " col-span-2 sm:col-span-1" : ""}`}
-                style={{
-                  background: "rgba(0,20,60,0.8)",
-                  border: "1px solid rgba(212,175,55,0.35)",
-                  boxShadow: "0 4px 24px rgba(212,175,55,0.1)",
+                transition={{ delay: i * 0.15 }}
+                whileHover={{
+                  y: -6,
+                  boxShadow: "0 16px 48px rgba(212,175,55,0.25)",
                 }}
+                className="rounded-2xl p-8 flex flex-col gap-5 group cursor-default"
+                style={{
+                  background: "rgba(0,35,100,0.6)",
+                  border: "1.5px solid rgba(212,175,55,0.5)",
+                  boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
+                  transition: "all 0.3s ease",
+                }}
+                data-ocid={`elite_clients.item.${i + 1}`}
               >
-                <div
-                  className="overflow-hidden rounded-t-xl"
-                  style={{ aspectRatio: "1/1" }}
-                >
-                  <img
-                    src={item.img}
-                    alt={item.name}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
-                    style={{
-                      filter: "drop-shadow(0 0 12px rgba(212,175,55,0.4))",
-                      transition: "transform 0.4s ease",
-                    }}
-                  />
-                </div>
-                <div className="flex flex-col items-center gap-2 px-3 py-4">
-                  <p
-                    className="font-heading font-bold text-sm sm:text-base text-center uppercase tracking-wide"
-                    style={{ color: "#D4AF37" }}
-                  >
-                    {item.name}
-                  </p>
-                  <span
-                    className="text-xs uppercase tracking-wider text-center px-3 py-1 rounded-full"
+                <div className="flex items-center gap-4">
+                  <div
+                    className="text-4xl flex items-center justify-center w-16 h-16 rounded-2xl flex-shrink-0"
                     style={{
                       background: "rgba(212,175,55,0.12)",
-                      border: "1px solid rgba(212,175,55,0.4)",
+                      border: "1.5px solid rgba(212,175,55,0.4)",
+                      boxShadow: "0 0 20px rgba(212,175,55,0.2)",
+                    }}
+                  >
+                    {client.icon}
+                  </div>
+                  <div>
+                    <h3
+                      className="font-heading text-2xl font-black uppercase tracking-wide"
+                      style={{ color: "#FFD700" }}
+                    >
+                      {client.name}
+                    </h3>
+                    <p
+                      className="text-sm font-semibold uppercase tracking-widest mt-0.5"
+                      style={{ color: "rgba(212,175,55,0.7)" }}
+                    >
+                      {client.tagline}
+                    </p>
+                  </div>
+                </div>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "rgba(255,255,255,0.8)" }}
+                >
+                  {client.desc}
+                </p>
+                <div
+                  className="flex items-center justify-between pt-3"
+                  style={{ borderTop: "1px solid rgba(212,175,55,0.2)" }}
+                >
+                  <span
+                    className="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
+                    style={{
+                      background: "rgba(212,175,55,0.15)",
+                      border: "1px solid rgba(212,175,55,0.5)",
                       color: "#D4AF37",
                     }}
                   >
-                    ✦ Hand-Picked &amp; Triple-Graded
+                    {client.badge}
+                  </span>
+                  <span
+                    className="text-xs"
+                    style={{ color: "rgba(212,175,55,0.5)" }}
+                  >
+                    Delhi-NCR
                   </span>
                 </div>
               </motion.div>
             ))}
           </div>
+
+          {/* Tagline */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="text-center mt-12 text-sm font-bold uppercase tracking-widest"
+            style={{ color: "rgba(212,175,55,0.6)" }}
+          >
+            Trusted by Giants — Serving premium venues like The Eastern and Riva
+          </motion.p>
         </div>
       </section>
 
@@ -2035,6 +2272,8 @@ export default function App() {
             <div className="flex justify-center items-center gap-4 mb-3">
               <img
                 loading="lazy"
+                width={40}
+                height={40}
                 src="/assets/uploads/IMG_2664-1.jpeg"
                 alt="Eagle Logo"
                 className="w-10 h-10 rounded-full object-cover"
@@ -2055,6 +2294,8 @@ export default function App() {
               </h2>
               <img
                 loading="lazy"
+                width={40}
+                height={40}
                 src="/assets/uploads/IMG_2664-1.jpeg"
                 alt="Eagle Logo"
                 className="w-10 h-10 rounded-full object-cover"
@@ -2097,6 +2338,8 @@ export default function App() {
                   />
                   <img
                     loading="lazy"
+                    width={80}
+                    height={80}
                     src="/assets/generated/team-vvip-placeholder.dim_200x200.png"
                     alt={partner.name}
                     className="relative z-10 w-20 h-20 rounded-full object-cover"
@@ -2369,6 +2612,244 @@ export default function App() {
               <Mail className="w-4 h-4" /> Email Us
             </a>
           </div>
+
+          {/* ── INQUIRY FORM + ADDRESS ── */}
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Office Address Card */}
+            <div
+              className="rounded-2xl p-7 flex flex-col gap-4"
+              style={{
+                background:
+                  "linear-gradient(145deg, rgba(0,48,128,0.45) 0%, rgba(0,26,77,0.8) 100%)",
+                border: "1px solid rgba(212,175,55,0.35)",
+              }}
+            >
+              <h3
+                className="font-heading text-lg font-black uppercase tracking-widest"
+                style={{ color: "#D4AF37" }}
+              >
+                📍 Our Office
+              </h3>
+              <div
+                className="flex flex-col gap-3 text-sm"
+                style={{ color: "rgba(255,255,255,0.75)" }}
+              >
+                <div className="flex gap-3">
+                  <span style={{ color: "#D4AF37", flexShrink: 0 }}>🏢</span>
+                  <span>
+                    <span className="font-bold" style={{ color: "#D4AF37" }}>
+                      Shahid Nagar Office
+                    </span>
+                    <br />
+                    Shahid Nagar, Ghaziabad,
+                    <br />
+                    Uttar Pradesh – 201005
+                  </span>
+                </div>
+                <div className="flex gap-3">
+                  <span style={{ color: "#D4AF37", flexShrink: 0 }}>🏭</span>
+                  <span>
+                    <span className="font-bold" style={{ color: "#D4AF37" }}>
+                      Mandi Operations
+                    </span>
+                    <br />
+                    Shop No., Sahibabad SB-20,
+                    <br />
+                    Ghaziabad, UP
+                  </span>
+                </div>
+                <div className="flex gap-3">
+                  <span style={{ color: "#D4AF37", flexShrink: 0 }}>⏰</span>
+                  <span>
+                    <span className="font-bold" style={{ color: "#D4AF37" }}>
+                      Operating Hours
+                    </span>
+                    <br />
+                    Mon – Sun: 4:00 AM – 10:00 PM
+                    <br />
+                    <span
+                      style={{
+                        color: "rgba(212,175,55,0.6)",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      24/7 WhatsApp Support Available
+                    </span>
+                  </span>
+                </div>
+                <div className="flex gap-3">
+                  <span style={{ color: "#D4AF37", flexShrink: 0 }}>✉️</span>
+                  <span>ask.global.exports.official@gmail.com</span>
+                </div>
+              </div>
+              <div className="mt-2">
+                <p
+                  className="text-xs uppercase tracking-widest font-bold mb-2"
+                  style={{ color: "rgba(212,175,55,0.55)" }}
+                >
+                  Coverage Area
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    "Ghaziabad",
+                    "Delhi NCR",
+                    "Noida",
+                    "Greater Noida",
+                    "Faridabad",
+                    "Gurugram",
+                  ].map((area) => (
+                    <span
+                      key={area}
+                      className="text-xs px-2 py-1 rounded-full"
+                      style={{
+                        background: "rgba(212,175,55,0.12)",
+                        border: "1px solid rgba(212,175,55,0.3)",
+                        color: "rgba(212,175,55,0.85)",
+                      }}
+                    >
+                      {area}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Inquiry Form */}
+            <div
+              className="rounded-2xl p-7"
+              style={{
+                background:
+                  "linear-gradient(145deg, rgba(0,48,128,0.45) 0%, rgba(0,26,77,0.8) 100%)",
+                border: "1px solid rgba(212,175,55,0.35)",
+              }}
+            >
+              <h3
+                className="font-heading text-lg font-black uppercase tracking-widest mb-5"
+                style={{ color: "#D4AF37" }}
+              >
+                📋 Send an Inquiry
+              </h3>
+              {formSent ? (
+                <div className="flex flex-col items-center justify-center gap-4 py-8 text-center">
+                  <div className="text-5xl">✅</div>
+                  <p className="font-bold text-lg" style={{ color: "#D4AF37" }}>
+                    Inquiry Sent via WhatsApp!
+                  </p>
+                  <p
+                    className="text-sm"
+                    style={{ color: "rgba(255,255,255,0.65)" }}
+                  >
+                    Our team will respond within 15 minutes.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormSent(false);
+                      setFormName("");
+                      setFormOrg("");
+                      setFormPhone("");
+                      setFormMsg("");
+                    }}
+                    className="text-xs uppercase tracking-widest font-bold px-4 py-2 rounded-lg"
+                    style={{
+                      background: "rgba(212,175,55,0.15)",
+                      border: "1px solid rgba(212,175,55,0.4)",
+                      color: "#D4AF37",
+                    }}
+                  >
+                    Send Another
+                  </button>
+                </div>
+              ) : (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const msg = `Hi A.S.K Team! 🙏%0A%0A*New Inquiry from Website*%0A👤 Name: ${encodeURIComponent(formName)}%0A🏢 Organisation: ${encodeURIComponent(formOrg || "N/A")}%0A📞 Phone: ${encodeURIComponent(formPhone)}%0A%0A💬 Message:%0A${encodeURIComponent(formMsg)}%0A%0A— Sent from ask-fresh-supply website`;
+                    window.open(
+                      `https://wa.me/918700722663?text=${msg}`,
+                      "_blank",
+                    );
+                    setFormSent(true);
+                  }}
+                  className="flex flex-col gap-4"
+                >
+                  <input
+                    type="text"
+                    placeholder="Your Name *"
+                    required
+                    value={formName}
+                    onChange={(e) => setFormName(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                    style={{
+                      background: "rgba(0,20,64,0.7)",
+                      border: "1px solid rgba(212,175,55,0.3)",
+                      color: "#fff",
+                      caretColor: "#D4AF37",
+                    }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Hotel / Restaurant / Organisation"
+                    value={formOrg}
+                    onChange={(e) => setFormOrg(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                    style={{
+                      background: "rgba(0,20,64,0.7)",
+                      border: "1px solid rgba(212,175,55,0.3)",
+                      color: "#fff",
+                      caretColor: "#D4AF37",
+                    }}
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Phone Number *"
+                    required
+                    value={formPhone}
+                    onChange={(e) => setFormPhone(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                    style={{
+                      background: "rgba(0,20,64,0.7)",
+                      border: "1px solid rgba(212,175,55,0.3)",
+                      color: "#fff",
+                      caretColor: "#D4AF37",
+                    }}
+                  />
+                  <textarea
+                    placeholder="Tell us your requirement (items, quantity, delivery schedule)..."
+                    required
+                    rows={4}
+                    value={formMsg}
+                    onChange={(e) => setFormMsg(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl text-sm outline-none resize-none"
+                    style={{
+                      background: "rgba(0,20,64,0.7)",
+                      border: "1px solid rgba(212,175,55,0.3)",
+                      color: "#fff",
+                      caretColor: "#D4AF37",
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    className="w-full py-3.5 rounded-xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
+                      color: "#fff",
+                      boxShadow: "0 4px 18px rgba(37,211,102,0.35)",
+                    }}
+                  >
+                    💬 Send via WhatsApp
+                  </button>
+                  <p
+                    className="text-xs text-center"
+                    style={{ color: "rgba(212,175,55,0.45)" }}
+                  >
+                    Submitting opens WhatsApp with your message pre-filled.
+                  </p>
+                </form>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -2383,6 +2864,8 @@ export default function App() {
         <div className="max-w-4xl mx-auto px-4">
           <img
             loading="lazy"
+            width={48}
+            height={48}
             src="/assets/uploads/IMG_2664-1.jpeg"
             alt="A.S.K Eagle"
             className="w-12 h-12 rounded-full mx-auto mb-4 object-cover"
@@ -2447,6 +2930,39 @@ export default function App() {
           </p>
         </div>
       </footer>
+      {/* ── FLOATING WHATSAPP BUTTON ── */}
+      <a
+        href="https://wa.me/918700722663?text=Hi%20A.S.K%20Team!%20I%27d%20like%20to%20get%20a%20quote%20for%20fresh%20produce%20supply."
+        target="_blank"
+        rel="noreferrer"
+        data-ocid="floating.whatsapp.cta"
+        className="fixed flex items-center gap-3 z-[60] rounded-full font-black text-sm uppercase tracking-wider"
+        style={{
+          bottom: "24px",
+          right: "20px",
+          background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
+          color: "#fff",
+          padding: "16px 26px",
+          boxShadow:
+            "0 8px 32px rgba(37,211,102,0.6), 0 4px 12px rgba(0,0,0,0.5), 0 0 0 4px rgba(37,211,102,0.2)",
+          animation: "whatsapp-float 2.8s ease-in-out infinite",
+          touchAction: "manipulation",
+        }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 32 32"
+          fill="currentColor"
+          aria-label="WhatsApp"
+          style={{ flexShrink: 0 }}
+        >
+          <title>WhatsApp</title>
+          <path d="M16 0C7.163 0 0 7.163 0 16c0 2.822.737 5.469 2.027 7.773L0 32l8.49-2.006A15.94 15.94 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.782-1.853l-.485-.288-5.037 1.188 1.22-4.9-.317-.5A13.268 13.268 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.333-9.974c-.4-.2-2.366-1.168-2.733-1.301-.367-.133-.634-.2-.9.2-.267.4-1.034 1.301-1.267 1.568-.233.267-.467.3-.867.1-.4-.2-1.688-.622-3.216-1.984-1.188-1.059-1.99-2.368-2.223-2.768-.233-.4-.025-.616.175-.816.181-.181.4-.467.6-.7.2-.233.267-.4.4-.667.133-.267.067-.5-.033-.7-.1-.2-.9-2.167-1.233-2.966-.325-.779-.655-.673-.9-.686-.232-.013-.5-.013-.767-.013s-.7.1-1.067.5c-.367.4-1.4 1.367-1.4 3.334s1.433 3.867 1.633 4.133c.2.267 2.817 4.3 6.825 6.033.954.413 1.698.66 2.278.845.957.305 1.828.262 2.516.159.768-.114 2.366-.967 2.7-1.9.333-.933.333-1.733.233-1.9-.1-.167-.367-.267-.767-.467z" />
+        </svg>
+        <span className="hidden sm:inline">Get a Quote</span>
+        <span className="sm:hidden">Quote</span>
+      </a>
     </div>
   );
 }

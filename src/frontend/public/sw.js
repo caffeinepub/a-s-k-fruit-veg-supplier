@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ask-sabzi-v10';
+const CACHE_NAME = 'ask-sabzi-v11';
 const URLS_TO_CACHE = [
   '/',
   '/manifest.json',
@@ -18,7 +18,7 @@ self.addEventListener('activate', (event) => {
     )
   );
   self.clients.claim();
-  // Force reload all open windows so users immediately see the latest no-login interface
+  // Force reload all open windows so users immediately see the latest interface
   self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
     clients.forEach((client) => client.navigate(client.url));
   });
