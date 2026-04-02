@@ -1904,6 +1904,112 @@ export default function App() {
         </div>
       </section>
 
+      {/* ── THE EXOTIC COLLECTION ── */}
+      <section
+        className="py-16 sm:py-20"
+        style={{
+          background: "#001847",
+          borderTop: "1px solid rgba(212,175,55,0.2)",
+          borderBottom: "1px solid rgba(212,175,55,0.1)",
+        }}
+      >
+        <div className="max-w-6xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2
+              className="font-heading text-2xl sm:text-3xl font-black uppercase tracking-widest mb-3 gold-glow"
+              style={{ color: "#D4AF37" }}
+            >
+              ✦ The Exotic Collection ✦
+            </h2>
+            <p
+              className="text-sm uppercase tracking-widest"
+              style={{ color: "rgba(212,175,55,0.6)" }}
+            >
+              Sourced from the World&apos;s Finest Farms | विश्व के सर्वश्रेष्ठ खेतों से
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6">
+            {[
+              {
+                name: "Broccoli",
+                img: "/assets/generated/exotic-broccoli.dim_600x600.jpg",
+              },
+              {
+                name: "Red & Yellow Bell Peppers",
+                img: "/assets/generated/exotic-bell-peppers.dim_600x600.jpg",
+              },
+              {
+                name: "Asparagus",
+                img: "/assets/generated/exotic-asparagus.dim_600x600.jpg",
+              },
+              {
+                name: "Avocado",
+                img: "/assets/generated/exotic-avocado.dim_600x600.jpg",
+              },
+              {
+                name: "Dragon Fruit",
+                img: "/assets/generated/exotic-dragon-fruit.dim_600x600.jpg",
+              },
+            ].map((item, index) => (
+              <motion.div
+                key={item.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ scale: 1.04 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+                className={`rounded-xl overflow-hidden flex flex-col${index === 4 ? " col-span-2 sm:col-span-1" : ""}`}
+                style={{
+                  background: "rgba(0,20,60,0.8)",
+                  border: "1px solid rgba(212,175,55,0.35)",
+                  boxShadow: "0 4px 24px rgba(212,175,55,0.1)",
+                }}
+              >
+                <div
+                  className="overflow-hidden rounded-t-xl"
+                  style={{ aspectRatio: "1/1" }}
+                >
+                  <img
+                    src={item.img}
+                    alt={item.name}
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                    style={{
+                      filter: "drop-shadow(0 0 12px rgba(212,175,55,0.4))",
+                      transition: "transform 0.4s ease",
+                    }}
+                  />
+                </div>
+                <div className="flex flex-col items-center gap-2 px-3 py-4">
+                  <p
+                    className="font-heading font-bold text-sm sm:text-base text-center uppercase tracking-wide"
+                    style={{ color: "#D4AF37" }}
+                  >
+                    {item.name}
+                  </p>
+                  <span
+                    className="text-xs uppercase tracking-wider text-center px-3 py-1 rounded-full"
+                    style={{
+                      background: "rgba(212,175,55,0.12)",
+                      border: "1px solid rgba(212,175,55,0.4)",
+                      color: "#D4AF37",
+                    }}
+                  >
+                    ✦ Hand-Picked &amp; Triple-Graded
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── LEADERSHIP ── */}
       <section
         id="about"
