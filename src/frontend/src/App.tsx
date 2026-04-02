@@ -946,13 +946,19 @@ export default function App() {
       <section
         id="home"
         className="relative min-h-screen flex items-center justify-center pt-64 pb-20"
-        style={{ background: "#002366" }}
+        style={{
+          backgroundImage:
+            "url(/assets/generated/warehouse-hero.dim_1920x1080.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
       >
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 40%, rgba(212,175,55,0.08) 0%, transparent 65%)",
+              "linear-gradient(to bottom, rgba(0,35,102,0.82) 0%, rgba(0,18,48,0.90) 100%)",
           }}
         />
         <div className="relative z-10 text-center max-w-3xl mx-auto px-4">
@@ -969,18 +975,18 @@ export default function App() {
               }}
             >
               <MapPin className="w-3.5 h-3.5" />
-              NCR's Largest Institutional Supply Partner
+              Delhi-NCR's Premier Institutional Partner
             </div>
             <h2 className="font-heading text-3xl sm:text-5xl font-black uppercase tracking-tight mb-6 gold-glow shimmer-gold leading-tight">
-              A.S.K Fresh Supply: Delivering Excellence from 1 to 1,00,000+
-              Guests.
+              A.S.K Fresh Supply: Delhi-NCR's Premier Partner for Elite Banquets
+              & 5-Star Hotels.
             </h2>
             <p
               className="text-base sm:text-lg leading-relaxed mb-8 max-w-2xl mx-auto"
               style={{ color: "rgba(212,175,55,0.8)" }}
             >
-              NCR&apos;s Only Supply Chain Partner with Zero-Wastage Guarantee
-              and Infinite Scaling Capability.
+              Specializing in A-Grade (SB-20) Produce, Exotic Vegetables, and
+              Imported Fruits with 24/7 Dedicated Logistics.
             </p>
             <p
               className="text-xs tracking-widest mb-8 uppercase"
