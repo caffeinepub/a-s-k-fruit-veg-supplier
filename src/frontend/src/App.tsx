@@ -382,6 +382,7 @@ const FEATURED = [
     label: "Sahibabad Ginger",
     hindiName: "अदरक",
     price: 86,
+    discountedPrice: 66,
     image: "/assets/generated/ginger-fresh.dim_400x400.png",
   },
   {
@@ -389,6 +390,7 @@ const FEATURED = [
     label: "VVIP Tomatoes",
     hindiName: "टमाटर",
     price: 27,
+    discountedPrice: 15,
     image: "/assets/generated/tomatoes-fresh.dim_400x400.png",
   },
   {
@@ -396,6 +398,7 @@ const FEATURED = [
     label: "Premium Onions",
     hindiName: "प्याज़",
     price: 24,
+    discountedPrice: 12,
     image: "/assets/generated/onions-fresh.dim_400x400.png",
   },
 ];
@@ -614,6 +617,23 @@ function MandiIntelligence() {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
+// Noida Competitive Pricing Rules
+// Rule 1: Aloo (id: "aloo") — NO discount, always standard rate
+// Rule 2: price > ₹50/kg → deduct ₹20
+// Rule 3: price ≤ ₹50/kg (non-Aloo) → deduct ₹12
+// ────────────────────────────────────────────────────────────────────────────
+function getDiscountedPrice(
+  product: Product,
+): { original: number; discounted: number } | null {
+  if (product.id === "aloo") return null;
+  const discount = product.retailPrice > 50 ? 20 : 12;
+  return {
+    original: product.retailPrice,
+    discounted: product.retailPrice - discount,
+  };
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 // Product Card
 // ────────────────────────────────────────────────────────────────────────────
 interface ProductCardProps {
@@ -657,21 +677,78 @@ function ProductCard({
           </p>
         </div>
         <div className="text-right">
-          <p
-            className="font-heading font-black text-lg"
-            style={{ color: "#FFD700" }}
-          >
-            ₹{product.retailPrice}
-          </p>
-          <p className="text-xs" style={{ color: "rgba(212,175,55,0.55)" }}>
-            per {product.unit}
-          </p>
-          <p
-            className="text-xs mt-0.5 font-semibold"
-            style={{ color: "#D4AF37" }}
-          >
-            Standard Delivery Price
-          </p>
+          {(() => {
+            const info = getDiscountedPrice(product);
+            if (!info) {
+              return (
+                <>
+                  <p
+                    className="font-heading font-black text-lg"
+                    style={{ color: "#FFD700" }}
+                  >
+                    ₹{product.retailPrice}
+                  </p>
+                  <p
+                    className="text-xs"
+                    style={{ color: "rgba(212,175,55,0.55)" }}
+                  >
+                    per {product.unit}
+                  </p>
+                  <p
+                    className="text-xs mt-0.5 font-semibold"
+                    style={{ color: "#D4AF37" }}
+                  >
+                    Standard Delivery Price
+                  </p>
+                </>
+              );
+            }
+            return (
+              <>
+                <span
+                  style={{
+                    display: "inline-block",
+                    background: "rgba(22,163,74,0.15)",
+                    border: "1px solid rgba(22,163,74,0.5)",
+                    color: "#16a34a",
+                    fontSize: "9px",
+                    fontWeight: 700,
+                    padding: "1px 5px",
+                    borderRadius: "3px",
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    marginBottom: "3px",
+                  }}
+                >
+                  ⚡ Special Opening Offer
+                </span>
+                <p
+                  className="font-heading text-sm line-through"
+                  style={{ color: "rgba(212,175,55,0.45)", lineHeight: "1.2" }}
+                >
+                  ₹{info.original}
+                </p>
+                <p
+                  className="font-heading font-black text-lg"
+                  style={{ color: "#16a34a" }}
+                >
+                  ₹{info.discounted}
+                </p>
+                <p
+                  className="text-xs"
+                  style={{ color: "rgba(212,175,55,0.55)" }}
+                >
+                  per {product.unit}
+                </p>
+                <p
+                  className="text-xs mt-0.5 font-semibold"
+                  style={{ color: "#16a34a" }}
+                >
+                  Special Opening Offer Price
+                </p>
+              </>
+            );
+          })()}
           <a
             href={`https://wa.me/918700722663?text=${encodeURIComponent(`Hi Sufiyan, I want the Wholesale VVIP Price for ${product.name} for my Banquet.`)}`}
             target="_blank"
@@ -1212,17 +1289,43 @@ export default function App() {
                   </p>
                 </div>
                 <div>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      background: "rgba(22,163,74,0.15)",
+                      border: "1px solid rgba(22,163,74,0.5)",
+                      color: "#16a34a",
+                      fontSize: "9px",
+                      fontWeight: 700,
+                      padding: "1px 6px",
+                      borderRadius: "3px",
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    ⚡ Special Opening Offer
+                  </span>
                   <p
-                    className="font-heading font-black text-2xl"
-                    style={{ color: "#FFD700" }}
+                    className="font-heading text-base line-through"
+                    style={{
+                      color: "rgba(212,175,55,0.45)",
+                      lineHeight: "1.2",
+                    }}
                   >
                     ₹{item.price}/kg
                   </p>
                   <p
-                    className="text-xs mt-0.5 font-semibold"
-                    style={{ color: "#D4AF37" }}
+                    className="font-heading font-black text-2xl"
+                    style={{ color: "#16a34a" }}
                   >
-                    Standard Delivery Price
+                    ₹{item.discountedPrice}/kg
+                  </p>
+                  <p
+                    className="text-xs mt-0.5 font-semibold"
+                    style={{ color: "#16a34a" }}
+                  >
+                    Special Opening Offer Price
                   </p>
                 </div>
                 <button

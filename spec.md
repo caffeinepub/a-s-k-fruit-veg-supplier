@@ -1,33 +1,35 @@
-# A.S.K Fruit & Veg Supplier
+# A.S.K Fresh Supply – Noida Competitive Pricing Logic
 
 ## Current State
-The site is a fully built Open Catalog with sections: Hero, A.S.K Edge, MD Standard, Sectors We Serve, Quality Policy, Exotic Collection, Our Corporate Infrastructure, Our Elite Clients, Client Spotlight, VIP Rate Card, Team A.S.K / Leadership, Contact, and Footer. All panels removed; pure public catalog.
+- Products are stored in a `PRODUCTS` array in `App.tsx`, each with a `retailPrice` field that is displayed directly as the price.
+- Product cards show `₹{product.retailPrice}` with a "Standard Delivery Price" label.
+- No discount logic, no strikethrough pricing, no special offer tags exist.
+- Aloo (id: `aloo`) has retailPrice: 25.
 
 ## Requested Changes (Diff)
 
 ### Add
-- New section: **"A.S.K Equity Partnership – Growing Together"** placed just before the Footer (after the Contact section)
-  - Gold-and-Black theme (black background #0a0a0a or #111, gold accents #D4AF37) to give 'Corporate Leadership' feel — distinct from the navy blue used elsewhere
-  - Handshake or Growth Graph icon at the top of the section (SVG or emoji icon, styled in gold)
-  - A prominent premium-styled box (gold border, subtle gold gradient background) containing the full Hindi/English mix text:
-    - Bold heading: "A.S.K Equity Partnership – Hamara Saajha Bhavishya"
-    - Body text: Full paragraph as provided by user (Hindi/Roman-Hindi)
-  - Legal Commitment Clause line below the box: "We are fully committed to this vision and are ready to sign a Legal Agreement with our founding partners to ensure transparency and trust."
-  - CTA button: "Contact MD Sufiyan to Join the Vision" → links to WhatsApp wa.me/918700722663 with pre-filled message
-  - Mobile-friendly: font sizes readable on small screens, generous padding, no overflow
+- A pure helper function `getDiscountedPrice(product)` that computes the discounted price:
+  - Aloo (id: `aloo`): no discount, return null (no change displayed)
+  - Items with retailPrice > 50: apply ₹20 discount
+  - All other items (retailPrice ≤ 50, excluding Aloo): apply ₹12 discount (midpoint of ₹10–₹15 range)
+  - Return `{ originalPrice, discountedPrice }` or `null` for Aloo
+- A `mandi_discount_rules` constant documenting the discount rules (code comment)
+- "Special Opening Offer" badge/tag shown near the discounted price on all discounted cards
+- Strikethrough display of original price in muted gold on discounted items
+- Discounted price shown in bold green
+- The FEATURED section prices also updated with the same discount logic (visual only)
 
 ### Modify
-- Nothing else changes
+- `ProductCard` component: update price display block to show strikethrough original + bold green discounted price + "Special Opening Offer" tag when a discount applies
+- Aloo card: no strikethrough, no discount tag — keeps normal gold price display
+- Cart/WhatsApp message: use discounted price for display; the cart total amount line if shown should use discounted prices
 
 ### Remove
 - Nothing removed
 
 ## Implementation Plan
-1. Insert a new `<section>` component block in App.tsx between the Contact section closing tag and the Footer.
-2. Section uses black/deep-charcoal background (#0d0d0d) with gold (#D4AF37) borders and accents.
-3. Section heading: "A.S.K Equity Partnership – Growing Together" in gold, with a handshake SVG icon.
-4. Premium box: gold border (1–2px solid gold), subtle dark gold tint background, rounded corners, padding.
-5. Inside box: bold Hindi heading, full body text in readable font (Open Sans or system), slightly larger line-height for Hindi readability.
-6. Below box: legal clause line in smaller italic gold text.
-7. CTA button styled in gold background, black text, linking to WhatsApp Sufiyan with pre-filled message about Partnership Vision.
-8. Full mobile responsiveness with proper font sizing (min 16px body).
+1. Add `getDiscountedPrice(product: Product)` helper function above the ProductCard component
+2. Update `ProductCard` price display block to use the helper — show strikethrough/green/badge for discounted items, normal for Aloo
+3. Update FEATURED section to also apply the same discount display for Ginger (₹86 → ₹66), keep Tomatoes/Onions unchanged display (they are below ₹50 threshold)
+4. Bump Service Worker to v13 for cache refresh
