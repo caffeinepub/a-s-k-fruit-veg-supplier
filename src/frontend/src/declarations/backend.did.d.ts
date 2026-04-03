@@ -10,6 +10,7 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface DailyReport { 'date' : string, 'count' : bigint }
 export interface Order {
   'id' : bigint,
   'status' : string,
@@ -36,6 +37,13 @@ export interface VVIPPartnerProfile {
   'phone' : string,
   'registrationTime' : Time,
 }
+export interface VisitorStats {
+  'otherCityVisits' : bigint,
+  'noidaGhaziabadVisits' : bigint,
+  'todayVisits' : bigint,
+  'weekVisits' : bigint,
+  'totalVisits' : bigint,
+}
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
@@ -49,6 +57,7 @@ export interface _SERVICE {
   'getArchivedOrders' : ActorMethod<[], Array<Order>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getDailyReport' : ActorMethod<[], Array<DailyReport>>,
   'getGreeting' : ActorMethod<[], string>,
   'getOrder' : ActorMethod<[bigint], [] | [Order]>,
   'getOrdersCount' : ActorMethod<[], bigint>,
@@ -56,8 +65,10 @@ export interface _SERVICE {
   'getStatusHistory' : ActorMethod<[], Array<OrderStatus>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'getVVIPPartnerProfile' : ActorMethod<[], [] | [VVIPPartnerProfile]>,
+  'getVisitorStats' : ActorMethod<[], VisitorStats>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'isVVIPPartner' : ActorMethod<[], boolean>,
+  'logVisit' : ActorMethod<[string, string], undefined>,
   'registerVVIPPartner' : ActorMethod<[string, string, string], VVIPPartnerId>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'setStatus' : ActorMethod<[string], undefined>,

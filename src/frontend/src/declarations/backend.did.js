@@ -34,9 +34,17 @@ export const VVIPPartnerProfile = IDL.Record({
   'registrationTime' : Time,
 });
 export const UserProfile = IDL.Record({ 'name' : IDL.Text });
+export const DailyReport = IDL.Record({ 'date' : IDL.Text, 'count' : IDL.Nat });
 export const OrderStatus = IDL.Record({
   'status' : IDL.Text,
   'timestamp' : IDL.Int,
+});
+export const VisitorStats = IDL.Record({
+  'otherCityVisits' : IDL.Nat,
+  'noidaGhaziabadVisits' : IDL.Nat,
+  'todayVisits' : IDL.Nat,
+  'weekVisits' : IDL.Nat,
+  'totalVisits' : IDL.Nat,
 });
 export const VVIPPartnerId = IDL.Nat;
 
@@ -53,6 +61,7 @@ export const idlService = IDL.Service({
   'getArchivedOrders' : IDL.Func([], [IDL.Vec(Order)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getDailyReport' : IDL.Func([], [IDL.Vec(DailyReport)], ['query']),
   'getGreeting' : IDL.Func([], [IDL.Text], ['query']),
   'getOrder' : IDL.Func([IDL.Nat], [IDL.Opt(Order)], ['query']),
   'getOrdersCount' : IDL.Func([], [IDL.Nat], ['query']),
@@ -68,8 +77,10 @@ export const idlService = IDL.Service({
       [IDL.Opt(VVIPPartnerProfile)],
       ['query'],
     ),
+  'getVisitorStats' : IDL.Func([], [VisitorStats], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'isVVIPPartner' : IDL.Func([], [IDL.Bool], ['query']),
+  'logVisit' : IDL.Func([IDL.Text, IDL.Text], [], []),
   'registerVVIPPartner' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text],
       [VVIPPartnerId],
@@ -109,9 +120,17 @@ export const idlFactory = ({ IDL }) => {
     'registrationTime' : Time,
   });
   const UserProfile = IDL.Record({ 'name' : IDL.Text });
+  const DailyReport = IDL.Record({ 'date' : IDL.Text, 'count' : IDL.Nat });
   const OrderStatus = IDL.Record({
     'status' : IDL.Text,
     'timestamp' : IDL.Int,
+  });
+  const VisitorStats = IDL.Record({
+    'otherCityVisits' : IDL.Nat,
+    'noidaGhaziabadVisits' : IDL.Nat,
+    'todayVisits' : IDL.Nat,
+    'weekVisits' : IDL.Nat,
+    'totalVisits' : IDL.Nat,
   });
   const VVIPPartnerId = IDL.Nat;
   
@@ -132,6 +151,7 @@ export const idlFactory = ({ IDL }) => {
     'getArchivedOrders' : IDL.Func([], [IDL.Vec(Order)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getDailyReport' : IDL.Func([], [IDL.Vec(DailyReport)], ['query']),
     'getGreeting' : IDL.Func([], [IDL.Text], ['query']),
     'getOrder' : IDL.Func([IDL.Nat], [IDL.Opt(Order)], ['query']),
     'getOrdersCount' : IDL.Func([], [IDL.Nat], ['query']),
@@ -147,8 +167,10 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(VVIPPartnerProfile)],
         ['query'],
       ),
+    'getVisitorStats' : IDL.Func([], [VisitorStats], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'isVVIPPartner' : IDL.Func([], [IDL.Bool], ['query']),
+    'logVisit' : IDL.Func([IDL.Text, IDL.Text], [], []),
     'registerVVIPPartner' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text],
         [VVIPPartnerId],

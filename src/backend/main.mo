@@ -4,11 +4,15 @@ import Iter "mo:core/Iter";
 import List "mo:core/List";
 import Runtime "mo:core/Runtime";
 import Array "mo:core/Array";
+import Int "mo:core/Int";
 import Map "mo:core/Map";
 import Text "mo:core/Text";
+import Nat "mo:core/Nat";
+
 
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
+
 
 actor {
   let accessControlState = AccessControl.initState();
@@ -46,11 +50,21 @@ actor {
     isArchived : Bool;
   };
 
+  public type VisitRecord = {
+    id : Nat;
+    timestamp : Int;
+    city : Text;
+    page : Text;
+  };
+
+  var visitCounter = 0;
+
   var nextOrderId = 0;
 
   var nextVVIPPartnerId = 0;
 
   let orders = Map.empty<Nat, Order>();
+  let visits = Map.empty<Nat, VisitRecord>();
   let vvipPartners = Map.empty<VVIPPartnerId, VVIPPartnerProfile>();
   let vvipPartnerPrincipalLookup = Map.empty<Principal, VVIPPartnerId>();
   let userProfiles = Map.empty<Principal, UserProfile>();
@@ -275,5 +289,108 @@ actor {
         true;
       };
     };
+  };
+
+  public type VisitorStats = {
+    totalVisits : Nat;
+    todayVisits : Nat;
+    weekVisits : Nat;
+    noidaGhaziabadVisits : Nat;
+    otherCityVisits : Nat;
+  };
+
+  public type DailyReport = {
+    date : Text;
+    count : Nat;
+  };
+
+  public shared ({ caller }) func logVisit(city : Text, page : Text) : async () {
+    let id = visitCounter;
+    let timestamp = Time.now();
+
+    let visit : VisitRecord = {
+      id;
+      timestamp;
+      city;
+      page;
+    };
+
+    visits.add(id, visit);
+    visitCounter += 1;
+  };
+
+  public query ({ caller }) func getVisitorStats() : async VisitorStats {
+    if (not (AccessControl.isAdmin(accessControlState, caller))) {
+      Runtime.trap("Unauthorized: Only admins can view visitor stats");
+    };
+
+    let allVisits = visits.values().toArray();
+
+    let currentTime = Time.now();
+    let dayNanos = 86_400_000_000_000;
+    let weekNanos = dayNanos * 7;
+
+    let todayVisits = allVisits.filter(
+      func(visit) {
+        return (currentTime - visit.timestamp) < dayNanos;
+      }
+    ).size();
+
+    let weekVisits = allVisits.filter(
+      func(visit) {
+        return (currentTime - visit.timestamp) < weekNanos;
+      }
+    ).size();
+
+    let noidaGhaziabadVisits = allVisits.filter(
+      func(visit) {
+        return visit.city.contains(#text("Noida")) or visit.city.contains(#text("Ghaziabad"));
+      }
+    ).size();
+
+    let totalVisits = allVisits.size();
+    let otherCityVisits = totalVisits - noidaGhaziabadVisits;
+
+    {
+      totalVisits;
+      todayVisits;
+      weekVisits;
+      noidaGhaziabadVisits;
+      otherCityVisits;
+    };
+  };
+
+  public query ({ caller }) func getDailyReport() : async [DailyReport] {
+    if (not (AccessControl.isAdmin(accessControlState, caller))) {
+      Runtime.trap("Unauthorized: Only admins can view daily report");
+    };
+
+    let allVisits = visits.values().toArray();
+
+    let currentTime = Time.now();
+    let dayNanos = 86_400_000_000_000;
+
+    let dayRanges = Nat.range(0, 30);
+    let reports = dayRanges.map(
+      func(dayOffset) {
+        let dayTimestamp = currentTime - (dayOffset * dayNanos);
+
+        let count = allVisits.filter(
+          func(visit) {
+            let daysAgo = Int.abs((currentTime - visit.timestamp) / dayNanos);
+            daysAgo == dayOffset;
+          }
+        ).size();
+
+        let report : DailyReport = {
+          date = "Day " # dayOffset.toText();
+          count;
+        };
+
+        report;
+      }
+    );
+
+    reports.toArray();
   };
 };

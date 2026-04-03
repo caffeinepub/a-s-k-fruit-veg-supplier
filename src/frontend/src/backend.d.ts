@@ -21,6 +21,17 @@ export interface VVIPPartnerProfile {
     phone: string;
     registrationTime: Time;
 }
+export interface DailyReport {
+    date: string;
+    count: bigint;
+}
+export interface VisitorStats {
+    otherCityVisits: bigint;
+    noidaGhaziabadVisits: bigint;
+    todayVisits: bigint;
+    weekVisits: bigint;
+    totalVisits: bigint;
+}
 export interface Order {
     id: bigint;
     status: string;
@@ -52,6 +63,7 @@ export interface backendInterface {
     getArchivedOrders(): Promise<Array<Order>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getDailyReport(): Promise<Array<DailyReport>>;
     getGreeting(): Promise<string>;
     getOrder(id: bigint): Promise<Order | null>;
     getOrdersCount(): Promise<bigint>;
@@ -59,8 +71,10 @@ export interface backendInterface {
     getStatusHistory(): Promise<Array<OrderStatus>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     getVVIPPartnerProfile(): Promise<VVIPPartnerProfile | null>;
+    getVisitorStats(): Promise<VisitorStats>;
     isCallerAdmin(): Promise<boolean>;
     isVVIPPartner(): Promise<boolean>;
+    logVisit(city: string, page: string): Promise<void>;
     registerVVIPPartner(fullName: string, phone: string, businessName: string): Promise<VVIPPartnerId>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     setStatus(status: string): Promise<void>;

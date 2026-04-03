@@ -1,983 +1,555 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useActor } from "@/hooks/useActor";
-import {
-  CheckCircle2,
-  ChevronDown,
-  ChevronUp,
-  Clock,
-  Loader2,
-  Lock,
-  Package,
-  ShieldCheck,
-  Truck,
-  X,
-} from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
+import { useEffect, useRef, useState } from "react";
+import { AdminAnalyticsDashboard } from "./AdminAnalyticsDashboard";
 
-interface Order {
-  id: bigint;
-  clientName: string;
-  itemsSummary: string;
-  status: string;
-  statusMessage: string;
-  vehicleNumber: string;
-  createdAt: bigint;
-  updatedAt: bigint;
-  isArchived: boolean;
+// ─── Password Gate ────────────────────────────────────────────────────────────
+const ADMIN_PASSWORD = "[Adnan ceo";
+const SESSION_KEY = "ask_admin_auth";
+
+// ─── Price Override Types ─────────────────────────────────────────────────────
+interface PriceOverride {
+  [id: string]: number;
 }
 
-const ADMINS = [
-  { name: "Adnan A.S.K — CEO", username: "Adnan_CEO", password: "ADNAN@786" },
+const PRICE_OVERRIDE_KEY = "ask_price_overrides";
+
+function loadOverrides(): PriceOverride {
+  try {
+    return JSON.parse(localStorage.getItem(PRICE_OVERRIDE_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveOverrides(overrides: PriceOverride) {
+  localStorage.setItem(PRICE_OVERRIDE_KEY, JSON.stringify(overrides));
+}
+
+// ─── Product list (mirrors App.tsx for price control) ────────────────────────
+const ALL_PRODUCTS = [
+  { id: "aloo", name: "Aloo / आलू", base: 25, unit: "kg" },
+  { id: "gajar", name: "Gajar / गाजर", base: 42, unit: "kg" },
+  { id: "mooli", name: "Mooli / मूली", base: 30, unit: "kg" },
+  { id: "arbi", name: "Arbi / अरबी", base: 70, unit: "kg" },
+  { id: "chukandar", name: "Chukandar / चुकन्दर", base: 43, unit: "kg" },
+  { id: "palak", name: "Palak / पालक", base: 32, unit: "kg" },
+  { id: "methi", name: "Methi / मेथी", base: 45, unit: "kg" },
+  { id: "bathua", name: "Bathua / बथुआ", base: 65, unit: "kg" },
+  { id: "sarson", name: "Sarson ka Saag / सरसों का साग", base: 45, unit: "kg" },
+  { id: "pudina", name: "Pudina / पुदीना", base: 75, unit: "kg" },
+  { id: "dhaniya", name: "Dhaniya / धनिया", base: 45, unit: "unit" },
+  { id: "baingan", name: "Baingan / बैंगन", base: 55, unit: "kg" },
+  { id: "tamatar", name: "Tamatar / टमाटर", base: 42, unit: "kg" },
+  { id: "pyaaz", name: "Pyaaz / प्याज़", base: 39, unit: "kg" },
+  { id: "bhindi", name: "Bhindi / भिंडी", base: 85, unit: "kg" },
+  { id: "lauki", name: "Lauki / लौकी", base: 43, unit: "kg" },
+  { id: "tori", name: "Tori / तोरी", base: 59, unit: "kg" },
+  { id: "karela", name: "Karela / करेला", base: 70, unit: "kg" },
+  { id: "parwal", name: "Parwal / परवल", base: 75, unit: "kg" },
+  { id: "mirch", name: "Mirch / मिर्च", base: 65, unit: "kg" },
+  { id: "shimla", name: "Shimla Mirch / शिमला मिर्च", base: 56, unit: "kg" },
+  {
+    id: "lal-pili",
+    name: "Lal Pili Shimla / लाल पीली शिमला",
+    base: 160,
+    unit: "kg",
+  },
+  { id: "adrak", name: "Adrak / अदरक", base: 101, unit: "kg" },
+  { id: "lahsun", name: "Lahsun Chila / लहसुन छिला", base: 160, unit: "kg" },
+  { id: "patta-gobhi", name: "Patta Gobhi / पत्ता गोभी", base: 16, unit: "kg" },
+  { id: "phool-gobhi", name: "Phool Gobhi / फूल गोभी", base: 55, unit: "kg" },
+  { id: "broccoli", name: "Broccoli / ब्रोकोली", base: 175, unit: "kg" },
+  { id: "matar", name: "Matar Safal / मटर सफल", base: 75, unit: "kg" },
+  { id: "sweet-corn", name: "Sweet Corn / स्वीट कॉर्न", base: 120, unit: "kg" },
+  { id: "beans", name: "Beans / बीन्स", base: 70, unit: "kg" },
+  { id: "kaddu", name: "Kaddu / कद्दू", base: 37, unit: "kg" },
+  { id: "mushroom", name: "Mushroom / मशरूम", base: 195, unit: "kg" },
+  { id: "sprouts", name: "Sprouts Daal / स्प्राउट्स", base: 155, unit: "kg" },
+  { id: "salad", name: "Salad Patta / सलाद पत्ता", base: 55, unit: "kg" },
 ];
 
-function formatTs(ts: bigint): string {
-  try {
-    const d = new Date(Number(ts / 1_000_000n));
-    return d.toLocaleString("en-IN", {
-      dateStyle: "medium",
-      timeStyle: "short",
+// ─── Price Control Panel ──────────────────────────────────────────────────────
+function PriceControlPanel() {
+  const [overrides, setOverrides] = useState<PriceOverride>(loadOverrides);
+  const [saved, setSaved] = useState(false);
+
+  const handleChange = (id: string, val: string) => {
+    const num = Number.parseInt(val, 10);
+    if (Number.isNaN(num) || num < 0) return;
+    setOverrides((prev) => ({ ...prev, [id]: num }));
+    setSaved(false);
+  };
+
+  const handleReset = (id: string) => {
+    setOverrides((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
     });
-  } catch {
-    return "—";
-  }
-}
+    setSaved(false);
+  };
 
-function statusColor(status: string): string {
-  switch (status) {
-    case "Confirmed":
-      return "#22c55e";
-    case "Sourcing":
-      return "#f59e0b";
-    case "Out for Delivery":
-      return "#3b82f6";
-    case "Delivered":
-      return "#6b7280";
-    default:
-      return "#9ca3af";
-  }
-}
+  const handleSaveAll = () => {
+    saveOverrides(overrides);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
 
-function statusBg(status: string): string {
-  switch (status) {
-    case "Confirmed":
-      return "rgba(34,197,94,0.15)";
-    case "Sourcing":
-      return "rgba(245,158,11,0.15)";
-    case "Out for Delivery":
-      return "rgba(59,130,246,0.15)";
-    case "Delivered":
-      return "rgba(107,114,128,0.15)";
-    default:
-      return "rgba(156,163,175,0.1)";
-  }
-}
+  const handleResetAll = () => {
+    setOverrides({});
+    saveOverrides({});
+    setSaved(false);
+  };
 
-interface DispatchState {
-  orderId: bigint;
-  vehicleNumber: string;
-}
+  return (
+    <div style={{ padding: "24px 16px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 16,
+        }}
+      >
+        <h2
+          style={{
+            color: "#D4AF37",
+            fontSize: 20,
+            fontWeight: 700,
+            fontFamily: "Montserrat, sans-serif",
+          }}
+        >
+          Price Control Panel
+        </h2>
+        <div style={{ display: "flex", gap: 10 }}>
+          <button
+            type="button"
+            onClick={handleResetAll}
+            style={{
+              padding: "8px 16px",
+              background: "rgba(212,175,55,0.1)",
+              color: "#D4AF37",
+              border: "1px solid rgba(212,175,55,0.4)",
+              borderRadius: 6,
+              fontSize: 13,
+              cursor: "pointer",
+              fontFamily: "Montserrat, sans-serif",
+            }}
+          >
+            Reset All to Base
+          </button>
+          <button
+            type="button"
+            onClick={handleSaveAll}
+            style={{
+              padding: "8px 20px",
+              background: saved ? "#2e7d32" : "#D4AF37",
+              color: saved ? "#fff" : "#001840",
+              border: "none",
+              borderRadius: 6,
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: "Montserrat, sans-serif",
+              transition: "background 0.3s",
+            }}
+          >
+            {saved ? "✓ Saved!" : "Save All Prices"}
+          </button>
+        </div>
+      </div>
 
-interface ConfirmDeliverState {
-  orderId: bigint;
-}
+      <p
+        style={{
+          color: "rgba(212,175,55,0.6)",
+          fontSize: 12,
+          marginBottom: 20,
+        }}
+      >
+        Changes are saved locally and reflected on the main catalog immediately.
+      </p>
 
-export default function AdminPanel() {
-  const { actor } = useActor();
-
-  // Auth state
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [authError, setAuthError] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [adminName, setAdminName] = useState("");
-
-  // Orders state
-  const [activeOrders, setActiveOrders] = useState<Order[]>([]);
-  const [archivedOrders, setArchivedOrders] = useState<Order[]>([]);
-  const [loadingOrders, setLoadingOrders] = useState(false);
-  const [updatingOrder, setUpdatingOrder] = useState<bigint | null>(null);
-  const [showArchived, setShowArchived] = useState(false);
-  const [showCreate, setShowCreate] = useState(true);
-
-  // Clear old sessions on mount
-  useEffect(() => {
-    localStorage.clear();
-  }, []);
-
-  // Create order
-  const [clientName, setClientName] = useState("");
-  const [itemsSummary, setItemsSummary] = useState("");
-  const [creating, setCreating] = useState(false);
-
-  // Dispatch modal
-  const [dispatchState, setDispatchState] = useState<DispatchState | null>(
-    null,
+      <div style={{ display: "grid", gap: 10 }}>
+        {ALL_PRODUCTS.map((p) => {
+          const current =
+            overrides[p.id] !== undefined ? overrides[p.id] : p.base;
+          const isModified =
+            overrides[p.id] !== undefined && overrides[p.id] !== p.base;
+          return (
+            <div
+              key={p.id}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                background: isModified
+                  ? "rgba(212,175,55,0.08)"
+                  : "rgba(255,255,255,0.03)",
+                border: `1px solid ${isModified ? "rgba(212,175,55,0.4)" : "rgba(212,175,55,0.12)"}`,
+                borderRadius: 8,
+                padding: "10px 14px",
+                gap: 12,
+              }}
+            >
+              <span
+                style={{
+                  color: isModified ? "#D4AF37" : "rgba(212,175,55,0.8)",
+                  fontSize: 14,
+                  flex: 1,
+                  fontFamily: "Open Sans, sans-serif",
+                }}
+              >
+                {p.name}
+              </span>
+              <span
+                style={{
+                  color: "rgba(212,175,55,0.4)",
+                  fontSize: 12,
+                  minWidth: 60,
+                }}
+              >
+                Base: ₹{p.base}/{p.unit}
+              </span>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ color: "#D4AF37", fontSize: 14 }}>₹</span>
+                <input
+                  type="number"
+                  min={0}
+                  value={current}
+                  onChange={(e) => handleChange(p.id, e.target.value)}
+                  style={{
+                    width: 72,
+                    background: "rgba(0,24,71,0.8)",
+                    border: "1px solid rgba(212,175,55,0.4)",
+                    borderRadius: 6,
+                    color: "#D4AF37",
+                    padding: "6px 8px",
+                    fontSize: 14,
+                    textAlign: "right",
+                    fontFamily: "Open Sans, sans-serif",
+                  }}
+                />
+                <span style={{ color: "rgba(212,175,55,0.5)", fontSize: 12 }}>
+                  /{p.unit}
+                </span>
+              </div>
+              {isModified && (
+                <button
+                  type="button"
+                  onClick={() => handleReset(p.id)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "rgba(212,175,55,0.5)",
+                    cursor: "pointer",
+                    fontSize: 16,
+                    padding: "0 2px",
+                  }}
+                  title="Reset to base price"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
+}
 
-  // Deliver confirmation
-  const [deliverConfirm, setDeliverConfirm] =
-    useState<ConfirmDeliverState | null>(null);
-
-  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const fetchActiveOrders = useCallback(async () => {
-    if (!actor) return;
-    try {
-      const orders = await actor.getActiveOrders();
-      setActiveOrders(orders.filter((o: Order) => !o.isArchived));
-    } catch {
-      // silent
-    }
-  }, [actor]);
-
-  const fetchArchivedOrders = useCallback(async () => {
-    if (!actor) return;
-    try {
-      const orders = await actor.getArchivedOrders();
-      setArchivedOrders(orders);
-    } catch {
-      // silent
-    }
-  }, [actor]);
+// ─── Main AdminPanel Component ────────────────────────────────────────────────
+export function AdminPanel() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => sessionStorage.getItem(SESSION_KEY) === "1",
+  );
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [activeTab, setActiveTab] = useState<"analytics" | "prices">(
+    "analytics",
+  );
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (loggedIn && actor) {
-      setLoadingOrders(true);
-      fetchActiveOrders().finally(() => setLoadingOrders(false));
-      pollRef.current = setInterval(fetchActiveOrders, 2000);
-      return () => {
-        if (pollRef.current) clearInterval(pollRef.current);
-      };
+    if (!isAuthenticated) {
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
-  }, [loggedIn, actor, fetchActiveOrders]);
-
-  useEffect(() => {
-    if (showArchived && loggedIn) fetchArchivedOrders();
-  }, [showArchived, loggedIn, fetchArchivedOrders]);
-
-  // Collapse create if orders exist
-  useEffect(() => {
-    if (activeOrders.length > 0) setShowCreate(false);
-  }, [activeOrders.length]);
+  }, [isAuthenticated]);
 
   const handleLogin = () => {
-    const admin = ADMINS.find((a) => a.username === username);
-    if (!admin || admin.password !== password) {
-      setAuthError("Incorrect username or password.");
-      return;
+    if (password === ADMIN_PASSWORD) {
+      sessionStorage.setItem(SESSION_KEY, "1");
+      setIsAuthenticated(true);
+      setError("");
+    } else {
+      setError("Incorrect password. Access denied.");
+      setPassword("");
+      inputRef.current?.focus();
     }
-    setLoggedIn(true);
-    setAdminName(admin.name);
-    setAuthError("");
-    toast.success("SYSTEM READY & BRANDED", { duration: 4000 });
   };
 
   const handleLogout = () => {
-    setLoggedIn(false);
-    setAdminName("");
-    setUsername("");
+    sessionStorage.removeItem(SESSION_KEY);
+    setIsAuthenticated(false);
     setPassword("");
-    setActiveOrders([]);
-    setArchivedOrders([]);
-    if (pollRef.current) clearInterval(pollRef.current);
+    // Navigate away from admin hash
+    window.location.hash = "";
   };
 
-  const handleCreateOrder = async () => {
-    if (!actor || !clientName.trim() || !itemsSummary.trim()) {
-      toast.error("Please fill in both Client Name and Items.");
-      return;
-    }
-    setCreating(true);
-    try {
-      await actor.createOrder(clientName.trim(), itemsSummary.trim());
-      toast.success("Order created successfully!");
-      setClientName("");
-      setItemsSummary("");
-      setShowCreate(false);
-      await fetchActiveOrders();
-    } catch {
-      toast.error("Failed to create order.");
-    } finally {
-      setCreating(false);
-    }
-  };
-
-  const handleConfirm = async (id: bigint) => {
-    if (!actor) return;
-    setUpdatingOrder(id);
-    try {
-      await actor.confirmOrder(id);
-      toast.success("Order confirmed!");
-      await fetchActiveOrders();
-    } catch {
-      toast.error("Failed to confirm order.");
-    } finally {
-      setUpdatingOrder(null);
-    }
-  };
-
-  const handleSourcing = async (id: bigint) => {
-    if (!actor) return;
-    setUpdatingOrder(id);
-    try {
-      await actor.startSourcing(id);
-      toast.success("Sourcing started!");
-      await fetchActiveOrders();
-    } catch {
-      toast.error("Failed to start sourcing.");
-    } finally {
-      setUpdatingOrder(null);
-    }
-  };
-
-  const handleDispatchConfirm = async () => {
-    if (!actor || !dispatchState) return;
-    if (!dispatchState.vehicleNumber.trim()) {
-      toast.error("Please enter a vehicle number.");
-      return;
-    }
-    setUpdatingOrder(dispatchState.orderId);
-    try {
-      await actor.dispatchOrder(
-        dispatchState.orderId,
-        dispatchState.vehicleNumber.trim(),
-      );
-      toast.success("Order dispatched!");
-      setDispatchState(null);
-      await fetchActiveOrders();
-    } catch {
-      toast.error("Failed to dispatch order.");
-    } finally {
-      setUpdatingOrder(null);
-    }
-  };
-
-  const handleDeliver = async (id: bigint) => {
-    if (!actor) return;
-    setUpdatingOrder(id);
-    setDeliverConfirm(null);
-    try {
-      await actor.deliverOrder(id);
-      toast.success("Order marked as Delivered and archived!");
-      await fetchActiveOrders();
-    } catch {
-      toast.error("Failed to deliver order.");
-    } finally {
-      setUpdatingOrder(null);
-    }
-  };
-
-  // ── Login Screen ──────────────────────────────────────────────────────────
-  if (!loggedIn) {
+  // ── Password Gate ──────────────────────────────────────────────────────────
+  if (!isAuthenticated) {
     return (
-      <section
-        id="admin"
-        className="min-h-screen flex items-center justify-center px-4 py-16"
-        style={{ background: "#0a0a0a" }}
-        data-ocid="admin.section"
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "#000d1a",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "Montserrat, sans-serif",
+          padding: 24,
+        }}
       >
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-sm"
+        <div
+          style={{
+            width: "100%",
+            maxWidth: 420,
+            background: "linear-gradient(160deg, #001430 0%, #000d1a 100%)",
+            border: "1px solid rgba(212,175,55,0.35)",
+            borderRadius: 16,
+            padding: "40px 32px",
+            boxShadow: "0 0 60px rgba(212,175,55,0.08)",
+            textAlign: "center",
+          }}
         >
-          {/* Logo */}
-          <div className="flex flex-col items-center mb-8">
-            <div
-              className="w-20 h-20 rounded-full overflow-hidden mb-4"
-              style={{ boxShadow: "0 0 28px rgba(212,175,55,0.6)" }}
-            >
-              <img
-                src="/assets/uploads/IMG_2664-1.jpeg"
-                alt="A.S.K Eagle"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex items-center gap-2 mb-1">
-              <ShieldCheck className="w-5 h-5" style={{ color: "#D4AF37" }} />
-              <h1
-                className="text-xl font-bold tracking-widest uppercase"
-                style={{ color: "#D4AF37" }}
-              >
-                Admin Access
-              </h1>
-            </div>
-            <p
-              className="text-xs tracking-wider"
-              style={{ color: "rgba(212,175,55,0.6)" }}
-            >
-              A.S.K VVIP STANDARD SUPPLY
-            </p>
-            <p
-              className="text-xs tracking-widest font-bold uppercase mt-1"
+          {/* Eagle Logo */}
+          <div style={{ marginBottom: 24 }}>
+            <img
+              src="/assets/uploads/IMG_2664-1.jpeg"
+              alt="A.S.K VVIP Logo"
+              width={90}
+              height={90}
               style={{
-                color: "#D4AF37",
-                fontFamily: "serif",
-                letterSpacing: "0.12em",
+                borderRadius: "50%",
+                border: "2px solid rgba(212,175,55,0.6)",
+                boxShadow: "0 0 24px rgba(212,175,55,0.5)",
+                objectFit: "cover",
               }}
-            >
-              SAHIBABAD, GHAZIABAD &amp; DELHI NCR
-            </p>
+              onError={(e) => {
+                (e.target as HTMLImageElement).src =
+                  "/assets/generated/ask-logo.png";
+              }}
+            />
           </div>
 
-          {/* Username */}
-          <p
-            className="text-xs font-bold uppercase tracking-widest mb-3"
-            style={{ color: "rgba(212,175,55,0.7)" }}
-          >
-            Username
-          </p>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-              setAuthError("");
-            }}
-            onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-            placeholder="Enter username"
-            data-ocid="admin.username.input"
-            className="w-full px-4 py-4 rounded-xl text-base font-mono mb-4 outline-none transition-all"
+          <div
             style={{
-              background: "rgba(212,175,55,0.07)",
-              border: authError
-                ? "1.5px solid #ef4444"
-                : "1.5px solid rgba(212,175,55,0.35)",
               color: "#D4AF37",
+              fontSize: 20,
+              fontWeight: 800,
+              letterSpacing: 1,
+              marginBottom: 4,
             }}
-          />
-
-          {/* Password */}
-          <p
-            className="text-xs font-bold uppercase tracking-widest mb-3"
-            style={{ color: "rgba(212,175,55,0.7)" }}
           >
-            Password
-          </p>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setAuthError("");
-            }}
-            onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-            placeholder="Enter your password"
-            data-ocid="admin.password.input"
-            className="w-full px-4 py-4 rounded-xl text-base font-mono mb-4 outline-none transition-all"
+            A.S.K VVIP STANDARD SUPPLY
+          </div>
+          <div
             style={{
-              background: "rgba(212,175,55,0.07)",
-              border: authError
-                ? "1.5px solid #ef4444"
-                : "1.5px solid rgba(212,175,55,0.35)",
-              color: "#D4AF37",
+              color: "rgba(212,175,55,0.65)",
+              fontSize: 12,
+              letterSpacing: 2,
+              textTransform: "uppercase",
+              marginBottom: 32,
             }}
-          />
+          >
+            SAHIBABAD, GHAZIABAD &amp; DELHI NCR
+          </div>
 
-          {authError && (
+          <div
+            style={{
+              background: "rgba(212,175,55,0.06)",
+              border: "1px solid rgba(212,175,55,0.2)",
+              borderRadius: 10,
+              padding: "24px 20px",
+              marginBottom: 20,
+            }}
+          >
             <p
-              className="text-red-400 text-sm mb-4 text-center"
-              data-ocid="admin.error_state"
+              style={{
+                color: "rgba(212,175,55,0.8)",
+                fontSize: 13,
+                marginBottom: 16,
+                letterSpacing: 0.5,
+              }}
             >
-              {authError}
+              RESTRICTED ACCESS — ADMIN ONLY
             </p>
-          )}
+            <input
+              ref={inputRef}
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError("");
+              }}
+              onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+              placeholder="Enter Admin Password"
+              style={{
+                width: "100%",
+                padding: "12px 16px",
+                background: "rgba(0,24,71,0.8)",
+                border: `1px solid ${error ? "#e53935" : "rgba(212,175,55,0.4)"}`,
+                borderRadius: 8,
+                color: "#D4AF37",
+                fontSize: 15,
+                outline: "none",
+                boxSizing: "border-box",
+                fontFamily: "Open Sans, sans-serif",
+                marginBottom: 14,
+              }}
+            />
+            {error && (
+              <p
+                style={{
+                  color: "#ef5350",
+                  fontSize: 13,
+                  marginBottom: 14,
+                  textAlign: "left",
+                }}
+              >
+                {error}
+              </p>
+            )}
+            <button
+              type="button"
+              onClick={handleLogin}
+              style={{
+                width: "100%",
+                padding: "13px",
+                background: "linear-gradient(135deg, #D4AF37 0%, #b8942e 100%)",
+                color: "#001840",
+                border: "none",
+                borderRadius: 8,
+                fontSize: 15,
+                fontWeight: 800,
+                cursor: "pointer",
+                letterSpacing: 1,
+                fontFamily: "Montserrat, sans-serif",
+              }}
+            >
+              UNLOCK DASHBOARD
+            </button>
+          </div>
 
-          <button
-            type="button"
-            onClick={handleLogin}
-            data-ocid="admin.submit_button"
-            className="w-full py-4 rounded-xl font-bold text-base uppercase tracking-widest transition-all active:scale-95"
-            style={{
-              background: "linear-gradient(135deg, #D4AF37 0%, #a08020 100%)",
-              color: "#0a0a0a",
-            }}
-          >
-            UNLOCK DASHBOARD
-          </button>
-        </motion.div>
-      </section>
+          <p style={{ color: "rgba(212,175,55,0.3)", fontSize: 11 }}>
+            This panel is private. Unauthorized access is prohibited.
+          </p>
+        </div>
+      </div>
     );
   }
 
-  // ── Dashboard ─────────────────────────────────────────────────────────────
+  // ── Authenticated Dashboard ────────────────────────────────────────────────
   return (
-    <section
-      id="admin"
-      className="min-h-screen px-4 py-6"
-      style={{ background: "#0a0a0a" }}
-      data-ocid="admin.panel"
-    >
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div
-          className="flex items-center justify-between mb-6 p-4 rounded-2xl"
-          style={{
-            background: "rgba(212,175,55,0.08)",
-            border: "1px solid rgba(212,175,55,0.25)",
-          }}
-        >
-          <div>
-            <h1
-              className="text-lg font-bold uppercase tracking-widest"
-              style={{ color: "#D4AF37" }}
-            >
-              A.S.K ORDER DASHBOARD
-            </h1>
-            <p
-              className="text-xs mt-0.5"
-              style={{ color: "rgba(212,175,55,0.6)" }}
-            >
-              Logged in as <span style={{ color: "#D4AF37" }}>{adminName}</span>
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={handleLogout}
-            data-ocid="admin.close_button"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wide transition-all"
-            style={{
-              background: "rgba(239,68,68,0.15)",
-              border: "1px solid rgba(239,68,68,0.4)",
-              color: "#ef4444",
-            }}
-          >
-            <Lock className="w-4 h-4" /> Lock
-          </button>
-        </div>
-
-        {/* Create Order */}
-        <div
-          className="mb-5 rounded-2xl overflow-hidden"
-          style={{ border: "1px solid rgba(212,175,55,0.25)" }}
-        >
-          <button
-            type="button"
-            onClick={() => setShowCreate((v) => !v)}
-            data-ocid="admin.create.toggle"
-            className="w-full flex items-center justify-between px-5 py-4 font-bold uppercase tracking-widest text-sm"
-            style={{ background: "rgba(212,175,55,0.08)", color: "#D4AF37" }}
-          >
-            <span className="flex items-center gap-2">
-              <Package className="w-4 h-4" /> New Order
-            </span>
-            {showCreate ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
-          </button>
-          <AnimatePresence initial={false}>
-            {showCreate && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                style={{ background: "rgba(12,12,12,1)" }}
-              >
-                <div className="p-5 space-y-3">
-                  <input
-                    type="text"
-                    value={clientName}
-                    onChange={(e) => setClientName(e.target.value)}
-                    placeholder="Client Name (e.g. The Eastern Address)"
-                    data-ocid="admin.order.input"
-                    className="w-full px-4 py-3.5 rounded-xl text-sm outline-none transition-all"
-                    style={{
-                      background: "rgba(212,175,55,0.07)",
-                      border: "1.5px solid rgba(212,175,55,0.3)",
-                      color: "#D4AF37",
-                    }}
-                  />
-                  <textarea
-                    value={itemsSummary}
-                    onChange={(e) => setItemsSummary(e.target.value)}
-                    placeholder="Items Summary (e.g. 10kg Tomatoes, 5kg Onions)"
-                    rows={3}
-                    data-ocid="admin.order.textarea"
-                    className="w-full px-4 py-3.5 rounded-xl text-sm outline-none resize-none transition-all"
-                    style={{
-                      background: "rgba(212,175,55,0.07)",
-                      border: "1.5px solid rgba(212,175,55,0.3)",
-                      color: "#D4AF37",
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleCreateOrder}
-                    disabled={creating}
-                    data-ocid="admin.order.submit_button"
-                    className="w-full py-4 rounded-xl font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-60"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #D4AF37 0%, #a08020 100%)",
-                      color: "#0a0a0a",
-                    }}
-                  >
-                    {creating && <Loader2 className="w-4 h-4 animate-spin" />}
-                    CREATE ORDER
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Active Orders */}
-        <h2
-          className="text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2"
-          style={{ color: "rgba(212,175,55,0.8)" }}
-        >
-          <Clock className="w-4 h-4" />
-          Active Orders
-          <span
-            className="ml-1 px-2 py-0.5 rounded-full text-xs"
-            style={{ background: "rgba(212,175,55,0.15)", color: "#D4AF37" }}
-          >
-            {activeOrders.length}
-          </span>
-        </h2>
-
-        {loadingOrders && (
-          <div
-            className="flex items-center justify-center py-12"
-            data-ocid="admin.loading_state"
-          >
-            <Loader2
-              className="w-8 h-8 animate-spin"
-              style={{ color: "#D4AF37" }}
-            />
-          </div>
-        )}
-
-        {!loadingOrders && activeOrders.length === 0 && (
-          <div
-            className="text-center py-12 rounded-2xl mb-5"
-            style={{
-              border: "1px dashed rgba(212,175,55,0.2)",
-              color: "rgba(212,175,55,0.4)",
-            }}
-            data-ocid="admin.order.empty_state"
-          >
-            <Package className="w-10 h-10 mx-auto mb-3 opacity-40" />
-            <p className="text-sm">No active orders. Create one above.</p>
-          </div>
-        )}
-
-        <div className="space-y-4 mb-6">
-          <AnimatePresence>
-            {activeOrders.map((order, idx) => (
-              <motion.div
-                key={String(order.id)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.25 }}
-                data-ocid={`admin.order.item.${idx + 1}`}
-                className="rounded-2xl overflow-hidden"
-                style={{
-                  border: "1px solid rgba(212,175,55,0.25)",
-                  background: "#0d0d0d",
-                }}
-              >
-                {/* Card Header */}
-                <div className="p-4 pb-3">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h3
-                        className="text-base font-bold"
-                        style={{ color: "#D4AF37" }}
-                      >
-                        {order.clientName}
-                      </h3>
-                      <p
-                        className="text-xs mt-0.5"
-                        style={{ color: "rgba(212,175,55,0.55)" }}
-                      >
-                        #{String(order.id)} · {formatTs(order.createdAt)}
-                      </p>
-                    </div>
-                    <span
-                      className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide"
-                      style={{
-                        background: statusBg(order.status),
-                        color: statusColor(order.status),
-                        border: `1px solid ${statusColor(order.status)}33`,
-                      }}
-                    >
-                      {order.status}
-                    </span>
-                  </div>
-                  <p
-                    className="text-sm mb-1"
-                    style={{ color: "rgba(212,175,55,0.75)" }}
-                  >
-                    {order.itemsSummary}
-                  </p>
-                  {order.statusMessage && (
-                    <p
-                      className="text-xs italic"
-                      style={{ color: "rgba(212,175,55,0.5)" }}
-                    >
-                      {order.statusMessage}
-                    </p>
-                  )}
-                  {order.vehicleNumber && (
-                    <p
-                      className="text-xs mt-1 flex items-center gap-1"
-                      style={{ color: "#3b82f6" }}
-                    >
-                      <Truck className="w-3 h-3" /> Vehicle:{" "}
-                      {order.vehicleNumber}
-                    </p>
-                  )}
-                </div>
-
-                {/* Dispatch inline panel */}
-                <AnimatePresence>
-                  {dispatchState?.orderId === order.id && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="px-4 pb-3"
-                      style={{
-                        background: "rgba(59,130,246,0.08)",
-                        borderTop: "1px solid rgba(59,130,246,0.25)",
-                      }}
-                    >
-                      <p
-                        className="text-xs font-bold uppercase tracking-widest mt-3 mb-2"
-                        style={{ color: "#3b82f6" }}
-                      >
-                        Enter Vehicle Number
-                      </p>
-                      <input
-                        type="text"
-                        value={dispatchState.vehicleNumber}
-                        onChange={(e) =>
-                          setDispatchState((d) =>
-                            d ? { ...d, vehicleNumber: e.target.value } : d,
-                          )
-                        }
-                        placeholder="e.g. DL-01-AB-1234"
-                        data-ocid="admin.dispatch.input"
-                        className="w-full px-4 py-3 rounded-xl text-sm outline-none mb-3"
-                        style={{
-                          background: "rgba(59,130,246,0.1)",
-                          border: "1.5px solid rgba(59,130,246,0.5)",
-                          color: "#93c5fd",
-                        }}
-                      />
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          onClick={handleDispatchConfirm}
-                          disabled={updatingOrder === order.id}
-                          data-ocid="admin.dispatch.confirm_button"
-                          className="flex-1 py-3 rounded-xl font-bold text-sm uppercase tracking-wide flex items-center justify-center gap-1.5 disabled:opacity-60"
-                          style={{
-                            background: "rgba(59,130,246,0.8)",
-                            color: "#fff",
-                          }}
-                        >
-                          {updatingOrder === order.id && (
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          )}
-                          CONFIRM DISPATCH
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setDispatchState(null)}
-                          data-ocid="admin.dispatch.cancel_button"
-                          className="px-4 py-3 rounded-xl font-bold text-sm uppercase tracking-wide"
-                          style={{
-                            background: "rgba(156,163,175,0.15)",
-                            color: "#9ca3af",
-                          }}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Deliver confirm */}
-                <AnimatePresence>
-                  {deliverConfirm?.orderId === order.id && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="px-4 pb-3"
-                      style={{
-                        background: "rgba(34,197,94,0.06)",
-                        borderTop: "1px solid rgba(34,197,94,0.2)",
-                      }}
-                    >
-                      <p
-                        className="text-sm font-bold mt-3 mb-3 text-center"
-                        style={{ color: "#22c55e" }}
-                      >
-                        Mark as Delivered and archive?
-                      </p>
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleDeliver(order.id)}
-                          disabled={updatingOrder === order.id}
-                          data-ocid="admin.deliver.confirm_button"
-                          className="flex-1 py-3 rounded-xl font-bold text-sm uppercase tracking-wide flex items-center justify-center gap-1.5 disabled:opacity-60"
-                          style={{
-                            background: "rgba(34,197,94,0.8)",
-                            color: "#fff",
-                          }}
-                        >
-                          {updatingOrder === order.id && (
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          )}
-                          YES, DELIVERED
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setDeliverConfirm(null)}
-                          data-ocid="admin.deliver.cancel_button"
-                          className="px-4 py-3 rounded-xl font-bold text-sm uppercase tracking-wide"
-                          style={{
-                            background: "rgba(156,163,175,0.15)",
-                            color: "#9ca3af",
-                          }}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Action Buttons 2x2 */}
-                <div
-                  className="grid grid-cols-2 gap-0"
-                  style={{ borderTop: "1px solid rgba(212,175,55,0.15)" }}
-                >
-                  {/* CONFIRM */}
-                  <ActionButton
-                    label="CONFIRM"
-                    icon={<CheckCircle2 className="w-5 h-5" />}
-                    isActive={order.status === "Confirmed"}
-                    isLoading={updatingOrder === order.id}
-                    activeColor="#22c55e"
-                    activeBg="rgba(34,197,94,0.15)"
-                    position="tl"
-                    dataOcid={`admin.confirm.button.${idx + 1}`}
-                    onClick={() => handleConfirm(order.id)}
-                  />
-                  {/* SOURCING */}
-                  <ActionButton
-                    label="SOURCING"
-                    icon={<Package className="w-5 h-5" />}
-                    isActive={order.status === "Sourcing"}
-                    isLoading={updatingOrder === order.id}
-                    activeColor="#f59e0b"
-                    activeBg="rgba(245,158,11,0.15)"
-                    position="tr"
-                    dataOcid={`admin.sourcing.button.${idx + 1}`}
-                    onClick={() => handleSourcing(order.id)}
-                  />
-                  {/* DISPATCH */}
-                  <ActionButton
-                    label="DISPATCH"
-                    icon={<Truck className="w-5 h-5" />}
-                    isActive={order.status === "Out for Delivery"}
-                    isLoading={updatingOrder === order.id}
-                    activeColor="#3b82f6"
-                    activeBg="rgba(59,130,246,0.15)"
-                    position="bl"
-                    dataOcid={`admin.dispatch.button.${idx + 1}`}
-                    onClick={() =>
-                      setDispatchState({ orderId: order.id, vehicleNumber: "" })
-                    }
-                  />
-                  {/* DELIVERED */}
-                  <ActionButton
-                    label="DELIVERED"
-                    icon={<CheckCircle2 className="w-5 h-5" />}
-                    isActive={false}
-                    isLoading={updatingOrder === order.id}
-                    activeColor="#6b7280"
-                    activeBg="rgba(107,114,128,0.15)"
-                    position="br"
-                    dataOcid={`admin.deliver.button.${idx + 1}`}
-                    onClick={() => setDeliverConfirm({ orderId: order.id })}
-                    danger
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-
-        {/* Archived Orders */}
-        <div
-          className="rounded-2xl overflow-hidden"
-          style={{ border: "1px solid rgba(212,175,55,0.15)" }}
-        >
-          <button
-            type="button"
-            onClick={() => setShowArchived((v) => !v)}
-            data-ocid="admin.archived.toggle"
-            className="w-full flex items-center justify-between px-5 py-4 font-bold uppercase tracking-widest text-sm"
-            style={{
-              background: "rgba(212,175,55,0.05)",
-              color: "rgba(212,175,55,0.5)",
-            }}
-          >
-            <span>DELIVERED / ARCHIVED</span>
-            {showArchived ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
-          </button>
-          <AnimatePresence initial={false}>
-            {showArchived && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-              >
-                <div className="p-4 space-y-3">
-                  {archivedOrders.length === 0 && (
-                    <p
-                      className="text-center py-4 text-sm"
-                      style={{ color: "rgba(212,175,55,0.3)" }}
-                    >
-                      No archived orders.
-                    </p>
-                  )}
-                  {archivedOrders.map((order, idx) => (
-                    <div
-                      key={String(order.id)}
-                      data-ocid={`admin.archived.item.${idx + 1}`}
-                      className="p-3 rounded-xl"
-                      style={{
-                        background: "rgba(107,114,128,0.08)",
-                        border: "1px solid rgba(107,114,128,0.2)",
-                      }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span
-                          className="font-bold text-sm"
-                          style={{ color: "rgba(212,175,55,0.6)" }}
-                        >
-                          {order.clientName}
-                        </span>
-                        <span className="text-xs" style={{ color: "#6b7280" }}>
-                          {formatTs(order.updatedAt)}
-                        </span>
-                      </div>
-                      <p
-                        className="text-xs mt-1"
-                        style={{ color: "rgba(212,175,55,0.4)" }}
-                      >
-                        {order.itemsSummary}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Caffeine footer */}
-        <p
-          className="text-center text-xs mt-8"
-          style={{ color: "rgba(212,175,55,0.3)" }}
-        >
-          © {new Date().getFullYear()}. Built with love using{" "}
-          <a
-            href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(typeof window !== "undefined" ? window.location.hostname : "")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "rgba(212,175,55,0.5)" }}
-          >
-            caffeine.ai
-          </a>
-        </p>
-      </div>
-    </section>
-  );
-}
-
-// ── ActionButton Component ──────────────────────────────────────────────────
-interface ActionButtonProps {
-  label: string;
-  icon: React.ReactNode;
-  isActive: boolean;
-  isLoading: boolean;
-  activeColor: string;
-  activeBg: string;
-  position: "tl" | "tr" | "bl" | "br";
-  dataOcid: string;
-  onClick: () => void;
-  danger?: boolean;
-}
-
-function ActionButton({
-  label,
-  icon,
-  isActive,
-  isLoading,
-  activeColor,
-  activeBg,
-  position,
-  dataOcid,
-  onClick,
-  danger,
-}: ActionButtonProps) {
-  const borderRight =
-    position === "tl" || position === "bl"
-      ? "1px solid rgba(212,175,55,0.15)"
-      : "none";
-  const borderTop =
-    position === "bl" || position === "br"
-      ? "1px solid rgba(212,175,55,0.15)"
-      : "none";
-
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={isLoading}
-      data-ocid={dataOcid}
-      className="flex flex-col items-center justify-center gap-1.5 py-4 font-bold text-xs uppercase tracking-wide transition-all active:scale-95 disabled:opacity-50"
+    <div
       style={{
-        background: isActive
-          ? activeBg
-          : danger
-            ? "rgba(239,68,68,0.05)"
-            : "transparent",
-        color: isActive
-          ? activeColor
-          : danger
-            ? "#ef4444"
-            : "rgba(212,175,55,0.65)",
-        borderRight,
-        borderTop,
-        minHeight: "64px",
+        minHeight: "100vh",
+        background: "#000d1a",
+        fontFamily: "Montserrat, sans-serif",
       }}
     >
-      {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : icon}
-      {label}
-    </button>
+      {/* Top Bar */}
+      <div
+        style={{
+          background: "rgba(0,24,71,0.98)",
+          borderBottom: "1px solid rgba(212,175,55,0.3)",
+          padding: "12px 24px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <img
+            src="/assets/uploads/IMG_2664-1.jpeg"
+            alt="Logo"
+            width={36}
+            height={36}
+            style={{
+              borderRadius: "50%",
+              border: "1px solid rgba(212,175,55,0.5)",
+              boxShadow: "0 0 10px rgba(212,175,55,0.3)",
+              objectFit: "cover",
+            }}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src =
+                "/assets/generated/ask-logo.png";
+            }}
+          />
+          <span style={{ color: "#D4AF37", fontWeight: 700, fontSize: 15 }}>
+            A.S.K Admin Dashboard
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={handleLogout}
+          style={{
+            background: "rgba(212,175,55,0.1)",
+            border: "1px solid rgba(212,175,55,0.3)",
+            color: "rgba(212,175,55,0.7)",
+            padding: "7px 16px",
+            borderRadius: 6,
+            fontSize: 13,
+            cursor: "pointer",
+            fontFamily: "Montserrat, sans-serif",
+          }}
+        >
+          Logout
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div
+        style={{
+          display: "flex",
+          borderBottom: "1px solid rgba(212,175,55,0.2)",
+          background: "rgba(0,18,50,0.8)",
+        }}
+      >
+        {(["analytics", "prices"] as const).map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => setActiveTab(tab)}
+            style={{
+              padding: "14px 28px",
+              background: "none",
+              border: "none",
+              borderBottom:
+                activeTab === tab
+                  ? "2px solid #D4AF37"
+                  : "2px solid transparent",
+              color: activeTab === tab ? "#D4AF37" : "rgba(212,175,55,0.45)",
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: "Montserrat, sans-serif",
+              letterSpacing: 1,
+              textTransform: "uppercase",
+            }}
+          >
+            {tab === "analytics" ? "📊 Visitor Tracking" : "💰 Price Control"}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+        {activeTab === "analytics" ? (
+          <AdminAnalyticsDashboard />
+        ) : (
+          <PriceControlPanel />
+        )}
+      </div>
+    </div>
   );
 }

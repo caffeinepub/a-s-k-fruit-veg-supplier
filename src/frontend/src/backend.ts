@@ -103,6 +103,17 @@ export interface VVIPPartnerProfile {
     phone: string;
     registrationTime: Time;
 }
+export interface DailyReport {
+    date: string;
+    count: bigint;
+}
+export interface VisitorStats {
+    otherCityVisits: bigint;
+    noidaGhaziabadVisits: bigint;
+    todayVisits: bigint;
+    weekVisits: bigint;
+    totalVisits: bigint;
+}
 export interface Order {
     id: bigint;
     status: string;
@@ -135,6 +146,7 @@ export interface backendInterface {
     getArchivedOrders(): Promise<Array<Order>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getDailyReport(): Promise<Array<DailyReport>>;
     getGreeting(): Promise<string>;
     getOrder(id: bigint): Promise<Order | null>;
     getOrdersCount(): Promise<bigint>;
@@ -142,8 +154,10 @@ export interface backendInterface {
     getStatusHistory(): Promise<Array<OrderStatus>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     getVVIPPartnerProfile(): Promise<VVIPPartnerProfile | null>;
+    getVisitorStats(): Promise<VisitorStats>;
     isCallerAdmin(): Promise<boolean>;
     isVVIPPartner(): Promise<boolean>;
+    logVisit(city: string, page: string): Promise<void>;
     registerVVIPPartner(fullName: string, phone: string, businessName: string): Promise<VVIPPartnerId>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     setStatus(status: string): Promise<void>;
@@ -320,6 +334,20 @@ export class Backend implements backendInterface {
             return from_candid_UserRole_n4(this._uploadFile, this._downloadFile, result);
         }
     }
+    async getDailyReport(): Promise<Array<DailyReport>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getDailyReport();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getDailyReport();
+            return result;
+        }
+    }
     async getGreeting(): Promise<string> {
         if (this.processError) {
             try {
@@ -418,6 +446,20 @@ export class Backend implements backendInterface {
             return from_candid_opt_n7(this._uploadFile, this._downloadFile, result);
         }
     }
+    async getVisitorStats(): Promise<VisitorStats> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getVisitorStats();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getVisitorStats();
+            return result;
+        }
+    }
     async isCallerAdmin(): Promise<boolean> {
         if (this.processError) {
             try {
@@ -443,6 +485,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.isVVIPPartner();
+            return result;
+        }
+    }
+    async logVisit(arg0: string, arg1: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.logVisit(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.logVisit(arg0, arg1);
             return result;
         }
     }
